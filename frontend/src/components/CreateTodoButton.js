@@ -8,9 +8,9 @@ class CreateTodoButton extends Component {
       <Link to="/new">
         <div className="create-contiainer">
           <div className="button">
-            {/* <div className="icon">
+            <div className="icon">
               +
-            </div> */}
+            </div>
           </div>
         </div>
       </Link>

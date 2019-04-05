@@ -13,9 +13,27 @@
 }
 
 .card > .controls > .a123button {
+  text-align: center;
   position: relative;
   top: -32px;
   cursor: pointer;
+  margin: 10px;
+  padding: 4px 16px;
+  color: #ffffff;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.a123button a {
+  color: #ffffff;
+}
+
+.a123button.success {
+  background-color: #28a745;
+}
+
+.a123button.danger {
+  background-color: #dc3545;
 }
 
 .card.has_description {

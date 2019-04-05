@@ -25,8 +25,8 @@ class NewTodo extends Component {
   }
 
   handleChange(event) {
-    let obj = {}
-    this.state.todo[event.target.id] = event.target.value;
+    let obj = {todo: this.state.todo}
+    obj['todo'][event.target.id] = event.target.value;
     this.setState(obj)
   }
 

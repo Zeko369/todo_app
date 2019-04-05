@@ -28,13 +28,19 @@ class Card extends Component {
           { this.props.todo.title }
         </div>
 
-        <div className="controls">
-          <button className="a123button" onClick={() => this.props.delete(this.props.todo.id)}>Delete</button>
-          <Link to={`${this.props.todo.id}/edit`}>Edit</Link>
-        </div>
-
         <div className="description">
           { description }
+        </div>
+
+        <div className="controls">
+          <div className="a123button danger" onClick={() => this.props.delete(this.props.todo.id)}>
+            Delete
+          </div>
+          <div className="a123button success">
+            <Link to={`${this.props.todo.id}/edit`}>
+              Edit
+            </Link>
+          </div>
         </div>
       </div>
     );
