@@ -17,8 +17,9 @@ module.exports = {
       .findByPk(req.params.id)
       .then((todo) => {
         if (!todo) {
-          return res.status(404).send({
-            message: 'Todo Not Found',
+          return res.status(200).send({
+            error: true,
+            error_type: 'Not found'
           });
         }
         return res.status(200).send(todo);

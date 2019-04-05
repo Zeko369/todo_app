@@ -57,9 +57,14 @@ class NewTodo extends Component {
   componentDidMount() {
     axios.get(`${api_url}/todo/${this.props.match.params.id}`)
       .then(res => {
-        const todo = res.data;
-        this.setState({ todo: todo});
-      });
+        if(res.data['error'] === true){
+          alert('Not found');
+          this.props.history.push(`/`);
+        } else {
+          const todo = res.data;
+          this.setState({ todo: todo});
+        }
+      })
   }
 
   render() {
