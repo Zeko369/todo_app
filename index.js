@@ -1,55 +1,33 @@
-const express = require('express')
-const app = express()
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-app.use(express.json())
+var indexRouter = require('./routes/index');
 
-var cors = require('cors');
+var app = express();
 
-app.use(cors());
+const port = 5000;
 
-const port = 5000
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-var ai = 4;
+app.use('/', indexRouter);
 
-let database = [
-  {
-    id: 1,
-    title: 'Foobar',
-  },
-  {
-    id: 2,
-    title: 'Title',
-    description: 'Do this by this asd',
-  },
-  {
-    id: 3,
-    title: 'Lorem',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla auctor tortor elit, in accumsan felis suscipit et. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam pretium.'
-  }
-];
-
-app.get('/', (req, res) => {
-  res.send('clear_todo');
-  database = [];
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  res.status(404).send({ error: 'Not found' })
 });
-app.get('/todos', (req, res) => {
-  res.json(database.reverse())
-});
-app.post('/todos', (req, res) => {
-  let data = req.body;
-  if(data['title'] !== undefined){
-    if(data['description'] !== undefined){
-      database.push({title: data['title'], description: data['description'], id: ai});
-      ai++;
-    } else {
-      database.push({title: data['title'], id: ai});
-      ai++;
-    }
 
-    res.json(database[database.length - 1])
-  } else {
-    res.json({error: true})
-  }
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.status(err.status || 500).send({ error: err })
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
