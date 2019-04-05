@@ -1,6 +1,6 @@
 module.exports = {
     production: {
-        api_url: 'https://todo-api.zekan.tk/api'
+      api_url: 'https://api.zekan.tk/api'
     },
     development: {
         // api_url: 'http://localhost:5000/api'
