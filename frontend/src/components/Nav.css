@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-.nav .title {
+.nav .title a {
   color: #ffffff;
   font-size: 32px;
   position: relative;

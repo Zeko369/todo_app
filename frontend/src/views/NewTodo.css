@@ -1,0 +1,32 @@
+input[type="text"] {
+  width: 100%;
+  font-size: 16px;
+}
+
+.btn {
+  float: right;
+  width: 20%;
+  margin-top: 10px;
+}
+
+.form-container {
+  padding-top: 200px;
+  padding-left: 25%;
+  padding-right: 25%;
+}
+
+/* Phone landscape */
+@media (max-width:992px) {
+  .form-container {
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+}
+
+/* Phone portrate */
+@media (max-width:576px) {
+  .form-container {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}

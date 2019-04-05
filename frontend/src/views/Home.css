@@ -1,6 +1,9 @@
 .card-container {
   padding-left: 25%;
   padding-right: 25%;
+
+  padding-bottom: 128px;
+  padding-top: 16px;
 }
 
 /* Phone landscape */

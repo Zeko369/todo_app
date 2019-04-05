@@ -1,24 +1,37 @@
 import React, { Component, Fragment } from 'react';
 import './Home.css'
+import axios from 'axios';
 
 import Card from '../components/Card'
 import CreateTodoButton from '../components/CreateTodoButton'
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      todos: []
+    };
+  }
+
+  componentDidMount() {
+    axios.get(`http://localhost:5000/todos`)
+      .then(res => {
+        const todos = res.data;
+        this.setState({ todos: todos});
+      });
+  }
+
   render() {
-    let aLot = [];
-    for(let i = 0; i<20; i++){
-      aLot.push(<Card key={i} title="Title" description="Fooo bar asdlkj asd jsad asd"/>);
-    }
+    let todos = this.state.todos.map(item => {
+      return <Card key={item.id} title={item.title} description={item.description}/>
+    })
 
     return (
       <Fragment>
         <div className="container">
           <div className="card-container">
-            <Card title="Title"/>
-            <Card title="Title" description="Fooo bar asdlkj asd jsad asd"/>
-            <Card title="Title" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla auctor tortor elit, in accumsan felis suscipit et. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam pretium."/>
-            { aLot }
+            { todos }
           </div>
 
           <CreateTodoButton/>
