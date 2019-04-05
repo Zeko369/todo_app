@@ -23,14 +23,13 @@ class NewTodo extends Component {
   }
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.title);
     event.preventDefault();
 
     const data = {
       title: this.state.title
     };
 
-    axios.post(`http://localhost:5000/todos`, data)
+    axios.post(`http://zekan.tk:9999/todos`, data)
       .then(res => {
         if(res.data['error'] === true){
           this.setState({error: true});

@@ -15,7 +15,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/todos`)
+    axios.get(`http://zekan.tk:9999/todos`)
       .then(res => {
         const todos = res.data;
         this.setState({ todos: todos});
