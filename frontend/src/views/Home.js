@@ -1,25 +1,35 @@
 import React, { Component, Fragment } from 'react';
 // import './Home.css'
 import axios from 'axios';
-
+import config from '../config'
 import Card from '../components/Card'
 import CreateTodoButton from '../components/CreateTodoButton'
 
-const apiUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL;
+const api_url = config[process.env.NODE_ENV || 'development'].api_url;
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
-    console.log(apiUrl);
-
     this.state = {
       todos: []
     };
+
+    this.delete = this.delete.bind(this)
+  }
+
+  delete(id){
+    axios.delete(`${api_url}/todo/${id}`)
+      .then(res => {
+        if(res.status == 204){
+          const newArray = this.state.todos.filter((todo) => todo.id != id);
+          this.setState({todos: newArray})
+        }
+      });
   }
 
   componentDidMount() {
-    axios.get(`http://zekan.tk:9999/todos`)
+    axios.get(`${api_url}/todos`)
       .then(res => {
         const todos = res.data;
         this.setState({ todos: todos});
@@ -27,8 +37,8 @@ class Home extends Component {
   }
 
   render() {
-    let todos = this.state.todos.map(item => {
-      return <Card key={item.id} title={item.title} description={item.description}/>
+    let todos = this.state.todos.map(todo => {
+      return <Card key={todo.id} todo={todo} delete={this.delete}/>
     })
 
     return (

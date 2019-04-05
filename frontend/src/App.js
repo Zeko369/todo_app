@@ -8,6 +8,7 @@ import BottomNav from './components/BottomNav'
 
 import Home from './views/Home'
 import NewTodo from './views/NewTodo'
+import EditTodo from './views/EditTodo'
 
 var hist = createBrowserHistory();
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
         <Nav/>
         <Switch>
           <Route path="/new" component={NewTodo} />
+          <Route path="/:id/edit" component={EditTodo} />
           <Route path="/" component={Home} />
         </Switch>
         <BottomNav/>

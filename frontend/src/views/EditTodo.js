@@ -11,8 +11,11 @@ class NewTodo extends Component {
     super(props);
 
     this.state = {
-      title: '',
-      description: '',
+      todo:
+        {
+            title: '',
+            description: '',
+        },
       error: false,
       redirect: false
     };
@@ -23,7 +26,7 @@ class NewTodo extends Component {
 
   handleChange(event) {
     let obj = {}
-    obj[event.target.id] = event.target.value;
+    this.state.todo[event.target.id] = event.target.value;
     this.setState(obj)
   }
 
@@ -31,11 +34,11 @@ class NewTodo extends Component {
     event.preventDefault();
 
     const data = {
-      title: this.state.title,
-      description: this.state.description.length > 0 ? this.state.description : null
+      title: this.state.todo.title,
+      description: this.state.todo.description.length > 0 ? this.state.todo.description : null
     };
 
-    axios.post(`${api_url}/todos`, data)
+    axios.patch(`${api_url}/todo/${this.props.match.params.id}`, data)
       .then(res => {
         if(res.data['error'] === true){
           this.setState({error: true});
@@ -51,6 +54,14 @@ class NewTodo extends Component {
     }
   }
 
+  componentDidMount() {
+    axios.get(`${api_url}/todo/${this.props.match.params.id}`)
+      .then(res => {
+        const todo = res.data;
+        this.setState({ todo: todo});
+      });
+  }
+
   render() {
     return (
       <Fragment>
@@ -59,10 +70,10 @@ class NewTodo extends Component {
           { this.state.error ? 'ERROR' : '' }
           <form onSubmit={this.handleSubmit}>
             Title<br/>
-            <input type="text" id="title" value={this.state.title} onChange={this.handleChange}/>
+            <input type="text" id="title" value={this.state.todo.title} onChange={this.handleChange}/>
             <br/>
             Description<br/>
-            <input type="text" id="description" value={this.state.description} onChange={this.handleChange}/>
+            <input type="text" id="description" value={this.state.todo.description} onChange={this.handleChange}/>
             <input className="btn" type="submit" value="Save" />
 
             {/* <textarea></textarea> */}

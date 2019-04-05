@@ -27,6 +27,7 @@ module.exports = {
   },
 
   add(req, res) {
+    console.log(req.body);
     return Todo
       .create({
         title: req.body.title,

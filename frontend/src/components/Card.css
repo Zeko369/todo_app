@@ -8,6 +8,15 @@
   min-height: 56px;
 }
 
+.card > .controls {
+  float: right;
+}
+
+.card > .controls > .a123button {
+  position: relative;
+  top: -32px;
+  cursor: pointer;
+}
 
 .card.has_description {
   min-height: 128px;
