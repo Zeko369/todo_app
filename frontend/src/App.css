@@ -1,8 +1,16 @@
-.container {
-  overflow: scroll;
-  height: 100%;
-}
-
 a {
   text-decoration: none;
+}
+
+.container {
+  padding-bottom: 128px;
+  padding-top: 16px;
+
+  position: relative;
+  margin: auto;
+  width: 100%;
+  max-width: 800px;
+
+  overflow: scroll;
+  height: 100%;
 }

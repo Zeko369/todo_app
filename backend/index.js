@@ -30,7 +30,7 @@ let database = [
 
 app.get('/', (req, res) => {
   res.send('clear_todo');
-  database = {};
+  database = [];
 });
 app.get('/todos', (req, res) => {
   res.json(database.reverse())

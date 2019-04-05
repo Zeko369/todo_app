@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import './Home.css'
+// import './Home.css'
 import axios from 'axios';
 
 import Card from '../components/Card'
@@ -30,9 +30,9 @@ class Home extends Component {
     return (
       <Fragment>
         <div className="container">
-          <div className="card-container">
+          {/* <div className="card-container"> */}
             { todos }
-          </div>
+          {/* </div> */}
 
           <CreateTodoButton/>
         </div>

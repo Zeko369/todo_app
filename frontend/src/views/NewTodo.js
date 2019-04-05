@@ -49,7 +49,7 @@ class NewTodo extends Component {
     return (
       <Fragment>
         {this.renderRedirect()}
-        <div className="form-container">
+        <div className="container form-container">
           { this.state.error ? 'ERROR' : '' }
           <form onSubmit={this.handleSubmit}>
             <input type="text" id="title" value={this.state.title} onChange={this.handleChange}/>
