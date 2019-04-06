@@ -33,7 +33,7 @@ class NewTodo extends Component {
     event.preventDefault();
 
     let description = '';
-    if(this.state.todo.description){
+    if(this.state.todo.description !== null){
       description = this.state.todo.description.length > 0 ? this.state.todo.description : null
     }
 
@@ -78,12 +78,23 @@ class NewTodo extends Component {
         <div className="container form-container">
           { this.state.error ? 'ERROR' : '' }
           <form onSubmit={this.handleSubmit}>
-            Title<br/>
-            <input type="text" id="title" value={this.state.todo.title} onChange={this.handleChange}/>
-            <br/>
-            Description<br/>
-            <input type="text" id="description" value={this.state.todo.description || ''} onChange={this.handleChange}/>
-            <input className="btn" type="submit" value="Save" />
+            <div className="form-container123">
+              <label>
+                Title
+                <input type="text" id="title" value={this.state.todo.title} onChange={this.handleChange}/>
+              </label>
+            </div>
+
+            <div className="form-container123">
+              <label>
+                Description
+                <input type="text" id="description" value={this.state.todo.description || ''} onChange={this.handleChange}/>
+              </label>
+            </div>
+
+            <div className="form-container123">
+              <input className="btn" type="submit" value="Save" />
+            </div>
 
             {/* <textarea></textarea> */}
             {/* <input type="date"/>

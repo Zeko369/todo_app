@@ -67,10 +67,20 @@ module.exports = {
             message: 'Todo Not Found',
           });
         }
+        let description = '';
+        if(req.body.description === null){
+          description = null
+        } else {
+          description = req.body.description || todo.description;
+        }
+
+        console.log(req.body.description);
+        console.log(description);
+
         return todo
           .update({
             title: req.body.title || todo.title,
-            description: req.body.description || todo.description,
+            description: description,
           })
           .then(() => res.status(200).send(todo))
           .catch((error) => res.status(400).send(error));
