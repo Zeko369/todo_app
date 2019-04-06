@@ -4,8 +4,11 @@ import config from '../config'
 import { Redirect } from 'react-router-dom'
 import './NewTodo.css'
 
-const api_url = config[process.env.NODE_ENV || 'development'].api_url;
-
+var api_url = config[process.env.NODE_ENV || 'development'].api_url;
+const url = document.location.href;
+if(url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').length === 4){
+  api_url = `${url.split(':').splice(0, 2).join(':')}:5000/api`;
+}
 class NewTodo extends Component {
   constructor(props){
     super(props);

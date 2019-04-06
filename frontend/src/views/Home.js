@@ -4,7 +4,11 @@ import config from '../config'
 import Card from '../components/Card'
 import CreateTodoButton from '../components/CreateTodoButton'
 
-const api_url = config[process.env.NODE_ENV || 'development'].api_url;
+var api_url = config[process.env.NODE_ENV || 'development'].api_url;
+const url = document.location.href;
+if(url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').length === 4){
+  api_url = `${url.split(':').splice(0, 2).join(':')}:5000/api`;
+}
 
 class Home extends Component {
   constructor(props) {
@@ -33,6 +37,9 @@ class Home extends Component {
   check(id, index){
     axios.patch(`${api_url}/todo/${id}/check`)
       .then(res => {
+        console.log(res);
+        console.log(id);
+        console.log(this.state.todos[index].id);
         let todos = this.state.todos;
         todos[index].checked = !todos[index].checked;
         this.setState({todos});
@@ -53,24 +60,30 @@ class Home extends Component {
 
   render() {
     let todos = this.state.todos
-      .filter((todo) => this.state.show_done ? true : !todo.checked)
+      .filter((todo) => this.state.show_done ? todo.checked : !todo.checked)
       .map((todo, index) => {
-        return <Card key={todo.id} todo={todo} delete={this.delete} check={this.check} index={index}/>
+        return <Card key={todo.id} todo={todo} delete={this.delete} check={this.check} index={this.state.todos.indexOf(todo)}/>
       });
+    let count = {
+      done: this.state.show_done ? todos.length : this.state.todos.length - todos.length,
+      todo: this.state.show_done ? this.state.todos.length - todos.length : todos.length,
+    }
 
     return (
       <Fragment>
         <div className="container">
           <div>
+            <p style={{float: "right", margin: 0}}>
+              {` todo: ${count.todo} (${count.done} done)`}
+            </p>
+
             <label>
               <input type="checkbox" checked={this.state.show_done} onChange={this.changeShow}/>
               Show completed
             </label>
           </div>
 
-          {/* <div className="card-container"> */}
-            { todos }
-          {/* </div> */}
+          { todos }
 
           <CreateTodoButton/>
         </div>
