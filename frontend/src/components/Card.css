@@ -10,6 +10,8 @@
 
 .card > .controls {
   float: right;
+  display: flex;
+  flex-direction: row;
 }
 
 .card > .controls > .a123button {
@@ -59,10 +61,11 @@
   position: relative;
   top: 16px;
   left: 8px;
-  margin-right: 8px;
+  /* margin-right: 8px; */
+  width: 70%;
 }
 
-input[type="checkbox"] {
+.checkbox {
   float: left;
   position: relative;
   top: 16px;

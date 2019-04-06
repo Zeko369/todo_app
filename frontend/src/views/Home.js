@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-// import './Home.css'
 import axios from 'axios';
 import config from '../config'
 import Card from '../components/Card'
@@ -12,11 +11,13 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      todos: []
+      todos: [],
+      show_done: false
     };
 
     this.delete = this.delete.bind(this)
     this.check = this.check.bind(this)
+    this.changeShow = this.changeShow.bind(this)
   }
 
   delete(id){
@@ -35,7 +36,7 @@ class Home extends Component {
         let todos = this.state.todos;
         todos[index].checked = !todos[index].checked;
         this.setState({todos});
-      })
+      });
   }
 
   componentDidMount() {
@@ -46,14 +47,27 @@ class Home extends Component {
       });
   }
 
+  changeShow(){
+    this.setState({show_done: !this.state.show_done});
+  }
+
   render() {
-    let todos = this.state.todos.map((todo, index) => {
-      return <Card key={todo.id} todo={todo} delete={this.delete} check={this.check} index={index}/>
-    })
+    let todos = this.state.todos
+      .filter((todo) => this.state.show_done ? true : !todo.checked)
+      .map((todo, index) => {
+        return <Card key={todo.id} todo={todo} delete={this.delete} check={this.check} index={index}/>
+      });
 
     return (
       <Fragment>
         <div className="container">
+          <div>
+            <label>
+              <input type="checkbox" checked={this.state.show_done} onChange={this.changeShow}/>
+              Show completed
+            </label>
+          </div>
+
           {/* <div className="card-container"> */}
             { todos }
           {/* </div> */}
