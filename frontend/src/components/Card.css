@@ -12,6 +12,20 @@
   float: right;
   display: flex;
   flex-direction: row;
+  margin-right: 4px;
+}
+
+@media only screen and (max-width: 600px) {
+  .card > .controls {
+    float: right;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+  }
+
+  .card {
+    min-height: 80px;
+  }
 }
 
 .card > .controls > .a123button {
@@ -19,7 +33,7 @@
   position: relative;
   top: -32px;
   cursor: pointer;
-  margin: 10px;
+  margin: 2px;
   padding: 4px 16px;
   color: #ffffff;
   font-size: 16px;
@@ -46,7 +60,6 @@
   max-height: 64px;
   overflow: scroll;
 }
-
 
 .card > .title {
   position: relative;
