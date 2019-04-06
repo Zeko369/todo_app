@@ -24,6 +24,10 @@ class Card extends Component {
 
     return (
       <div className={ card_classes }>
+        <input type="checkbox" checked={this.props.todo.checked}
+         onChange={() => this.props.check(this.props.todo.id, this.props.index)}
+        />
+
         <div className="title">
           { this.props.todo.title }
         </div>

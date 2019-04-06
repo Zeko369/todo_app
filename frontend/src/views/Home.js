@@ -16,6 +16,7 @@ class Home extends Component {
     };
 
     this.delete = this.delete.bind(this)
+    this.check = this.check.bind(this)
   }
 
   delete(id){
@@ -28,6 +29,15 @@ class Home extends Component {
       });
   }
 
+  check(id, index){
+    axios.patch(`${api_url}/todo/${id}/check`)
+      .then(res => {
+        let todos = this.state.todos;
+        todos[index].checked = !todos[index].checked;
+        this.setState({todos});
+      })
+  }
+
   componentDidMount() {
     axios.get(`${api_url}/todos`)
       .then(res => {
@@ -37,8 +47,8 @@ class Home extends Component {
   }
 
   render() {
-    let todos = this.state.todos.map(todo => {
-      return <Card key={todo.id} todo={todo} delete={this.delete}/>
+    let todos = this.state.todos.map((todo, index) => {
+      return <Card key={todo.id} todo={todo} delete={this.delete} check={this.check} index={index}/>
     })
 
     return (
