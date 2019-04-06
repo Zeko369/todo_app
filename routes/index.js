@@ -14,6 +14,7 @@ router.get('/api/todos', todosController.list);
 router.get('/api/todo/:id', todosController.getById);
 router.post('/api/todos', todosController.add);
 router.patch('/api/todo/:id', todosController.update);
+router.patch('/api/todo/:id/check', todosController.check);
 router.delete('/api/todo/:id', todosController.delete);
 
 module.exports = router;

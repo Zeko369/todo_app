@@ -8,7 +8,7 @@ module.exports = {
       Sequelize.TEXT)
   },
   down: (queryInterface, Sequelize) => {
-    return  queryInterface.addColumn(
+    return  queryInterface.removeColumn(
       'Todos',
       'description')
   }

@@ -38,6 +38,26 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  check(req, res) {
+    return Todo
+      .findByPk(req.params.id)
+      .then(todo => {
+        if (!todo) {
+          return res.status(404).send({
+            message: 'Todo Not Found',
+          });
+        }
+        return todo
+          .update({
+            checked: !todo.checked,
+            checkedAt: todo.checked ? null : new Date
+          })
+          .then(() => res.status(200).send(todo))
+          .catch((error) => res.status(400).send(error));
+      })
+      .catch((error) => res.status(400).send(error));
+  },
+
   update(req, res) {
     return Todo
       .findByPk(req.params.id)
