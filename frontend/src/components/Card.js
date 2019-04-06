@@ -28,14 +28,6 @@ class Card extends Component {
          onChange={() => this.props.check(this.props.todo.id, this.props.index)}
         />
 
-        <div className="title">
-          { this.props.todo.title }
-        </div>
-
-        <div className="description">
-          { description }
-        </div>
-
         <div className="controls">
           <div className="a123button danger" onClick={() => this.props.delete(this.props.todo.id)}>
             Delete
@@ -45,6 +37,14 @@ class Card extends Component {
               Edit
             </Link>
           </div>
+        </div>
+
+        <div className="title">
+          { this.props.todo.title }
+        </div>
+
+        <div className="description">
+          { description }
         </div>
       </div>
     );

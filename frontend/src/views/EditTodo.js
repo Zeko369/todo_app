@@ -11,11 +11,10 @@ class NewTodo extends Component {
     super(props);
 
     this.state = {
-      todo:
-        {
-            title: '',
-            description: '',
-        },
+      todo: {
+        title: '',
+        description: ''
+      },
       error: false,
       redirect: false
     };
@@ -33,9 +32,14 @@ class NewTodo extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    let description = '';
+    if(this.state.todo.description){
+      description = this.state.todo.description.length > 0 ? this.state.todo.description : null
+    }
+
     const data = {
       title: this.state.todo.title,
-      description: this.state.todo.description.length > 0 ? this.state.todo.description : null
+      description: description
     };
 
     axios.patch(`${api_url}/todo/${this.props.match.params.id}`, data)
@@ -78,7 +82,7 @@ class NewTodo extends Component {
             <input type="text" id="title" value={this.state.todo.title} onChange={this.handleChange}/>
             <br/>
             Description<br/>
-            <input type="text" id="description" value={this.state.todo.description} onChange={this.handleChange}/>
+            <input type="text" id="description" value={this.state.todo.description || ''} onChange={this.handleChange}/>
             <input className="btn" type="submit" value="Save" />
 
             {/* <textarea></textarea> */}
