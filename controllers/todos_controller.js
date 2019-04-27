@@ -1,9 +1,14 @@
 const Todo = require('../models').Todo;
+const Task = require('../models').Task;
 
 module.exports = {
   list(req, res) {
     return Todo
       .findAll({
+        include: [{
+          model: Task,
+          as: 'tasks'
+        }],
         order: [
           ['createdAt', 'DESC']
         ],
@@ -12,7 +17,7 @@ module.exports = {
       .catch((error) => { res.status(400).send(error); });
   },
 
-  getById(req, res) {
+  show(req, res) {
     return Todo
       .findByPk(req.params.id)
       .then((todo) => {
@@ -27,7 +32,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  add(req, res) {
+  create(req, res) {
     console.log(req.body);
     return Todo
       .create({
@@ -88,7 +93,7 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
-  delete(req, res) {
+  destroy(req, res) {
     return Todo
       .findByPk(req.params.id)
       .then(todo => {

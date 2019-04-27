@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     checkedAt: DataTypes.DATE
   }, {});
   Todo.associate = function(models) {
+    Todo.hasMany(models.Task, {
+      foreignKey: 'TodoId',
+      as: 'tasks',
+    });
     // associations can be defined here
   };
   return Todo;
