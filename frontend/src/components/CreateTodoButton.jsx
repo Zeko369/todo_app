@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import './CreateTodoButton.css'
+import './CreateTodoButton.scss'
 
 class CreateTodoButton extends Component {
   render() {

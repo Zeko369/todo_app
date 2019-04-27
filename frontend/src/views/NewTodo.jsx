@@ -2,7 +2,9 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios'
 import config from '../config'
 import { Redirect } from 'react-router-dom'
-import './NewTodo.css'
+import './FormTodo.scss'
+
+import BottomNav from '../components/BottomNav';
 
 var api_url = config[process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
@@ -84,6 +86,7 @@ class NewTodo extends Component {
             <input type="time"/> */}
           </form>
         </div>
+        <BottomNav path={this.props.location}/>
       </Fragment>
     );
   }

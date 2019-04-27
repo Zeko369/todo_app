@@ -4,6 +4,8 @@ import config from '../config'
 import Card from '../components/Card'
 import CreateTodoButton from '../components/CreateTodoButton'
 
+import BottomNav from '../components/BottomNav';
+
 var api_url = config[process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
 if(url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').length === 4){
@@ -16,7 +18,8 @@ class Home extends Component {
 
     this.state = {
       todos: [],
-      show_done: false
+      show_done: false,
+      loading: true
     };
 
     this.delete = this.delete.bind(this)
@@ -25,13 +28,12 @@ class Home extends Component {
   }
 
   delete(id){
-    axios.delete(`${api_url}/todo/${id}`)
-      .then(res => {
-        if(res.status === 204){
-          const newArray = this.state.todos.filter((todo) => todo.id !== id);
-          this.setState({todos: newArray})
-        }
-      });
+    axios.delete(`${api_url}/todo/${id}`).then(res => {
+      if(res.status === 204){
+        const newArray = this.state.todos.filter((todo) => todo.id !== id);
+        this.setState({todos: newArray})
+      }
+    });
   }
 
   check(id, index){
@@ -50,7 +52,7 @@ class Home extends Component {
     axios.get(`${api_url}/todos`)
       .then(res => {
         const todos = res.data;
-        this.setState({ todos: todos});
+        this.setState({ todos: todos, loading: false });
       });
   }
 
@@ -59,6 +61,19 @@ class Home extends Component {
   }
 
   render() {
+    if(this.state.loading){
+      return (
+        <Fragment>
+          <div className="container">
+            <div>
+              <h3>Loading</h3>
+            </div>
+          </div>
+          <BottomNav path={this.props.location}/>
+        </Fragment>
+      );
+    }
+
     let todos = this.state.todos
       .filter((todo) => this.state.show_done ? todo.checked : !todo.checked)
       .map((todo, index) => {
@@ -87,6 +102,7 @@ class Home extends Component {
 
           <CreateTodoButton/>
         </div>
+        <BottomNav path={this.props.location}/>
       </Fragment>
     );
   }
