@@ -6,12 +6,14 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon --ignore frontend index.js",
-    "frontend": "cd frontend && yarn start",
-    "fullstack": "concurrently \"yarn run dev\" \"yarn run frontend\""
+    "front": "cd frontend && yarn start",
+    "storybook": "cd frontend && yarn run storybook",
+    "fullstack": "concurrently \"yarn run dev\" \"yarn run front\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@storybook/addon-knobs": "^5.0.10",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "express": "^4.16.4",

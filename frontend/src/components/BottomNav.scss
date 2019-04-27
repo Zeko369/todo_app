@@ -36,5 +36,9 @@
 }
 
 .bottom-nav .item .line.selected {
-  background-color: #aaa;
+  background-color: #bbb;
+}
+
+.bottom-nav .item:hover .line {
+  background-color: #fff;
 }

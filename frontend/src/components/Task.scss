@@ -1,0 +1,18 @@
+.task {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  background-color: #aaa;
+  border-radius: 4px;
+  border: 2px solid #888;
+}
+
+.checkbox.checked {
+  background-color: #af0;
+}
