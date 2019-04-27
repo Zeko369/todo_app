@@ -10,6 +10,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
+    "styled-components": "^4.2.0",
     "sweetalert2": "^8.8.7",
     "sweetalert2-react-content": "^1.1.0"
   },
@@ -18,7 +19,9 @@
     "build": "react-scripts build",
     "now-build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -28,5 +31,13 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@storybook/addon-actions": "^5.0.10",
+    "@storybook/addon-links": "^5.0.10",
+    "@storybook/addons": "^5.0.10",
+    "@storybook/react": "^5.0.10",
+    "babel-loader": "^8.0.5"
+  }
 }
