@@ -32,14 +32,16 @@ export default class TodoCard extends Component {
   render() {
     const description = this.truncate(this.props.todo.description, 128);
     const body = this.props.todo.description || this.props.todo.tasks ? '' : 'no-body';
+    const checked = this.props.todo.checked ? 'checked' : '';
+    const checkbox = <i class="material-icons md-24 md-dark " onClick={() => this.props.check(this.props.todo.id, this.props.index)}>{this.props.todo.checked ? 'check_box' : 'check_box_outline_blank'}</i>
 
     const taskList = this.tasks();
 
     return (
       <Fragment>
-        <div className={`card ${body}`}>
+        <div className={`card ${body} ${checked}`}>
           <div className="checkbox">
-            <MaterialIcon icon={this.props.todo.checked ? "check_box" : "check_box_outline_blank"} onClick={() => this.props.check(this.props.todo.id, this.props.index)}/>
+            { checkbox }
           </div>
 
           <div className="controls">
