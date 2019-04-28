@@ -14,12 +14,14 @@ export default class TestScren extends Component {
       todos: [
         {
           id: 1,
-          title: 'Foobar'
+          title: 'Foobar',
+          checked: true
         },
         {
           id: 2,
           title: 'Foobar',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa massa ultricies mi quis hendrerit dolor magna. Ipsum dolor sit amet consectetur adipiscing elit ut. Cursus metus aliquam eleifend mi in. Tellus integer feugiat scelerisque varius morbi enim nunc. Dolor sit amet consectetur adipiscing elit ut aliquam. Suspendisse potenti nullam ac tortor vitae purus. Tristique risus nec feugiat in fermentum posuere urna nec. Fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec. Nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Nisi quis eleifend quam adipiscing vitae. Interdum varius sit amet mattis vulputate enim nulla aliquet. Nullam ac tortor vitae purus faucibus.'
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa massa ultricies mi quis hendrerit dolor magna. Ipsum dolor sit amet consectetur adipiscing elit ut. Cursus metus aliquam eleifend mi in. Tellus integer feugiat scelerisque varius morbi enim nunc. Dolor sit amet consectetur adipiscing elit ut aliquam. Suspendisse potenti nullam ac tortor vitae purus. Tristique risus nec feugiat in fermentum posuere urna nec. Fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec. Nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur. Nisi quis eleifend quam adipiscing vitae. Interdum varius sit amet mattis vulputate enim nulla aliquet. Nullam ac tortor vitae purus faucibus.',
+          checked: false
         },
         // {
         //   id: 3,
@@ -39,7 +41,8 @@ export default class TestScren extends Component {
         // },
         {
           id: 6,
-          title: 'Foobar'
+          title: 'Foobar',
+          checked: true
         },
       ]
     }

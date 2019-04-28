@@ -1,11 +1,11 @@
 import React, { Fragment, Component } from 'react'
-import './TodoCard.scss';
-
+import MaterialIcon from 'material-icons-react';
+import { Link } from 'react-router-dom';
 import Task from './Task';
 
-export default class TodoCard extends Component {
-  state = {open: false}
+import './TodoCard.scss';
 
+export default class TodoCard extends Component {
   truncate(string, length) {
     let tmp_string = '';
 
@@ -30,14 +30,25 @@ export default class TodoCard extends Component {
   }
 
   render() {
-    const description = this.state.open ? this.props.todo.description : this.truncate(this.props.todo.description, 128);
+    const description = this.truncate(this.props.todo.description, 128);
     const body = this.props.todo.description || this.props.todo.tasks ? '' : 'no-body';
 
     const taskList = this.tasks();
 
     return (
       <Fragment>
-        <div className={`card ${body}`} onClick={() => this.setState({open: !this.state.open})}>
+        <div className={`card ${body}`}>
+          <div className="checkbox">
+            <MaterialIcon icon={this.props.todo.checked ? "check_box" : "check_box_outline_blank"} onClick={() => this.props.check(this.props.todo.id, this.props.index)}/>
+          </div>
+
+          <div className="controls">
+            <Link to={`${this.props.todo.id}/edit`}>
+              <MaterialIcon icon="edit" color='#28a745' />
+            </Link>
+            <MaterialIcon icon="delete" color='#dc3545' onClick={() => this.props.delete(this.props.todo.id)}/>
+          </div>
+
           <div className="title">
             { this.props.todo.title }
           </div>

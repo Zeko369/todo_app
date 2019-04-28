@@ -2,23 +2,46 @@
   margin: auto;
   margin-top: 8px;
   margin-bottom: 16px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08), 0 3px 6px rgba(0,0,0,0.16);
   border-radius: 8px;
   width: 90%;
-  min-height: 40px;
+  min-height: 42px;
 }
 
 .card .title {
   font-weight: 500;
   padding-top: 8px;
-  padding-left: 8px;
-  font-size: 1.125em;
+  padding-left: 36px;
+  font-size: 1.25em;
   line-height: 1.5em;
 }
 
 .card .body {
-  padding: 4px 8px 8px 8px;
+  padding: 4px 8px 8px 12px;
+  margin-top: 2px;
   font-size: 1em;
+}
+
+.checkbox {
+  position: absolute;
+  padding-top: 10px;
+  padding-left: 8px;
+}
+
+.card .controls {
+  float: right;
+  padding-top: 6px;
+  padding-right: 6px;
+}
+
+.card .controls .material-icons {
+  cursor: pointer;
+  padding: 4px;
+}
+
+.card .controls .material-icons:hover {
+  background-color: #eee;
+  border-radius: 4px;
 }
 
 .card.no-body .body {

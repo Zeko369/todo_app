@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import config from '../config'
-import Card from '../components/Card'
+// import Card from '../components/Card'
+import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton'
 
 import BottomNav from '../components/BottomNav';
@@ -39,9 +40,6 @@ class Home extends Component {
   check(id, index){
     axios.patch(`${api_url}/todo/${id}/check`)
       .then(res => {
-        console.log(res);
-        console.log(id);
-        console.log(this.state.todos[index].id);
         let todos = this.state.todos;
         todos[index].checked = !todos[index].checked;
         this.setState({todos});
@@ -77,7 +75,7 @@ class Home extends Component {
     let todos = this.state.todos
       .filter((todo) => this.state.show_done ? todo.checked : !todo.checked)
       .map((todo, index) => {
-        return <Card key={todo.id} todo={todo} delete={this.delete} check={this.check} index={this.state.todos.indexOf(todo)}/>
+        return <TodoCard key={todo.id} todo={todo} delete={this.delete} check={this.check} index={this.state.todos.indexOf(todo)}/>
       });
     let count = {
       done: this.state.show_done ? todos.length : this.state.todos.length - todos.length,
