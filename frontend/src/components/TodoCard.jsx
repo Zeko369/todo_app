@@ -45,9 +45,9 @@ export default class TodoCard extends Component {
           </div>
 
           <div className="controls">
-            <Link to={`${this.props.todo.id}/edit`}>
+            {/* <Link to={`${this.props.todo.id}/edit`}> */}
               <MaterialIcon icon="edit" color='#28a745' />
-            </Link>
+            {/* </Link> */}
             <MaterialIcon icon="delete" color='#dc3545' onClick={() => this.props.delete(this.props.todo.id)}/>
           </div>
 
