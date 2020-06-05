@@ -73,7 +73,7 @@ class Home extends Component {
     }
 
     let todos = this.state.todos
-      .filter((todo) => this.state.show_done ? todo.checked : !todo.checked)
+      .filter((todo) => this.state.show_done ? true : !todo.checked)
       .map((todo, index) => {
         return <TodoCard key={todo.id} todo={todo} delete={this.delete} check={this.check} index={this.state.todos.indexOf(todo)}/>
       });
