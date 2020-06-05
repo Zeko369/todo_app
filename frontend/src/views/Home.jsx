@@ -29,12 +29,14 @@ class Home extends Component {
   }
 
   delete(id) {
-    axios.delete(`${api_url}/todo/${id}`).then((res) => {
-      if (res.status === 204) {
-        const newArray = this.state.todos.filter((todo) => todo.id !== id);
-        this.setState({ todos: newArray });
-      }
-    });
+    if (window.confirm('Are you sure')) {
+      axios.delete(`${api_url}/todo/${id}`).then((res) => {
+        if (res.status === 204) {
+          const newArray = this.state.todos.filter((todo) => todo.id !== id);
+          this.setState({ todos: newArray });
+        }
+      });
+    }
   }
 
   check(id, index) {
