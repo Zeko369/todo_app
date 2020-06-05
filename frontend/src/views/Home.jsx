@@ -4,7 +4,6 @@ import config from '../config';
 // import Card from '../components/Card'
 import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton';
-
 import BottomNav from '../components/BottomNav';
 
 var api_url = config[process.env.NODE_ENV || 'development'].api_url;
@@ -19,13 +18,14 @@ class Home extends Component {
 
     this.state = {
       todos: [],
-      show_done: false,
+      showAll: true,
       loading: true,
     };
 
     this.delete = this.delete.bind(this);
     this.check = this.check.bind(this);
     this.changeShow = this.changeShow.bind(this);
+    this.update = this.update.bind(this);
   }
 
   delete(id) {
@@ -38,10 +38,16 @@ class Home extends Component {
   }
 
   check(id, index) {
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)),
+    }));
+
     axios.patch(`${api_url}/todo/${id}/check`).then((res) => {
-      let todos = this.state.todos;
-      todos[index].checked = !todos[index].checked;
-      this.setState({ todos });
+      if (this.state.todos[index] !== res.data.checked) {
+        this.setState({
+          todos: this.state.todos.map((todo, i) => (i === index ? res.data : todo)),
+        });
+      }
     });
   }
 
@@ -58,59 +64,58 @@ class Home extends Component {
   }
 
   changeShow() {
-    this.setState({ show_done: !this.state.show_done });
+    this.setState((state) => ({ showAll: !state.showAll }));
+  }
+
+  update(id, data) {
+    this.setState((state) => ({
+      todos: (state.todos || []).map((todo) => (todo.id === id ? data : todo)),
+    }));
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <Fragment>
-          <div className="container">
-            <div>
-              <h3>Loading</h3>
-            </div>
-          </div>
-          <BottomNav path={this.props.location} />
-        </Fragment>
-      );
-    }
-
-    let todos = this.state.todos
-      .filter((todo) => (this.state.show_done ? true : !todo.checked))
-      .map((todo, index) => {
-        return (
-          <TodoCard
-            key={todo.id}
-            todo={todo}
-            delete={this.delete}
-            check={this.check}
-            index={this.state.todos.indexOf(todo)}
-          />
-        );
-      });
-
-    let count = {
-      done: this.state.show_done ? todos.length : this.state.todos.length - todos.length,
-      todo: this.state.show_done ? this.state.todos.length - todos.length : todos.length,
+    const { loading, todos } = this.state;
+    const count = {
+      done: todos.filter((todo) => todo.checked).length,
+      todo: todos.filter((todo) => !todo.checked).length,
     };
 
     return (
       <Fragment>
         <div className="container">
-          <div>
-            <p style={{ float: 'right', margin: 0 }}>
-              {` todo: ${count.todo} (${count.done} done)`}
-            </p>
+          {loading ? (
+            <h3>Loading</h3>
+          ) : (
+            <>
+              <div>
+                <p style={{ float: 'right', margin: 0 }}>
+                  {` todo: ${count.todo} (${count.done} done)`}
+                </p>
 
-            <label>
-              <input type="checkbox" checked={this.state.show_done} onChange={this.changeShow} />
-              Show completed
-            </label>
-          </div>
+                <label>
+                  <input type="checkbox" checked={this.state.showAll} onChange={this.changeShow} />
+                  Show all
+                </label>
+              </div>
 
-          {todos}
+              {todos
+                .filter((todo) => (this.state.showAll ? true : !todo.checked))
+                .map((todo) => {
+                  return (
+                    <TodoCard
+                      key={todo.id}
+                      todo={todo}
+                      delete={this.delete}
+                      check={this.check}
+                      index={todos.indexOf(todo)}
+                      update={this.update}
+                    />
+                  );
+                })}
 
-          <CreateTodoButton />
+              <CreateTodoButton />
+            </>
+          )}
         </div>
         <BottomNav path={this.props.location} />
       </Fragment>
