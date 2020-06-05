@@ -5,6 +5,7 @@ import config from '../config';
 import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton';
 import BottomNav from '../components/BottomNav';
+import { Link } from 'react-router-dom';
 
 var api_url = config[process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
@@ -98,6 +99,8 @@ class Home extends Component {
                   <input type="checkbox" checked={this.state.showAll} onChange={this.changeShow} />
                   Show all
                 </label>
+
+                <Link to="/new">New</Link>
               </div>
 
               {todos
@@ -119,7 +122,6 @@ class Home extends Component {
             </>
           )}
         </div>
-        <BottomNav path={this.props.location} />
       </Fragment>
     );
   }
