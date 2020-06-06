@@ -5,7 +5,7 @@ const { Todo } = require('../models');
 const { Task } = require('../models');
 
 const queryTodo = (id, includeTasks = false, findAll = false) => {
-  return Todo[findAll ? 'findAll' : 'findOne']({
+  const params = {
     ...(findAll ? {} : { where: { id } }),
     include: includeTasks
       ? [
@@ -16,19 +16,21 @@ const queryTodo = (id, includeTasks = false, findAll = false) => {
         ]
       : [],
     order: [['createdAt', 'DESC']],
-  });
+  };
+  console.log(params, findAll);
+  return Todo[findAll ? 'findAll' : 'findOne'](params);
 };
 
 class TodosContoller extends BaseController {
-  constructor(...props) {
-    super(...props);
+  constructor(prefix) {
+    super(prefix);
   }
 
   listTodos = () => ({
     route: 'get /',
     callback: async (req, res) => {
       try {
-        const todos = await queryTodo(undefined, true, true);
+        const todos = await queryTodo(false, true, true);
 
         res.status(200).send(todos);
       } catch (err) {
