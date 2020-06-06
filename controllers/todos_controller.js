@@ -18,8 +18,7 @@ class TodosContoller extends BaseController {
   }
 
   listTodos = () => ({
-    path: '/todos',
-    method: 'get',
+    route: 'get /todos',
     callback: async (req, res) => {
       try {
         const todos = await Todo.findAll({
@@ -40,8 +39,7 @@ class TodosContoller extends BaseController {
   });
 
   createTodo = () => ({
-    path: '/todos',
-    method: 'post',
+    route: 'post /todos',
     callback: async (req, res) => {
       try {
         const todo = await Todo.create({
@@ -56,8 +54,7 @@ class TodosContoller extends BaseController {
   });
 
   getTodo = () => ({
-    path: '/todo/:id',
-    method: 'get',
+    route: 'get /todo/:id',
     callback: async (req, res) => {
       try {
         const todo = await Todo.findByPk(req.params.id);
@@ -75,8 +72,7 @@ class TodosContoller extends BaseController {
   });
 
   checkTodo = () => ({
-    path: '/todo/:id/check',
-    method: 'patch',
+    route: 'patch /todo/:id/check',
     callback: async (req, res) => {
       try {
         const todo = await Todo.findByPk(req.params.id);
@@ -99,8 +95,7 @@ class TodosContoller extends BaseController {
   });
 
   updateTodo = () => ({
-    path: '/todo/:id',
-    method: 'patch',
+    route: 'patch /todo/:id',
     callback: async (req, res) => {
       try {
         const todo = await Todo.findByPk(req.params.id);
@@ -130,8 +125,7 @@ class TodosContoller extends BaseController {
   });
 
   deleteTodo = () => ({
-    path: '/todo/:id',
-    method: 'delete',
+    route: 'delete /todo/:id',
     callback: async (req, res) => {
       try {
         const todo = await Todo.findByPk(req.params.id);

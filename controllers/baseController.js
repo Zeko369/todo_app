@@ -18,7 +18,11 @@ class BaseController {
       .filter((item) => ![...baseExclude, ...this.exclude].includes(item))
       .forEach((func) => {
         if (this[func] && {}.toString.call(this[func]) === '[object Function]') {
-          const { path, method, callback } = this[func]();
+          const { route, callback } = this[func]();
+          const [method, path] = route.split(' ');
+
+          console.log(method, path);
+
           console.log(`Adding route: ${method.toUpperCase()} ${path}`);
           this.router[method](path, callback);
         }
