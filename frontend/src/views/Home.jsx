@@ -31,7 +31,7 @@ class Home extends Component {
 
   delete(id) {
     if (window.confirm('Are you sure')) {
-      axios.delete(`${api_url}/todo/${id}`).then((res) => {
+      axios.delete(`${api_url}/todos/${id}`).then((res) => {
         if (res.status === 204) {
           const newArray = this.state.todos.filter((todo) => todo.id !== id);
           this.setState({ todos: newArray });
@@ -45,7 +45,7 @@ class Home extends Component {
       todos: todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)),
     }));
 
-    axios.patch(`${api_url}/todo/${id}/check`).then((res) => {
+    axios.patch(`${api_url}/todos/${id}/check`).then((res) => {
       if (this.state.todos[index] !== res.data.checked) {
         this.setState({
           todos: this.state.todos.map((todo, i) => (i === index ? res.data : todo)),

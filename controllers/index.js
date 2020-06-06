@@ -1,5 +1,9 @@
-const todos = require('./todos_controller');
+const TodosController = require('./todos_controller');
+const TasksController = require('./tasks_controller');
+
+console.log(TasksController);
 
 module.exports = {
-  todos,
+  TodosController,
+  TasksController,
 };

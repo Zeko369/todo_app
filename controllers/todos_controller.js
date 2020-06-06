@@ -1,35 +1,34 @@
 // @ts-check
-
 const BaseController = require('./baseController');
 
 const { Todo } = require('../models');
 const { Task } = require('../models');
 
-// todos
-// todo/:id
-// todos
-// todo/:id
-// todo/:id/check
-// todo/:id
+const queryTodo = (id, includeTasks = false, findAll = false) => {
+  return Todo[findAll ? 'findAll' : 'findOne']({
+    ...(findAll ? {} : { where: { id } }),
+    include: includeTasks
+      ? [
+          {
+            model: Task,
+            as: 'tasks',
+          },
+        ]
+      : [],
+    order: [['createdAt', 'DESC']],
+  });
+};
 
 class TodosContoller extends BaseController {
-  constructor() {
-    super();
+  constructor(...props) {
+    super(...props);
   }
 
   listTodos = () => ({
-    route: 'get /todos',
+    route: 'get /',
     callback: async (req, res) => {
       try {
-        const todos = await Todo.findAll({
-          include: [
-            {
-              model: Task,
-              as: 'tasks',
-            },
-          ],
-          order: [['createdAt', 'DESC']],
-        });
+        const todos = await queryTodo(undefined, true, true);
 
         res.status(200).send(todos);
       } catch (err) {
@@ -39,7 +38,7 @@ class TodosContoller extends BaseController {
   });
 
   createTodo = () => ({
-    route: 'post /todos',
+    route: 'post /',
     callback: async (req, res) => {
       try {
         const todo = await Todo.create({
@@ -54,16 +53,18 @@ class TodosContoller extends BaseController {
   });
 
   getTodo = () => ({
-    route: 'get /todo/:id',
+    route: 'get /:id',
     callback: async (req, res) => {
       try {
-        const todo = await Todo.findByPk(req.params.id);
+        const todo = await queryTodo(req.params.id, true);
+
         if (!todo) {
           return res.status(404).send({
             error: true,
             error_type: 'Not found',
           });
         }
+
         return res.status(200).send(todo);
       } catch (err) {
         res.status(500).send(err);
@@ -72,10 +73,10 @@ class TodosContoller extends BaseController {
   });
 
   checkTodo = () => ({
-    route: 'patch /todo/:id/check',
+    route: 'patch /:id/check',
     callback: async (req, res) => {
       try {
-        const todo = await Todo.findByPk(req.params.id);
+        const todo = await queryTodo(req.params.id);
         if (!todo) {
           return res.status(404).send({
             message: 'Todo Not Found',
@@ -95,10 +96,10 @@ class TodosContoller extends BaseController {
   });
 
   updateTodo = () => ({
-    route: 'patch /todo/:id',
+    route: 'patch /:id',
     callback: async (req, res) => {
       try {
-        const todo = await Todo.findByPk(req.params.id);
+        const todo = await queryTodo(req.params.id, true);
         if (!todo) {
           return res.status(404).send({
             message: 'Todo Not Found',
@@ -125,7 +126,7 @@ class TodosContoller extends BaseController {
   });
 
   deleteTodo = () => ({
-    route: 'delete /todo/:id',
+    route: 'delete /:id',
     callback: async (req, res) => {
       try {
         const todo = await Todo.findByPk(req.params.id);

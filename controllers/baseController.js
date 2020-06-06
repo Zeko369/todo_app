@@ -1,14 +1,18 @@
 const { Router } = require('express');
 
-const baseExclude = ['router', 'exclude', 'generateRoutes', 'getRouter'];
+const baseExclude = ['router', 'exclude', 'generateRoutes', 'getRouter', 'prefix'];
 const methods = ['get', 'post', 'put', 'patch', 'delete'];
+const len = Math.max(...methods.map((a) => a.length));
 
 class BaseController {
   exclude = [];
+  prefix = '';
   router = undefined;
 
-  constructor() {
+  constructor(prefix) {
     this.router = Router();
+    this.prefix = prefix;
+
     this.generateRoutes = this.generateRoutes.bind(this);
     this.getRouter = this.getRouter.bind(this);
   }
@@ -21,9 +25,9 @@ class BaseController {
           const { route, callback } = this[func]();
           const [method, path] = route.split(' ');
 
-          console.log(method, path);
-
-          console.log(`Adding route: ${method.toUpperCase()} ${path}`);
+          console.log(
+            `${' '.repeat(len - method.length)}${method.toUpperCase()} ${this.prefix}${path}`
+          );
           this.router[method](path, callback);
         }
       });
