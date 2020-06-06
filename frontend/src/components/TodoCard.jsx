@@ -38,7 +38,7 @@ export default class TodoCard extends Component {
     axios
       .patch(`${api_url}/todo/${this.props.todo.id}`, {
         title,
-        description: description.length === 0 ? null : description,
+        description: (description === null ? true : description.length === 0) ? null : description,
       })
       .then((res) => {
         if (res.data['error'] === true) {
@@ -60,38 +60,54 @@ export default class TodoCard extends Component {
 
   render() {
     const { todo, check, index, delete: remove } = this.props;
-    const { description, tasks, checked } = todo;
+    const { id, title, description, tasks = [], checked } = todo;
     const { editing } = this.state;
 
     return (
       <Fragment>
         <div
-          className={`card ${description || tasks ? '' : 'no-body'} ${checked ? 'checked' : ''}`}
+          className={`card ${description || tasks.length ? '' : 'no-body'} ${
+            checked ? 'checked' : ''
+          }`}
         >
           {editing ? (
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit} className="editContainer">
               <input type="text" value={this.state.title} onChange={this.onChange('title')} />
               <input
                 type="text"
                 value={this.state.description}
                 onChange={this.onChange('description')}
               />
-              <button type="submit">Save</button>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div></div>
+                <div>
+                  <button className="green" type="submit">
+                    Save
+                  </button>
+                  <button
+                    className="red"
+                    type="button"
+                    onClick={() => this.setState({ editing: false })}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </form>
           ) : (
             <>
               <div className="checkbox">
-                <i class="material-icons md-24 md-dark " onClick={() => check(todo.id, index)}>
+                <i className="material-icons md-24 md-dark " onClick={() => check(id, index)}>
                   {checked ? 'check_box' : 'check_box_outline_blank'}
                 </i>
               </div>
 
               <div className="controls">
                 <MaterialIcon icon="edit" color="#28a745" onClick={this.edit} />
-                <MaterialIcon icon="delete" color="#dc3545" onClick={() => remove(todo.id)} />
+                <MaterialIcon icon="delete" color="#dc3545" onClick={() => remove(id)} />
               </div>
 
-              <div className="title">{todo.title}</div>
+              <div className="title">{title}</div>
 
               <div className="body">
                 {truncate(description, 128)}
