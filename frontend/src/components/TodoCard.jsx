@@ -112,7 +112,7 @@ export default class TodoCard extends Component {
               <div className="body">
                 {truncate(description, 128)}
                 {(tasks || []).map((task) => (
-                  <Task task={task} />
+                  <Task task={task} check={() => {}} />
                 ))}
               </div>
             </>
