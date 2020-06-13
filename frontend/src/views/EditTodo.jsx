@@ -1,27 +1,27 @@
 import React, { Component, Fragment } from 'react';
-import axios from 'axios'
-import config from '../config'
-import { Redirect } from 'react-router-dom'
-import './FormTodo.scss'
+import axios from 'axios';
+import config from '../config';
+import { Redirect } from 'react-router-dom';
+import './FormTodo.scss';
 
 import BottomNav from '../components/BottomNav';
 
 var api_url = config[process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
-if(url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').length === 4){
+if (url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').length === 4) {
   api_url = `${url.split(':').splice(0, 2).join(':')}:5000/api`;
 }
 class NewTodo extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
       todo: {
         title: '',
-        description: ''
+        description: '',
       },
       error: false,
-      redirect: false
+      redirect: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -29,51 +29,49 @@ class NewTodo extends Component {
   }
 
   handleChange(event) {
-    let obj = {todo: this.state.todo}
+    let obj = { todo: this.state.todo };
     obj['todo'][event.target.id] = event.target.value;
-    this.setState(obj)
+    this.setState(obj);
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
     let description = '';
-    if(this.state.todo.description !== null){
-      description = this.state.todo.description.length > 0 ? this.state.todo.description : null
+    if (this.state.todo.description !== null) {
+      description = this.state.todo.description.length > 0 ? this.state.todo.description : null;
     }
 
     const data = {
       title: this.state.todo.title,
-      description: description
+      description: description,
     };
 
-    axios.patch(`${api_url}/todo/${this.props.match.params.id}`, data)
-      .then(res => {
-        if(res.data['error'] === true){
-          this.setState({error: true});
-        } else {
-          this.setState({redirect: true})
-        }
-      })
+    axios.patch(`${api_url}/todos/${this.props.match.params.id}`, data).then((res) => {
+      if (res.data['error'] === true) {
+        this.setState({ error: true });
+      } else {
+        this.setState({ redirect: true });
+      }
+    });
   }
 
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect to='/' />
+      return <Redirect to="/" />;
     }
-  }
+  };
 
   componentDidMount() {
-    axios.get(`${api_url}/todo/${this.props.match.params.id}`)
-      .then(res => {
-        if(res.data['error'] === true){
-          alert('Not found');
-          this.props.history.push(`/`);
-        } else {
-          const todo = res.data;
-          this.setState({ todo: todo});
-        }
-      })
+    axios.get(`${api_url}/todos/${this.props.match.params.id}`).then((res) => {
+      if (res.data['error'] === true) {
+        alert('Not found');
+        this.props.history.push(`/`);
+      } else {
+        const todo = res.data;
+        this.setState({ todo: todo });
+      }
+    });
   }
 
   render() {
@@ -81,19 +79,29 @@ class NewTodo extends Component {
       <Fragment>
         {this.renderRedirect()}
         <div className="container form-container">
-          { this.state.error ? 'ERROR' : '' }
+          {this.state.error ? 'ERROR' : ''}
           <form onSubmit={this.handleSubmit}>
             <div className="form-container123">
               <label>
                 Title
-                <input type="text" id="title" value={this.state.todo.title} onChange={this.handleChange}/>
+                <input
+                  type="text"
+                  id="title"
+                  value={this.state.todo.title}
+                  onChange={this.handleChange}
+                />
               </label>
             </div>
 
             <div className="form-container123">
               <label>
                 Description
-                <input type="text" id="description" value={this.state.todo.description || ''} onChange={this.handleChange}/>
+                <input
+                  type="text"
+                  id="description"
+                  value={this.state.todo.description || ''}
+                  onChange={this.handleChange}
+                />
               </label>
             </div>
 
@@ -106,7 +114,7 @@ class NewTodo extends Component {
             <input type="time"/> */}
           </form>
         </div>
-        <BottomNav path={this.props.location}/>
+        <BottomNav path={this.props.location} />
       </Fragment>
     );
   }
