@@ -36,7 +36,7 @@ export default class TodoCard extends Component {
     const { title, description } = this.state;
 
     axios
-      .patch(`${api_url}/todos${this.props.todo.id}`, {
+      .patch(`${api_url}/todos/${this.props.todo.id}`, {
         title,
         description: (description === null ? true : description.length === 0) ? null : description,
       })
