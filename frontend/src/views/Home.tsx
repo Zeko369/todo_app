@@ -3,10 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import config from '../config';
-// import Card from '../components/Card'
 import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton';
-import BottomNav from '../components/BottomNav';
 
 var api_url = config['production' || process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
@@ -14,16 +12,38 @@ if (url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').lengt
   api_url = `${url.split(':').splice(0, 2).join(':')}:5000/api`;
 }
 
-class Home extends Component {
-  constructor(props) {
+interface Todo {
+  id: number;
+  title: string;
+  description: null | string;
+  checked: boolean;
+  checkedAt: null | string;
+  createdAt: string;
+  updatedAt: string;
+  tasks: any[];
+}
+
+interface Props {}
+interface State {
+  todos: Todo[];
+  showAll: boolean;
+  loading: boolean;
+  order: 'DESC' | 'ASC';
+  lin: boolean;
+  error: null | string;
+}
+
+class Home extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
       todos: [],
       showAll: localStorage.getItem('showAll') !== 'false',
       loading: true,
-      order: localStorage.getItem('order') || 'DESC',
+      order: (localStorage.getItem('order') as 'DESC' | 'ASC' | null) || 'DESC',
       lin: localStorage.getItem('lin') !== 'false',
+      error: null,
     };
 
     this.check = this.check.bind(this);
@@ -34,7 +54,7 @@ class Home extends Component {
     this.toggleOrder = this.toggleOrder.bind(this);
   }
 
-  delete(id) {
+  delete(id: number) {
     if (window.confirm('Are you sure')) {
       axios.delete(`${api_url}/todos/${id}`).then((res) => {
         if (res.status === 204) {
@@ -45,7 +65,7 @@ class Home extends Component {
     }
   }
 
-  check(id, index) {
+  check(id: number, index: number) {
     this.setState(({ todos }) => ({
       todos: todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)),
     }));
@@ -67,17 +87,18 @@ class Home extends Component {
         this.setState({ todos: todos, loading: false });
       })
       .catch((err) => {
+        this.setState({ loading: false, error: err });
         console.error(err);
       });
   }
 
   changeShow() {
     const newValue = !this.state.showAll;
-    localStorage.setItem('showAll', newValue);
+    localStorage.setItem('showAll', String(newValue));
     this.setState({ showAll: newValue });
   }
 
-  update(id, data) {
+  update(id: number, data: Todo) {
     this.setState((state) => ({
       todos: (state.todos || []).map((todo) => (todo.id === id ? data : todo)),
     }));
@@ -91,74 +112,74 @@ class Home extends Component {
 
   toggleLin() {
     const lin = !this.state.lin;
-    localStorage.setItem('lin', lin);
+    localStorage.setItem('lin', String(lin));
     this.setState({ lin });
   }
 
+  filterByLin(lin: boolean) {
+    return (todo: Todo) => (lin ? todo.id >= 115 : true);
+  }
+
+  not(todo: Todo) {
+    return !todo.checked && !todo.title.startsWith('#');
+  }
+
   render() {
-    const { loading, todos, order, lin } = this.state;
+    const { loading, todos, order, lin, error } = this.state;
     const count = {
-      done: todos
-        .filter((todo) => (lin ? todo.id >= 115 : true))
-        .filter((todo) => todo.checked || todo.title.startsWith('#')).length,
-      todo: todos
-        .filter((todo) => (lin ? todo.id >= 115 : true))
-        .filter((todo) => !todo.checked && !todo.title.startsWith('#')).length,
+      done: todos.filter(this.filterByLin(lin)).filter((todo) => !this.not(todo)).length,
+      todo: todos.filter(this.filterByLin(lin)).filter(this.not).length,
     };
 
-    let filteredTodos = todos.filter((todo) =>
-      this.state.showAll ? true : !todo.checked && !todo.title.startsWith('#')
-    );
-
-    if (lin) {
-      filteredTodos = filteredTodos.filter((todo) => todo.id >= 115);
-    }
+    let filteredTodos = todos
+      .filter((todo) => (this.state.showAll ? true : this.not(todo)))
+      .filter(this.filterByLin(lin));
 
     if (order === 'ASC') {
       filteredTodos = filteredTodos.reverse();
     }
 
     return (
-      <Fragment>
-        <div className="container">
-          {loading ? (
-            <h3>Loading</h3>
-          ) : (
-            <>
-              <div>
-                <p style={{ float: 'right', margin: 0 }}>
-                  {` todo: ${count.todo} (${count.done} done)`}
-                </p>
+      <div className="container">
+        {loading ? (
+          <h3>Loading</h3>
+        ) : error ? (
+          <h3>Error :(</h3>
+        ) : (
+          <>
+            <div>
+              <p style={{ float: 'right', margin: 0 }}>
+                todo: {count.todo} ({count.done} done)
+              </p>
 
-                <label>
-                  <input type="checkbox" checked={this.state.showAll} onChange={this.changeShow} />
-                  Show all
-                </label>
+              <label>
+                <input type="checkbox" checked={this.state.showAll} onChange={this.changeShow} />
+                Show all
+              </label>
 
-                <button onClick={this.toggleOrder}>{order}</button>
-                <button onClick={this.toggleLin}>{lin ? 'Lin' : 'Not lin'}</button>
+              <button onClick={this.toggleOrder}>{order}</button>
+              <button onClick={this.toggleLin}>{lin ? 'Lin' : 'Not lin'}</button>
 
-                <Link to="/new">New</Link>
-              </div>
+              <Link to="/new">New</Link>
+            </div>
 
-              {filteredTodos.map((todo) => {
-                return (
-                  <TodoCard
-                    key={todo.id}
-                    todo={todo}
-                    delete={this.delete}
-                    check={this.check}
-                    index={todos.indexOf(todo)}
-                    update={this.update}
-                  />
-                );
-              })}
+            {filteredTodos.map((todo) => {
+              return (
+                <TodoCard
+                  key={todo.id}
+                  todo={todo}
+                  delete={this.delete}
+                  check={this.check}
+                  index={todos.indexOf(todo)}
+                  update={this.update}
+                />
+              );
+            })}
 
-              <CreateTodoButton />
-            </>
-          )}
-        </div>
-      </Fragment>
+            <CreateTodoButton />
+          </>
+        )}
+      </div>
     );
   }
 }
