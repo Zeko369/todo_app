@@ -10,6 +10,10 @@ const truncate = (string, length) => {
     }
   }
 
+  if (tmp_string === '...') {
+    return `${string.slice(0, length - 3)}...`;
+  }
+
   return tmp_string;
 };
 

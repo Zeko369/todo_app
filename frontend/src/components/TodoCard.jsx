@@ -20,9 +20,11 @@ export default class TodoCard extends Component {
       editing: false,
       title: '',
       description: '',
+      showWhole: false,
     };
 
     this.edit = this.edit.bind(this);
+    this.toggle = this.toggle.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -58,67 +60,73 @@ export default class TodoCard extends Component {
     this.setState({ editing: true });
   }
 
+  toggle() {
+    this.setState({ showWhole: !this.state.showWhole });
+  }
+
   render() {
     const { todo, check, index, delete: remove } = this.props;
     const { id, title, description, tasks = [], checked } = todo;
-    const { editing } = this.state;
+    const { editing, showWhole } = this.state;
+
+    const toggleFunction = description && description.length > 128 ? this.toggle : undefined;
 
     return (
-      <Fragment>
-        <div
-          className={`card ${description || tasks.length ? '' : 'no-body'} ${
-            checked ? 'checked' : ''
-          }`}
-        >
-          {editing ? (
-            <form onSubmit={this.onSubmit} className="editContainer">
-              <input type="text" value={this.state.title} onChange={this.onChange('title')} />
-              <input
-                type="text"
-                value={this.state.description}
-                onChange={this.onChange('description')}
-              />
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div></div>
-                <div>
-                  <button className="green" type="submit">
-                    Save
-                  </button>
-                  <button
-                    className="red"
-                    type="button"
-                    onClick={() => this.setState({ editing: false })}
-                  >
-                    Cancel
-                  </button>
-                </div>
+      <div
+        className={`card ${description || tasks.length ? '' : 'no-body'} ${
+          checked ? 'checked' : ''
+        }`}
+        style={toggleFunction ? { cursor: 'pointer' } : {}}
+        onClick={toggleFunction}
+      >
+        {editing ? (
+          <form onSubmit={this.onSubmit} className="editContainer">
+            <input type="text" value={this.state.title} onChange={this.onChange('title')} />
+            <input
+              type="text"
+              value={this.state.description}
+              onChange={this.onChange('description')}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div></div>
+              <div>
+                <button className="green" type="submit">
+                  Save
+                </button>
+                <button
+                  className="red"
+                  type="button"
+                  onClick={() => this.setState({ editing: false })}
+                >
+                  Cancel
+                </button>
               </div>
-            </form>
-          ) : (
-            <>
-              <div className="checkbox">
-                <i className="material-icons md-24 md-dark " onClick={() => check(id, index)}>
-                  {checked ? 'check_box' : 'check_box_outline_blank'}
-                </i>
-              </div>
+            </div>
+          </form>
+        ) : (
+          <>
+            <div className="checkbox">
+              <i className="material-icons md-24 md-dark " onClick={() => check(id, index)}>
+                {checked ? 'check_box' : 'check_box_outline_blank'}
+              </i>
+            </div>
 
-              <div className="controls">
-                <MaterialIcon icon="edit" color="#28a745" onClick={this.edit} />
-                <MaterialIcon icon="delete" color="#dc3545" onClick={() => remove(id)} />
-              </div>
+            <div className="controls">
+              <MaterialIcon icon="edit" color="#28a745" onClick={this.edit} />
+              <MaterialIcon icon="delete" color="#dc3545" onClick={() => remove(id)} />
+            </div>
 
-              <div className="title">{title}</div>
+            <div className="title">{title}</div>
 
-              <div className="body">
-                {truncate(description, 128)}
-                {(tasks || []).map((task) => (
-                  <Task task={task} check={() => {}} />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </Fragment>
+            <div className="body">
+              {showWhole ? description : truncate(description, 128)}
+              {(tasks || []).map((task) => (
+                <Task task={task} check={() => {}} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     );
   }
 }
