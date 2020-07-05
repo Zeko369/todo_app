@@ -104,7 +104,9 @@ class Home extends Component {
               </div>
 
               {todos
-                .filter((todo) => (this.state.showAll ? true : !todo.checked))
+                .filter((todo) =>
+                  this.state.showAll ? true : !todo.checked && !todo.title.startsWith('#')
+                )
                 .map((todo) => {
                   return (
                     <TodoCard
