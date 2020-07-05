@@ -8,7 +8,7 @@ import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton';
 import BottomNav from '../components/BottomNav';
 
-var api_url = config[process.env.NODE_ENV || 'development'].api_url;
+var api_url = config['production' || process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
 if (url.indexOf(':') !== -1 && url.split('//')[1].split(':')[0].split('.').length === 4) {
   api_url = `${url.split(':').splice(0, 2).join(':')}:5000/api`;
@@ -22,12 +22,16 @@ class Home extends Component {
       todos: [],
       showAll: localStorage.getItem('showAll') !== 'false',
       loading: true,
+      order: localStorage.getItem('order') || 'DESC',
+      lin: localStorage.getItem('lin') !== 'false',
     };
 
-    this.delete = this.delete.bind(this);
     this.check = this.check.bind(this);
-    this.changeShow = this.changeShow.bind(this);
+    this.delete = this.delete.bind(this);
     this.update = this.update.bind(this);
+    this.toggleLin = this.toggleLin.bind(this);
+    this.changeShow = this.changeShow.bind(this);
+    this.toggleOrder = this.toggleOrder.bind(this);
   }
 
   delete(id) {
@@ -68,11 +72,9 @@ class Home extends Component {
   }
 
   changeShow() {
-    this.setState((state) => {
-      const newValue = !state.showAll;
-      localStorage.setItem('showAll', newValue);
-      return { showAll: newValue };
-    });
+    const newValue = !this.state.showAll;
+    localStorage.setItem('showAll', newValue);
+    this.setState({ showAll: newValue });
   }
 
   update(id, data) {
@@ -81,12 +83,36 @@ class Home extends Component {
     }));
   }
 
+  toggleOrder() {
+    const newOrder = this.state.order === 'DESC' ? 'ASC' : 'DESC';
+    localStorage.setItem('order', newOrder);
+    this.setState({ order: newOrder });
+  }
+
+  toggleLin() {
+    const lin = !this.state.lin;
+    localStorage.setItem('lin', lin);
+    this.setState({ lin });
+  }
+
   render() {
-    const { loading, todos } = this.state;
+    const { loading, todos, order, lin } = this.state;
     const count = {
       done: todos.filter((todo) => todo.checked || todo.title.startsWith('#')).length,
       todo: todos.filter((todo) => !todo.checked && !todo.title.startsWith('#')).length,
     };
+
+    let filteredTodos = todos.filter((todo) =>
+      this.state.showAll ? true : !todo.checked && !todo.title.startsWith('#')
+    );
+
+    if (lin) {
+      filteredTodos = filteredTodos.filter((todo) => todo.id >= 115);
+    }
+
+    if (order === 'ASC') {
+      filteredTodos = filteredTodos.reverse();
+    }
 
     return (
       <Fragment>
@@ -105,25 +131,23 @@ class Home extends Component {
                   Show all
                 </label>
 
+                <button onClick={this.toggleOrder}>{order}</button>
+
                 <Link to="/new">New</Link>
               </div>
 
-              {todos
-                .filter((todo) =>
-                  this.state.showAll ? true : !todo.checked && !todo.title.startsWith('#')
-                )
-                .map((todo) => {
-                  return (
-                    <TodoCard
-                      key={todo.id}
-                      todo={todo}
-                      delete={this.delete}
-                      check={this.check}
-                      index={todos.indexOf(todo)}
-                      update={this.update}
-                    />
-                  );
-                })}
+              {filteredTodos.map((todo) => {
+                return (
+                  <TodoCard
+                    key={todo.id}
+                    todo={todo}
+                    delete={this.delete}
+                    check={this.check}
+                    index={todos.indexOf(todo)}
+                    update={this.update}
+                  />
+                );
+              })}
 
               <CreateTodoButton />
             </>
