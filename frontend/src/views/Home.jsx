@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import config from '../config';
 // import Card from '../components/Card'
 import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton';
 import BottomNav from '../components/BottomNav';
-import { Link } from 'react-router-dom';
 
 var api_url = config[process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
@@ -19,7 +20,7 @@ class Home extends Component {
 
     this.state = {
       todos: [],
-      showAll: true,
+      showAll: localStorage.getItem('showAll') !== 'false',
       loading: true,
     };
 
@@ -67,7 +68,11 @@ class Home extends Component {
   }
 
   changeShow() {
-    this.setState((state) => ({ showAll: !state.showAll }));
+    this.setState((state) => {
+      const newValue = !state.showAll;
+      localStorage.setItem('showAll', newValue);
+      return { showAll: newValue };
+    });
   }
 
   update(id, data) {
@@ -79,8 +84,8 @@ class Home extends Component {
   render() {
     const { loading, todos } = this.state;
     const count = {
-      done: todos.filter((todo) => todo.checked).length,
-      todo: todos.filter((todo) => !todo.checked).length,
+      done: todos.filter((todo) => todo.checked || todo.title.startsWith('#')).length,
+      todo: todos.filter((todo) => !todo.checked && !todo.title.startsWith('#')).length,
     };
 
     return (
