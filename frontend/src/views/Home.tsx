@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import config from '../config';
 import TodoCard from '../components/TodoCard';
 import CreateTodoButton from '../components/CreateTodoButton';
+import New from '../components/New';
 
 var api_url = config['production' || process.env.NODE_ENV || 'development'].api_url;
 const url = document.location.href;
@@ -31,6 +32,7 @@ interface State {
   order: 'DESC' | 'ASC';
   lin: boolean;
   error: null | string;
+  showNew: boolean;
 }
 
 class Home extends Component<Props, State> {
@@ -44,11 +46,14 @@ class Home extends Component<Props, State> {
       order: (localStorage.getItem('order') as 'DESC' | 'ASC' | null) || 'DESC',
       lin: localStorage.getItem('lin') !== 'false',
       error: null,
+      showNew: false,
     };
 
     this.check = this.check.bind(this);
     this.delete = this.delete.bind(this);
     this.update = this.update.bind(this);
+    this.refetch = this.refetch.bind(this);
+    this.toggleNew = this.toggleNew.bind(this);
     this.toggleLin = this.toggleLin.bind(this);
     this.changeShow = this.changeShow.bind(this);
     this.toggleOrder = this.toggleOrder.bind(this);
@@ -79,8 +84,8 @@ class Home extends Component<Props, State> {
     });
   }
 
-  componentDidMount() {
-    axios
+  refetch() {
+    return axios
       .get(`${api_url}/todos`)
       .then((res) => {
         const todos = res.data;
@@ -90,6 +95,10 @@ class Home extends Component<Props, State> {
         this.setState({ loading: false, error: err });
         console.error(err);
       });
+  }
+
+  componentDidMount() {
+    this.refetch();
   }
 
   changeShow() {
@@ -116,6 +125,10 @@ class Home extends Component<Props, State> {
     this.setState({ lin });
   }
 
+  toggleNew() {
+    this.setState({ showNew: !this.state.showNew });
+  }
+
   filterByLin(lin: boolean) {
     return (todo: Todo) => (lin ? todo.id >= 115 : true);
   }
@@ -125,7 +138,7 @@ class Home extends Component<Props, State> {
   }
 
   render() {
-    const { loading, todos, order, lin, error } = this.state;
+    const { loading, todos, order, lin, error, showNew } = this.state;
     const count = {
       done: todos.filter(this.filterByLin(lin)).filter((todo) => !this.not(todo)).length,
       todo: todos.filter(this.filterByLin(lin)).filter(this.not).length,
@@ -158,10 +171,13 @@ class Home extends Component<Props, State> {
               </label>
 
               <button onClick={this.toggleOrder}>{order}</button>
+              <button onClick={this.toggleNew}>{showNew ? 'Hide' : 'Show'} new</button>
               <button onClick={this.toggleLin}>{lin ? 'Lin' : 'Not lin'}</button>
 
               <Link to="/new">New</Link>
             </div>
+
+            {showNew && <New refetch={this.refetch} />}
 
             {filteredTodos.map((todo) => {
               return (
