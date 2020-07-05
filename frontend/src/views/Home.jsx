@@ -98,8 +98,12 @@ class Home extends Component {
   render() {
     const { loading, todos, order, lin } = this.state;
     const count = {
-      done: todos.filter((todo) => todo.checked || todo.title.startsWith('#')).length,
-      todo: todos.filter((todo) => !todo.checked && !todo.title.startsWith('#')).length,
+      done: todos
+        .filter((todo) => (lin ? todo.id >= 115 : true))
+        .filter((todo) => todo.checked || todo.title.startsWith('#')).length,
+      todo: todos
+        .filter((todo) => (lin ? todo.id >= 115 : true))
+        .filter((todo) => !todo.checked && !todo.title.startsWith('#')).length,
     };
 
     let filteredTodos = todos.filter((todo) =>
@@ -132,6 +136,7 @@ class Home extends Component {
                 </label>
 
                 <button onClick={this.toggleOrder}>{order}</button>
+                <button onClick={this.toggleLin}>{lin ? 'Lin' : 'Not lin'}</button>
 
                 <Link to="/new">New</Link>
               </div>
