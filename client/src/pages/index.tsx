@@ -20,11 +20,22 @@ interface TodosProps {
 const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
   const { data, mutate } = useSWR<ITodo[]>(config.apiUrl('/todos'));
 
-  const check = async (id: number): Promise<ITodo[] | undefined | void> => {
+  const check = async (id: number): Promise<unknown> => {
     try {
       const res = await fetch(config.apiUrl(`/todos/${id}/check`), { method: 'PATCH' });
       const data = await res.json();
       return await mutate((current) => current.map((todo) => (todo.id === id ? data : todo)));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const remove = async (id: number): Promise<unknown> => {
+    try {
+      const res = await fetch(config.apiUrl(`/todos/${id}`), { method: 'DELETE' });
+      if (res.status === 204) {
+        return await mutate((current) => current.filter((todo) => todo.id !== id));
+      }
     } catch (err) {
       console.error(err);
     }
@@ -41,7 +52,7 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
       {filteredData
         .filter((todo) => (onlyTodo ? !todo.checked : true))
         .map((todo) => (
-          <Todo key={todo.id} todo={todo} check={check} />
+          <Todo key={todo.id} todo={todo} check={check} remove={remove} />
         ))}
     </Stack>
   ) : (
