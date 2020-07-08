@@ -1,43 +1,14 @@
 import React, { Suspense } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
+import { Stack, Box, Heading, Button } from '@chakra-ui/core';
+
 import config from '../config';
 import { ITodo } from '../ts/api';
-import { Stack, Text, Box, Heading, Flex, IconButton, Button } from '@chakra-ui/core';
 import useSaveToggle from '../hooks/useSaveToggle';
+import Todo from '../components/Todo';
 
 const isServer = typeof window === 'undefined';
-
-interface TodoProps {
-  todo: ITodo;
-  check: (id: number) => () => void;
-}
-
-const Todo: React.FC<TodoProps> = ({ todo, check }) => {
-  const { id, title, description, checked } = todo;
-
-  return (
-    <Box p={4} shadow="md" borderWidth="1px">
-      <Flex align="center">
-        <IconButton
-          icon={checked ? 'check-circle' : 'check'}
-          variantColor={checked ? 'green' : 'blue'}
-          aria-label="check"
-          mr={4}
-          onClick={check(id)}
-        />
-        <Box>
-          <Heading fontSize="xl">{title}</Heading>
-          {description && (
-            <Text mt={4} wordBreak="break-all">
-              {description}
-            </Text>
-          )}
-        </Box>
-      </Flex>
-    </Box>
-  );
-};
 
 interface TodosProps {
   lin: boolean;
@@ -47,12 +18,10 @@ interface TodosProps {
 const Todos: React.FC<TodosProps> = ({ lin, order }) => {
   const { data, mutate } = useSWR<ITodo[]>(config.apiUrl('/todos'));
 
-  const check = (id: number) => () => {
-    fetch(config.apiUrl(`/todos/${id}/check`), { method: 'PATCH' })
+  const check = (id: number): Promise<void | ITodo[] | undefined> => {
+    return fetch(config.apiUrl(`/todos/${id}/check`), { method: 'PATCH' })
       .then((res) => res.json())
-      .then((data) => {
-        mutate((current) => current.map((todo) => (todo.id === id ? data : todo)));
-      })
+      .then((data) => mutate((current) => current.map((todo) => (todo.id === id ? data : todo))))
       .catch((err) => console.error(err));
   };
 
