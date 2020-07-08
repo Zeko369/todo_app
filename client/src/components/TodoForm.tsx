@@ -47,7 +47,11 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           <Input name="title" ref={register()} isRequired defaultValue={todo?.title} />
-          <Input name="description" ref={register()} defaultValue={todo?.description} />
+          <Input
+            name="description"
+            ref={register()}
+            defaultValue={todo?.description || undefined}
+          />
           <Stack isInline justify="flex-end">
             <Button type="submit" variantColor="green" isLoading={loading}>
               {!todo ? 'Add' : 'Update'}

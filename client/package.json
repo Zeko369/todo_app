@@ -19,9 +19,10 @@
   },
   "devDependencies": {
     "@types/node": "12.0.12",
-    "@types/react": "16.8.23",
+    "@types/react": "^16.9.41",
     "@types/react-dom": "16.8.4",
-    "typescript": "3.5.2"
+    "typescript": "^3.9.6",
+    "vercel": "^19.1.1"
   },
   "license": "ISC"
 }
