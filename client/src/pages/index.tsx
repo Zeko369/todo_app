@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import { Stack, Box, Heading, Button, Flex, Text } from '@chakra-ui/core';
@@ -7,6 +7,9 @@ import config from '../config';
 import { ITodo } from '../ts/api';
 import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';
+import useToggle from '../hooks/useToggle';
+import TodoForm from '../components/TodoForm';
+import { IMutate } from '../ts/swr';
 
 const isServer = typeof window === 'undefined';
 
@@ -65,11 +68,12 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
 };
 
 const Home: NextPage = () => {
-  const [stats, setStats] = useState<string>();
+  const [stats, setStats] = useState<string>('');
 
   const [lin, toggle] = useSaveToggle('lin');
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
+  const [showNew, toggleNew] = useToggle(true);
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
@@ -80,8 +84,14 @@ const Home: NextPage = () => {
           <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
           <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
         </Stack>
-        <Text>{stats}</Text>
+        <Stack isInline align="center">
+          <Text>{stats}</Text>
+          <Button onClick={toggleNew} variantColor="blue">
+            {showNew ? 'Hide new' : 'Show new'}
+          </Button>
+        </Stack>
       </Flex>
+      {showNew && <TodoForm type="new" />}
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>
           <Todos lin={lin} order={order} onlyTodo={onlyTodo} setStats={setStats} />
