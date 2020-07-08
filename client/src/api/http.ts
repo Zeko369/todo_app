@@ -1,6 +1,7 @@
 interface Http {
-  post: (url: string, body: string) => Promise<Response>;
-  patch: (url: string, body: string) => Promise<Response>;
+  post: (url: string, body?: string) => Promise<Response>;
+  patch: (url: string, body?: string) => Promise<Response>;
+  delete: (url: string) => Promise<Response>;
 }
 
 const http: Http = {
@@ -16,6 +17,11 @@ const http: Http = {
       body: body,
       headers: { 'content-type': 'application/json' },
     }).then((res) => res.json()),
+  delete: (url) =>
+    fetch(url, {
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json' },
+    }),
 };
 
 export default http;

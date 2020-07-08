@@ -1,4 +1,4 @@
-import React, { Suspense, useState, createContext } from 'react';
+import React, { Suspense, useState } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import { Stack, Box, Heading, Button, Flex, Text } from '@chakra-ui/core';
@@ -9,6 +9,7 @@ import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';
 import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
+import http from '../api/http';
 
 const isServer = typeof window === 'undefined';
 
@@ -24,7 +25,7 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
 
   const check = async (id: number): Promise<unknown> => {
     try {
-      const res = await fetch(config.apiUrl(`/todos/${id}/check`), { method: 'PATCH' });
+      const res = await http.patch(config.apiUrl(`/todos/${id}/check`));
       const data = await res.json();
       return await mutate((current) => current.map((todo) => (todo.id === id ? data : todo)));
     } catch (err) {
@@ -38,7 +39,7 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
     }
 
     try {
-      const res = await fetch(config.apiUrl(`/todos/${id}`), { method: 'DELETE' });
+      const res = await http.delete(config.apiUrl(`/todos/${id}`));
       if (res.status === 204) {
         return await mutate((current) => current.filter((todo) => todo.id !== id));
       }
