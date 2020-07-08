@@ -22,4 +22,5 @@ jobs:
           port: 22
           script: |
             cd todo_app
+            git checkout .
             sh run_deploy.sh
