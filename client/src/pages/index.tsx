@@ -3,7 +3,8 @@ import { NextPage } from 'next';
 import useSWR from 'swr';
 import config from '../config';
 import { ITodo } from '../ts/api';
-import { Stack, Text, Box, Heading, Flex, IconButton } from '@chakra-ui/core';
+import { Stack, Text, Box, Heading, Flex, IconButton, Button } from '@chakra-ui/core';
+import useSaveToggle from '../hooks/useSaveToggle';
 
 const isServer = typeof window === 'undefined';
 
@@ -16,7 +17,7 @@ const Todo: React.FC<TodoProps> = ({ todo, check }) => {
   const { id, title, description, checked } = todo;
 
   return (
-    <Box p={5} shadow="md" borderWidth="1px">
+    <Box p={4} shadow="md" borderWidth="1px">
       <Flex align="center">
         <IconButton
           icon={checked ? 'check-circle' : 'check'}
@@ -38,7 +39,11 @@ const Todo: React.FC<TodoProps> = ({ todo, check }) => {
   );
 };
 
-const Todos: React.FC = () => {
+interface TodosProps {
+  lin: boolean;
+}
+
+const Todos: React.FC<TodosProps> = ({ lin }) => {
   const { data, mutate } = useSWR<ITodo[]>(config.apiUrl('/todos'));
 
   const check = (id: number) => () => {
@@ -51,10 +56,12 @@ const Todos: React.FC = () => {
   };
 
   return data ? (
-    <Stack spacing={8} shouldWrapChildren>
-      {data.map((todo) => (
-        <Todo todo={todo} check={check} />
-      ))}
+    <Stack spacing={4} shouldWrapChildren>
+      {data
+        .filter((todo) => (lin ? todo.id >= 115 : true))
+        .map((todo) => (
+          <Todo todo={todo} check={check} />
+        ))}
     </Stack>
   ) : (
     <Heading fontSize={1.75}>No data :(</Heading>
@@ -62,12 +69,17 @@ const Todos: React.FC = () => {
 };
 
 const Home: NextPage = () => {
+  const [lin, toggle] = useSaveToggle();
+
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
-      <Heading mb={3}>Todos</Heading>
+      <Stack isInline align="center">
+        <Heading mb={3}>Todos</Heading>
+        <Button onClick={toggle}>{lin ? 'Only lin' : 'All'}</Button>
+      </Stack>
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>
-          <Todos />
+          <Todos lin={lin} />
         </Suspense>
       )}
     </Box>
