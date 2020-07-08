@@ -13,6 +13,10 @@ interface TodoProps {
 
 const CustomBox = styled(Box)`
   .remove {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     opacity: 0;
     transition-duration: 0.2s;
   }
@@ -43,7 +47,7 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
     <TodoForm todo={todo} close={() => setUpdate(false)} />
   ) : (
     <CustomBox p={4} shadow="md" borderWidth="1px">
-      <Flex align="center" justify="space-between">
+      <Flex align="center" justify="space-between" pos="relative">
         <Flex>
           <IconButton
             icon={checked ? 'check' : 'minus'}
@@ -54,7 +58,9 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
             onClick={onCheck}
           />
           <Box>
-            <Heading fontSize="xl">{title}</Heading>
+            <Heading fontSize="xl" wordBreak="break-all">
+              {title}
+            </Heading>
             {description && (
               <Text mt={4} wordBreak="break-all">
                 {description}

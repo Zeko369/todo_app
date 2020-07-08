@@ -25,8 +25,7 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
 
   const check = async (id: number): Promise<unknown> => {
     try {
-      const res = await http.patch(config.apiUrl(`/todos/${id}/check`));
-      const data = await res.json();
+      const data = await http.patch(config.apiUrl(`/todos/${id}/check`));
       return await mutate((current) => current.map((todo) => (todo.id === id ? data : todo)));
     } catch (err) {
       console.error(err);
@@ -80,9 +79,6 @@ const Home: NextPage = () => {
       <Flex justify="space-between" align="center">
         <Stack isInline align="center">
           <Heading mb={3}>Todos</Heading>
-          <Button onClick={toggle}>{lin ? 'Only lin' : 'All'}</Button>
-          <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
-          <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
         </Stack>
         <Stack isInline align="center">
           <Text>{stats}</Text>
@@ -91,6 +87,11 @@ const Home: NextPage = () => {
           </Button>
         </Stack>
       </Flex>
+      <Stack isInline mb={3}>
+        <Button onClick={toggle}>{lin ? 'Only lin' : 'All'}</Button>
+        <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
+        <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
+      </Stack>
       {showNew && <TodoForm />}
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>

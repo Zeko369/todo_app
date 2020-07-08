@@ -1,6 +1,6 @@
 interface Http {
-  post: (url: string, body?: string) => Promise<Response>;
-  patch: (url: string, body?: string) => Promise<Response>;
+  post: (url: string, body?: string) => Promise<any>;
+  patch: (url: string, body?: string) => Promise<any>;
   delete: (url: string) => Promise<Response>;
 }
 
