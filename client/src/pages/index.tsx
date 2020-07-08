@@ -27,7 +27,11 @@ const Todo: React.FC<TodoProps> = ({ todo, check }) => {
         />
         <Box>
           <Heading fontSize="xl">{title}</Heading>
-          {description && <Text mt={4}>{description}</Text>}
+          {description && (
+            <Text mt={4} wordBreak="break-all">
+              {description}
+            </Text>
+          )}
         </Box>
       </Flex>
     </Box>
