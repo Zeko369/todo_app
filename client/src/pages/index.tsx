@@ -31,6 +31,10 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
   };
 
   const remove = async (id: number): Promise<unknown> => {
+    if (!confirm('Are you sure you want to delete this todo?')) {
+      return;
+    }
+
     try {
       const res = await fetch(config.apiUrl(`/todos/${id}`), { method: 'DELETE' });
       if (res.status === 204) {
