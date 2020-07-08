@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 
-const useToggle = (
-  initValue = false
-): [boolean, () => void, React.Dispatch<React.SetStateAction<boolean>>] => {
+export type useToggleReturn = [boolean, () => void, React.Dispatch<React.SetStateAction<boolean>>];
+
+const useToggle = (initValue = false): useToggleReturn => {
   const [value, setValue] = useState<boolean>(initValue);
 
   const toggle = useCallback(() => setValue((v) => !v), []);
