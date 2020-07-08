@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Flex, IconButton, Heading, Text } from '@chakra-ui/core';
+import { Box, Flex, IconButton, Heading, Text, Stack } from '@chakra-ui/core';
 import { ITodo } from '../ts/api';
 import styled from '@emotion/styled';
+import useToggle from '../hooks/useToggle';
+import TodoForm from './TodoForm';
 
 interface TodoProps {
   todo: ITodo;
@@ -24,6 +26,7 @@ const CustomBox = styled(Box)`
 
 const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [showUpdate, toggleUpdate, setUpdate] = useToggle();
   const { id, title, description, checked } = todo;
 
   const onCheck = () => {
@@ -36,13 +39,15 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
     remove(id).finally(() => setLoading(false));
   };
 
-  return (
+  return showUpdate ? (
+    <TodoForm todo={todo} close={() => setUpdate(false)} />
+  ) : (
     <CustomBox p={4} shadow="md" borderWidth="1px">
       <Flex align="center" justify="space-between">
         <Flex>
           <IconButton
-            icon={checked ? 'check-circle' : 'check'}
-            variantColor={checked ? 'green' : 'blue'}
+            icon={checked ? 'check' : 'minus'}
+            variantColor={checked ? 'green' : 'gray'}
             aria-label="check"
             mr={4}
             isLoading={loading}
@@ -57,7 +62,7 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
             )}
           </Box>
         </Flex>
-        <Box className="remove">
+        <Stack className="remove" spacing={3} isInline>
           <IconButton
             icon="delete"
             variantColor="red"
@@ -65,7 +70,14 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
             isLoading={loading}
             onClick={onDelete}
           />
-        </Box>
+          <IconButton
+            icon="edit"
+            variantColor="green"
+            aria-label="Update"
+            isLoading={loading}
+            onClick={toggleUpdate}
+          />
+        </Stack>
       </Flex>
     </CustomBox>
   );

@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { Suspense, useState, createContext } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import { Stack, Box, Heading, Button, Flex, Text } from '@chakra-ui/core';
@@ -9,7 +9,6 @@ import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';
 import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
-import { IMutate } from '../ts/swr';
 
 const isServer = typeof window === 'undefined';
 
@@ -73,7 +72,7 @@ const Home: NextPage = () => {
   const [lin, toggle] = useSaveToggle('lin');
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
-  const [showNew, toggleNew] = useToggle(true);
+  const [showNew, toggleNew] = useToggle();
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
@@ -91,7 +90,7 @@ const Home: NextPage = () => {
           </Button>
         </Stack>
       </Flex>
-      {showNew && <TodoForm type="new" />}
+      {showNew && <TodoForm />}
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>
           <Todos lin={lin} order={order} onlyTodo={onlyTodo} setStats={setStats} />
