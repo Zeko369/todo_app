@@ -2,34 +2,71 @@ import React, { Suspense } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import config from '../config';
-import { Todo } from '../ts/api';
+import { ITodo } from '../ts/api';
+import { Stack, Text, Box, Heading, Flex, IconButton } from '@chakra-ui/core';
 
 const isServer = typeof window === 'undefined';
 
+interface TodoProps {
+  todo: ITodo;
+  check: (id: number) => () => void;
+}
+
+const Todo: React.FC<TodoProps> = ({ todo, check }) => {
+  const { id, title, description, checked } = todo;
+
+  return (
+    <Box p={5} shadow="md" borderWidth="1px">
+      <Flex align="center">
+        <IconButton
+          icon={checked ? 'check-circle' : 'check'}
+          variantColor={checked ? 'green' : 'blue'}
+          aria-label="check"
+          mr={4}
+          onClick={check(id)}
+        />
+        <Box>
+          <Heading fontSize="xl">{title}</Heading>
+          {description && <Text mt={4}>{description}</Text>}
+        </Box>
+      </Flex>
+    </Box>
+  );
+};
+
 const Todos: React.FC = () => {
-  const { data } = useSWR<Todo[]>(config.apiUrl('/todos'));
+  const { data, mutate } = useSWR<ITodo[]>(config.apiUrl('/todos'));
+
+  const check = (id: number) => () => {
+    fetch(config.apiUrl(`/todos/${id}/check`), { method: 'PATCH' })
+      .then((res) => res.json())
+      .then((data) => {
+        mutate((current) => current.map((todo) => (todo.id === id ? data : todo)));
+      })
+      .catch((err) => console.error(err));
+  };
 
   return data ? (
-    <ul>
+    <Stack spacing={8} shouldWrapChildren>
       {data.map((todo) => (
-        <li key={todo.id}>{todo.title}</li>
+        <Todo todo={todo} check={check} />
       ))}
-    </ul>
+    </Stack>
   ) : (
-    <h1>No data :(</h1>
+    <Heading fontSize={1.75}>No data :(</Heading>
   );
 };
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <h1>Hello world</h1>
+    <Box w="90%" maxW="1000px" m="0 auto">
+      <Heading mb={3}>Todos</Heading>
       {!isServer && (
-        <Suspense fallback={<h1>Loading...</h1>}>
+        <Suspense fallback={<Heading>Loading...</Heading>}>
           <Todos />
         </Suspense>
       )}
-    </div>
+    </Box>
   );
 };
 
