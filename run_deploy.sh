@@ -4,9 +4,9 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 git pull origin master
 NODE_ENV=development yarn install
-NODE_ENV=development sequelize db:migrate
+NODE_ENV=development yarn sequelize db:migrate
 
 cd client
 yarn install
-yarn build
-yarn export
+yarn next build
+yarn next export
