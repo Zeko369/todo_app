@@ -14,13 +14,12 @@ import http from '../api/http';
 const isServer = typeof window === 'undefined';
 
 interface TodosProps {
-  lin: boolean;
   order: boolean;
   onlyTodo: boolean;
   setStats: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
+const Todos: React.FC<TodosProps> = ({ order, onlyTodo, setStats }) => {
   const { data, mutate } = useSWR<ITodo[]>(config.apiUrl('/todos'));
 
   const check = async (id: number): Promise<unknown> => {
@@ -47,9 +46,7 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
     }
   };
 
-  const filteredData = (data || [])
-    .filter((todo) => (lin ? todo.id >= 115 : true))
-    .sort((t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id));
+  const filteredData = (data || []).sort((t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id));
 
   setStats(`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`);
 
@@ -69,7 +66,6 @@ const Todos: React.FC<TodosProps> = ({ lin, order, onlyTodo, setStats }) => {
 const Home: NextPage = () => {
   const [stats, setStats] = useState<string>('');
 
-  const [lin, toggle] = useSaveToggle('lin');
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
   const [showNew, toggleNew] = useToggle();
@@ -88,14 +84,13 @@ const Home: NextPage = () => {
         </Stack>
       </Flex>
       <Stack isInline mb={3}>
-        <Button onClick={toggle}>{lin ? 'Only lin' : 'All'}</Button>
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
       </Stack>
       {showNew && <TodoForm />}
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>
-          <Todos lin={lin} order={order} onlyTodo={onlyTodo} setStats={setStats} />
+          <Todos order={order} onlyTodo={onlyTodo} setStats={setStats} />
         </Suspense>
       )}
     </Box>

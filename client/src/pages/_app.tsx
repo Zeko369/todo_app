@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { SWRConfig } from 'swr';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
@@ -15,6 +16,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       }}
     >
       <ThemeProvider>
+        <Head>
+          <title>Todo app</title>
+        </Head>
         <CSSReset />
         <Component {...pageProps} />
       </ThemeProvider>
