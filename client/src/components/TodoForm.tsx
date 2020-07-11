@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Heading, Stack, Box, Button } from '@chakra-ui/core';
+import { Heading, Stack, Box, Button, Flex } from '@chakra-ui/core';
 import Input from './Input';
 import config from '../config';
 import { mutate } from 'swr';
@@ -18,6 +18,8 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: { title: todo?.title, description: todo?.description },
   });
+
+  const isUpdate = Boolean(todo);
 
   const onSubmit = (data: { title: string; description?: string }) => {
     setLoading(true);
@@ -41,9 +43,16 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
 
   return (
     <Box p={3} shadow="md" borderWidth="1px" mb={6}>
-      <Heading fontSize="lg" mb={2}>
-        {!todo ? 'New TODO' : 'Edit TODO'}
-      </Heading>
+      <Flex justify="space-between">
+        <Heading fontSize="lg" mb={2}>
+          {!isUpdate ? 'New TODO' : 'Edit TODO'}
+        </Heading>
+        {isUpdate && (
+          <Button type="button" onClick={close}>
+            Close
+          </Button>
+        )}
+      </Flex>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           <Input name="title" ref={register()} isRequired defaultValue={todo?.title} />
@@ -54,13 +63,8 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
           />
           <Stack isInline justify="flex-end">
             <Button type="submit" variantColor="green" isLoading={loading}>
-              {!todo ? 'Add' : 'Update'}
+              {!isUpdate ? 'Add' : 'Update'}
             </Button>
-            {todo && (
-              <Button type="button" onClick={close}>
-                Close
-              </Button>
-            )}
           </Stack>
         </Stack>
       </form>
