@@ -1290,9 +1290,9 @@
   integrity sha512-7+2BITlgjgDhH0vvwZU/HZJVyk+2XUlvxXe8dFMedNX/aMkaOq++rMAFXc0tM7ij15QaWlbdQASBR9dihi+bDQ==
 
 "@types/node@*":
-  version "14.0.20"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.20.tgz#0da05cddbc761e1fa98af88a17244c8c1ff37231"
-  integrity sha512-MRn/NP3dee8yL5QhbSA6riuwkS+UOcsPUMOIOG3KMUQpuor/2TopdRBu8QaaB4fGU+gz/bzyDWt0FtUbeJ8H1A==
+  version "14.0.22"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.22.tgz#23ea4d88189cec7d58f9e6b66f786b215eb61bdc"
+  integrity sha512-emeGcJvdiZ4Z3ohbmw93E/64jRzUHAItSHt8nF7M4TGgQTiWqFVGB8KNpLGFmUHmHLvjvBgFwVlqNcq+VuGv9g==
 
 "@types/node@12.0.12":
   version "12.0.12"
@@ -1321,15 +1321,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.10":
-  version "16.9.41"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.41.tgz#925137ee4d2ff406a0ecf29e8e9237390844002e"
-  integrity sha512-6cFei7F7L4wwuM+IND/Q2cV1koQUvJ8iSV+Gwn0c3kvABZ691g7sp3hfEQHOUBJtccl1gPi+EyNjMIl9nGA0ug==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^2.2.0"
-
-"@types/react@^16.9.42":
+"@types/react@*", "@types/react@^16.8.10", "@types/react@^16.9.42":
   version "16.9.42"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.42.tgz#9776508d59c1867bbf9bd7f036dab007fdaa1cb7"
   integrity sha512-iGy6HwfVfotqJ+PfRZ4eqPHPP5NdPZgQlr0lTs8EfkODRBV9cYy8QMKcC9qPCe1JrESC1Im6SrCFR6tQgg74ag==
@@ -1354,25 +1346,25 @@
   resolved "https://registry.yarnpkg.com/@use-it/event-listener/-/event-listener-0.1.3.tgz#a9920b2819d211cf55e68e830997546eec6886d3"
   integrity sha512-UCHkLOVU+xj3/1R8jXz8GzDTowkzfIDPESOBlVC2ndgwUSBEqiFdwCoUEs2lcGhJOOiEdmWxF+T23C5+60eEew==
 
-"@vercel/build-utils@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@vercel/build-utils/-/build-utils-2.4.0.tgz#c756a3804f072cc693ebe0bbcc1adcce61b9f15c"
-  integrity sha512-VRXMLBPDcpFUHQMgHdgYHBl9SRwqNFb43tgkMdTYaNml2HgqlLNvNuINKlqwB2/Q/tARIWcm4jmPKR0gu1CaEQ==
+"@vercel/build-utils@2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@vercel/build-utils/-/build-utils-2.4.1.tgz#e49de196807321e60d6616ec412c033c0b9a0a87"
+  integrity sha512-DgRvs0u5ZLQyeVztZWEbEtGeq1PsquJ4BfGQ9pu3w3vPuk1Znbxhrha55Kqc8Zo5YTWBEudQh5OlxA7ZYCjqPQ==
 
-"@vercel/go@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@vercel/go/-/go-1.1.2.tgz#0b0067a56616e4c56eeac8a8b33a9bb64a79be71"
-  integrity sha512-1k7w6gY2Uj4DVqvvqm5VXZZeCqmzV5Fw3T3hjfgt13WVXPVwYfXf50ya4VvwpF9/IEvXpAhXLRcHD7ZTCMoXKA==
+"@vercel/go@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@vercel/go/-/go-1.1.3.tgz#2ef813f1a7e15a9593b5dd183f574f82df08569a"
+  integrity sha512-ydW8jA4wtx781BbaCB/BDuC+NO6aqUVbkqFhltVVFeUjYRxL3Uyh35dWwSbT/d9Kgw3xorLTb3m/gAyFwjoHVw==
 
-"@vercel/next@2.6.7":
-  version "2.6.7"
-  resolved "https://registry.yarnpkg.com/@vercel/next/-/next-2.6.7.tgz#e522ab1e4c2af83b51df430dec1f98f64d7d202e"
-  integrity sha512-zzcalT/TRpI7EH4glRqhD09jkeGqbjZ4JbiOkCdwTAMJDme8bf6wsYffBGu92DLv/2zDFPLj0EcNsGVhb7bk0w==
+"@vercel/next@2.6.11":
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/@vercel/next/-/next-2.6.11.tgz#485e896d3cd29546e64694ca3e30e5d0d3cb7ee4"
+  integrity sha512-bUHhQoR72iG0RUwGUEuQZVVDI09+wLL5ADBbRFudQq9xg1kCYBlQ/6l3MyFif2IuZq5b/OPQ++XX0qtUzeLlJQ==
 
-"@vercel/node@1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@vercel/node/-/node-1.7.1.tgz#cdf9b2226cbc469228aae6369b2b21db4c83dc69"
-  integrity sha512-Lp6l3526xQ/srCqkXE9/E+gykAcpM/vut4zFo5NA9+syGxZt1nlVAznhNVkgsSW4mbRIE67KIfi7SII55dW7uw==
+"@vercel/node@1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@vercel/node/-/node-1.7.2.tgz#85cb8aac661c02dfef6fe752740f5b162e90767b"
+  integrity sha512-XV5lrLC+K/cxsaFj8H2OoGu1zliOqnxcrOnPInI8HmQjR/Tztt+0nzgpt+7sx8wXcrib0Nu7lK303jP7VjSETw==
   dependencies:
     "@types/node" "*"
     ts-node "8.9.1"
@@ -1383,15 +1375,15 @@
   resolved "https://registry.yarnpkg.com/@vercel/python/-/python-1.2.2.tgz#52e8e2a0d3a65153b8bd25a63db36b704aafde72"
   integrity sha512-+rHfbjJaySdac59Oa11a7/nZzpXC98Kqw5tPh8DT1I5OG8YTfgJnwgfBoytZOAZZQBcggoJspnjAd+wGVCoVXw==
 
-"@vercel/ruby@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@vercel/ruby/-/ruby-1.2.2.tgz#0a6ef704d9eec7a88d3bf12f462cd52046b75361"
-  integrity sha512-5kKFNS84EvjHRI/umZqL31KdyvoWO05qbIeR3YHHJBCPSBIUlGimM0Wx7OsdAK+TMDzpWszBF/6bgk//KpmYbg==
+"@vercel/ruby@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@vercel/ruby/-/ruby-1.2.3.tgz#008163246fa1191a05eca2065cab2b89619a36ff"
+  integrity sha512-WvtImWLdIo4bB0f2Pgc+P7KdgVVsPSMEVEtk4ZJnKkhU7IsCn/UnlovOsZeP6Qw/Bwqv84KrNm+nNRte648aew==
 
-"@vercel/static-build@0.17.3":
-  version "0.17.3"
-  resolved "https://registry.yarnpkg.com/@vercel/static-build/-/static-build-0.17.3.tgz#43ce2f605df946c11b697b5bf1b8f91cdc148cf6"
-  integrity sha512-Xf4b6AEVl5EnTSecG0p9hwi3F4MuvwsYyGmvhbNfoV5c8T4Q9gPgTY0f738OAUv1f81DdzRXcgijK4rFQ1ysTQ==
+"@vercel/static-build@0.17.5":
+  version "0.17.5"
+  resolved "https://registry.yarnpkg.com/@vercel/static-build/-/static-build-0.17.5.tgz#e52e6b73ea0362b6bc05b45d4b0396da562e8e7d"
+  integrity sha512-pZpIgm22BbscfH3qJUBgTZf0RNQO/sh2AORsu9aF70QXeU2B2n9wvpz+K8oiTTXjdNdFSidfMUX+PZZc1OPx+Q==
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -2119,9 +2111,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001043, caniuse-lite@^1.0.30001093:
-  version "1.0.30001096"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001096.tgz#5a4541af5317dc21f91f5b24d453030a35f919c0"
-  integrity sha512-PFTw9UyVfbkcMEFs82q8XVlRayj7HKvnhu5BLcmjGpv+SNyiWasCcWXPGJuO0rK0dhLRDJmtZcJ+LHUfypbw1w==
+  version "1.0.30001097"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001097.tgz#1129c40c9f5ee3282158da08fd915d301f4a9bd8"
+  integrity sha512-TeuSleKt/vWXaPkLVFqGDnbweYfq4IaZ6rUugFf3rWY6dlII8StUZ8Ddin0PkADfgYZ4wRqCdO2ORl4Rn5eZIA==
 
 chalk@4.0.0:
   version "4.0.0"
@@ -2791,9 +2783,9 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     stream-shift "^1.0.0"
 
 electron-to-chromium@^1.3.413, electron-to-chromium@^1.3.488:
-  version "1.3.492"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.492.tgz#bde16082a05a124266e5ecc9cf0ce53d137f2919"
-  integrity sha512-AD6v9Y2wN0HuoRH4LwCmlSHjkKq51D1U52bTuvM5uPzisbHVm3Hms15c42TBFLewxnSqxAynK/tbeaUi4Rnjqw==
+  version "1.3.496"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.496.tgz#3f43d32930481d82ad3663d79658e7c59a58af0b"
+  integrity sha512-TXY4mwoyowwi4Lsrq9vcTUYBThyc1b2hXaTZI13p8/FRhY2CTaq5lK+DVjhYkKiTLsKt569Xes+0J5JsVXFurQ==
 
 elliptic@^6.0.0, elliptic@^6.5.2:
   version "6.5.3"
@@ -4116,10 +4108,15 @@ native-url@0.3.1:
   dependencies:
     querystring "^0.2.0"
 
-neo-async@2.6.1, neo-async@^2.5.0, neo-async@^2.6.1:
+neo-async@2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
+
+neo-async@^2.5.0, neo-async@^2.6.1:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
+  integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
 next-tick@~1.0.0:
   version "1.0.0"
@@ -5064,9 +5061,9 @@ react-focus-lock@^2.2.1:
     use-sidecar "^1.0.1"
 
 react-hook-form@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.0.2.tgz#4a16064b9a47509736f1b1afe84ad87cac617e58"
-  integrity sha512-8KR2bJbwFLuDci/c3tbmCLrkAsHPV7bKGbbXoCokhWx6gYL5me55Gzz2IiVPetj1rlvQejgUGWL+iZF/LpBYUg==
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.0.4.tgz#c5fc36886f0b4cadd8a2b3bb83a3dbde01ab52a3"
+  integrity sha512-LQIQBenTkSLtwes2tiFzqkOlAaa/ppbiaAFnpngufS8eM139cl76h7YybJso96i6VOSIhlfRpUbDPc+VoA/bog==
 
 react-is@16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
@@ -5948,10 +5945,10 @@ typescript@3.9.3:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.3.tgz#d3ac8883a97c26139e42df5e93eeece33d610b8a"
   integrity sha512-D/wqnB2xzNFIcoBG9FG8cXRDjiqSTbG2wd8DMZeQyJlP1vfTkIxH4GKveWaEBYySKIg+USu+E+EDIR47SqnaMQ==
 
-typescript@^3.9.6:
-  version "3.9.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
-  integrity sha512-Pspx3oKAPJtjNwE92YS05HQoY7z2SFyOpHo9MqJor3BXAGNaPUs83CuVp9VISFkSjyRfiTpmKuAYGJB7S7hOxw==
+typescript@^4.0.0-dev.20200711:
+  version "4.0.0-dev.20200711"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.0-dev.20200711.tgz#c98738ca78d3b2caaa91adaaef72d2abdb5f7a48"
+  integrity sha512-ynscKsQt5G6NStIzPpzCEhPJK0qp/DYyI6uTl5Mn1mDhBqnrMXQWXGoYDl9DA6Mf5plK64zSD9CoSn4L8vDyig==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
@@ -6123,17 +6120,17 @@ vendors@^1.0.0:
   integrity sha512-/juG65kTL4Cy2su4P8HjtkTxk6VmJDiOPBufWniqQ6wknac6jNiXS9vU+hO3wgusiyqWlzTbVHi0dyJqRONg3w==
 
 vercel@^19.1.1:
-  version "19.1.1"
-  resolved "https://registry.yarnpkg.com/vercel/-/vercel-19.1.1.tgz#2034911bff81f4d055f5deb9995db1f93552529b"
-  integrity sha512-cFKkzkkypdNcO1OQnjVCGSS/lFQQAmWNDIutdi2RYqMW0Pdp/u6XeZPADvDbqVwKi56QthoZybCCdolzNZxHVw==
+  version "19.1.2"
+  resolved "https://registry.yarnpkg.com/vercel/-/vercel-19.1.2.tgz#2b5f35b70b2c1b8ed02dbe8da62d648e89cf6a60"
+  integrity sha512-eBA6K/V+FX56FIYtv/gT6/UJWmb7YZ14LihRgiLBR7TkXK72HE4z+kPXJUcX1zSCBdd1pkLeZ/VhbLv4WXL9TA==
   dependencies:
-    "@vercel/build-utils" "2.4.0"
-    "@vercel/go" "1.1.2"
-    "@vercel/next" "2.6.7"
-    "@vercel/node" "1.7.1"
+    "@vercel/build-utils" "2.4.1"
+    "@vercel/go" "1.1.3"
+    "@vercel/next" "2.6.11"
+    "@vercel/node" "1.7.2"
     "@vercel/python" "1.2.2"
-    "@vercel/ruby" "1.2.2"
-    "@vercel/static-build" "0.17.3"
+    "@vercel/ruby" "1.2.3"
+    "@vercel/static-build" "0.17.5"
 
 vm-browserify@^1.0.1:
   version "1.1.2"
