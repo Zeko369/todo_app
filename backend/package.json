@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/cli": "2.2.1",
+    "@prisma/client": "2.2.1",
+    "typescript": "^3.9.6"
+  }
+}
