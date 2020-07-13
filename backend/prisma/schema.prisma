@@ -7,15 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Tasks {
-  id          Int       @default(autoincrement()) @id
-  TodoId      Int?
-  text        String?
-  completedAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
 model Todos {
   id          Int       @default(autoincrement()) @id
   title       String?
