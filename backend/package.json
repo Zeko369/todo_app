@@ -3,9 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --no-notify src/index.ts",
+    "start": "ts-node src/index.ts"
+  },
   "dependencies": {
     "@prisma/cli": "2.2.1",
     "@prisma/client": "2.2.1",
     "typescript": "^3.9.6"
+  },
+  "devDependencies": {
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "^1.0.0-pre.51"
   }
 }

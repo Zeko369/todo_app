@@ -5,4 +5,5 @@ const client = new PrismaClient();
 (async () => {
   const todos = await client.todos.findMany();
   console.log(todos);
-})().finally(client.disconnect);
+  await client.disconnect();
+})().finally(() => console.log('Bye'));
