@@ -1,9 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import express from 'express';
+import router from './old/todos';
 
-const client = new PrismaClient();
+const PORT = process.env.PORT || 8080;
+const app = express();
 
-(async () => {
-  const todos = await client.todos.findMany();
-  console.log(todos);
-  await client.disconnect();
-})().finally(() => console.log('Bye'));
+app.use('/api/todos', router);
+
+app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
+});
