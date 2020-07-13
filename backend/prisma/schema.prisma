@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SequelizeMeta {
+  name String @id
+}
+
+model Tasks {
+  id          Int       @default(autoincrement()) @id
+  TodoId      Int?
+  text        String?
+  completedAt DateTime?
+  createdAt   DateTime
+  updatedAt   DateTime
+}
+
+model Todos {
+  id          Int       @default(autoincrement()) @id
+  title       String?
+  createdAt   DateTime
+  updatedAt   DateTime
+  description String?
+  checked     Boolean   @default(false)
+  checkedAt   DateTime?
+}
