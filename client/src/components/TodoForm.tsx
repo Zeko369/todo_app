@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Heading, Stack, Box, Button, Flex } from '@chakra-ui/core';
+import { Heading, Stack, Box, Button, Flex, IconButton } from '@chakra-ui/core';
 import Input from './Input';
 import config from '../config';
 import { mutate } from 'swr';
@@ -47,10 +47,8 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
         <Heading fontSize="lg" mb={2}>
           {!isUpdate ? 'New TODO' : 'Edit TODO'}
         </Heading>
-        {isUpdate && (
-          <Button type="button" onClick={close}>
-            Close
-          </Button>
+        {close && (
+          <IconButton size="xs" type="button" onClick={close} icon="close" aria-label="close" />
         )}
       </Flex>
       <form onSubmit={handleSubmit(onSubmit)}>

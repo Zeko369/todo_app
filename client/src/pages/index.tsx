@@ -87,7 +87,7 @@ const Home: NextPage = () => {
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
       </Stack>
-      {showNew && <TodoForm />}
+      {showNew && <TodoForm close={toggleNew} />}
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>
           <Todos order={order} onlyTodo={onlyTodo} setStats={setStats} />
