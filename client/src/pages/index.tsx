@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
+import React, { Suspense, useState, useRef, useCallback } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import { Stack, Box, Heading, Button, Flex, Text, Collapse } from '@chakra-ui/core';
@@ -72,7 +72,11 @@ const Home: NextPage = () => {
   const [showNew, , setNew] = useToggle();
 
   const newRef = useRef<HTMLInputElement>(null);
-  const newPressed = useKeyPress('n');
+  useKeyPress('n', (down) => {
+    if (down) {
+      openNew();
+    }
+  });
 
   const openNew = useCallback(() => {
     setNew(true);
@@ -88,12 +92,6 @@ const Home: NextPage = () => {
       openNew();
     }
   }, [showNew]);
-
-  useEffect(() => {
-    if (newPressed) {
-      openNew();
-    }
-  }, [newPressed]);
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">

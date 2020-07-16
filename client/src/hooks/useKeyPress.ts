@@ -1,12 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 
-const useKeyPress = (targetKey: string) => {
-  const [keyPressed, setKeyPressed] = useState(false);
-
+const useKeyPress = (targetKey: string, callback: (down: boolean) => any) => {
   const downHandler = useCallback(
     ({ key, target }: KeyboardEvent) => {
       if (key === targetKey && (target as any).type === undefined) {
-        setKeyPressed(true);
+        callback(true);
       }
     },
     [targetKey]
@@ -15,7 +13,7 @@ const useKeyPress = (targetKey: string) => {
   const upHandler = useCallback(
     ({ key, target }: KeyboardEvent) => {
       if (key === targetKey && (target as any).type === undefined) {
-        setKeyPressed(false);
+        callback(false);
       }
     },
     [targetKey]
@@ -30,10 +28,6 @@ const useKeyPress = (targetKey: string) => {
       window.removeEventListener('keyup', upHandler);
     };
   }, [downHandler, upHandler]);
-
-  return keyPressed;
 };
-
-export const useEscape = () => useKeyPress('Escape');
 
 export default useKeyPress;
