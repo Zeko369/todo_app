@@ -4,8 +4,8 @@ const useKeyPress = (targetKey: string) => {
   const [keyPressed, setKeyPressed] = useState(false);
 
   const downHandler = useCallback(
-    ({ key }) => {
-      if (key === targetKey) {
+    ({ key, target }: KeyboardEvent) => {
+      if (key === targetKey && (target as any).type === undefined) {
         setKeyPressed(true);
       }
     },
@@ -13,8 +13,8 @@ const useKeyPress = (targetKey: string) => {
   );
 
   const upHandler = useCallback(
-    ({ key }) => {
-      if (key === targetKey) {
+    ({ key, target }: KeyboardEvent) => {
+      if (key === targetKey && (target as any).type === undefined) {
         setKeyPressed(false);
       }
     },
