@@ -69,7 +69,7 @@ const Home: NextPage = () => {
 
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
-  const [showNew, _toggleNew, setNew] = useToggle();
+  const [showNew, , setNew] = useToggle();
 
   const newRef = useRef<HTMLInputElement>(null);
   const newPressed = useKeyPress('n');
