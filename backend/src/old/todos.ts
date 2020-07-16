@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', async (_req, res) => {
   try {
-    const todos = await db.todos.findMany();
+    const todos = await db.todo.findMany();
     res.status(200).send(todos);
   } catch (err) {
     res.status(500).send(err);
@@ -14,7 +14,7 @@ router.get('/', async (_req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const todo = await db.todos.create({
+    const todo = await db.todo.create({
       data: {
         title: req.body.title,
         description: req.body.description,
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const todo = await db.todos.findOne({ where: { id } });
+    const todo = await db.todo.findOne({ where: { id } });
 
     if (!todo) {
       return res.status(404).send({
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res) => {
 router.patch('/:id/check', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const todo = await db.todos.findOne({ where: { id } });
+    const todo = await db.todo.findOne({ where: { id } });
 
     if (!todo) {
       return res.status(404).send({
@@ -55,7 +55,7 @@ router.patch('/:id/check', async (req, res) => {
       });
     }
 
-    await db.todos.update({
+    await db.todo.update({
       where: { id },
       data: {
         checked: !todo.checked,
@@ -72,7 +72,7 @@ router.patch('/:id/check', async (req, res) => {
 router.patch('/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const todo = await db.todos.findOne({ where: { id } });
+    const todo = await db.todo.findOne({ where: { id } });
 
     if (!todo) {
       return res.status(404).send({
@@ -87,7 +87,7 @@ router.patch('/:id', async (req, res) => {
       description = req.body.description || todo.description;
     }
 
-    await db.todos.update({
+    await db.todo.update({
       where: { id },
       data: {
         title: req.body.title || todo.title,
@@ -104,7 +104,7 @@ router.patch('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const todo = await db.todos.findOne({ where: { id } });
+    const todo = await db.todo.findOne({ where: { id } });
 
     if (!todo) {
       return res.status(400).send({
@@ -112,7 +112,7 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
-    await db.todos.delete({ where: { id } });
+    await db.todo.delete({ where: { id } });
     res.status(204).send();
   } catch (err) {
     res.status(500).send(err);
