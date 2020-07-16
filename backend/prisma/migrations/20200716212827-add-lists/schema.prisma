@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Todo {
@@ -16,8 +16,6 @@ model Todo {
   createdAt   DateTime  @default(now())
   list        List?     @relation(fields: [listId], references: [id])
   listId      Int?
-  requires    Todo[]    @relation("Requirements", references: [id])
-  requiredBy  Todo[]    @relation("Requirements", references: [id])
   updatedAt   DateTime  @updatedAt
 }
 

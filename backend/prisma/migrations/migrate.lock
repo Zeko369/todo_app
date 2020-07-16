@@ -1,3 +1,5 @@
 # Prisma Migrate lockfile v1
 
-20200713214639-init-db
+20200716212735-init
+20200716212827-add-lists
+20200716212919-add-requirements

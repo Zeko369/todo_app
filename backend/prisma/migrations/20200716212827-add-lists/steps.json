@@ -2,34 +2,12 @@
   "version": "0.3.14-fixed",
   "steps": [
     {
-      "tag": "CreateSource",
-      "source": "db"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Source",
-        "source": "db"
-      },
-      "argument": "provider",
-      "value": "\"postgresql\""
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Source",
-        "source": "db"
-      },
-      "argument": "url",
-      "value": "\"***\""
-    },
-    {
       "tag": "CreateModel",
-      "model": "Todos"
+      "model": "List"
     },
     {
       "tag": "CreateField",
-      "model": "Todos",
+      "model": "List",
       "field": "id",
       "type": "Int",
       "arity": "Required"
@@ -39,7 +17,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Todos",
+          "model": "List",
           "field": "id"
         },
         "directive": "default"
@@ -51,7 +29,7 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Todos",
+          "model": "List",
           "field": "id"
         },
         "directive": "default"
@@ -64,7 +42,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Todos",
+          "model": "List",
           "field": "id"
         },
         "directive": "id"
@@ -72,60 +50,21 @@
     },
     {
       "tag": "CreateField",
-      "model": "Todos",
+      "model": "List",
       "field": "title",
       "type": "String",
       "arity": "Optional"
     },
     {
       "tag": "CreateField",
-      "model": "Todos",
-      "field": "description",
-      "type": "String",
-      "arity": "Optional"
+      "model": "List",
+      "field": "todos",
+      "type": "Todo",
+      "arity": "List"
     },
     {
       "tag": "CreateField",
-      "model": "Todos",
-      "field": "checked",
-      "type": "Boolean",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "Todos",
-          "field": "checked"
-        },
-        "directive": "default"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "Todos",
-          "field": "checked"
-        },
-        "directive": "default"
-      },
-      "argument": "",
-      "value": "false"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Todos",
-      "field": "checkedAt",
-      "type": "DateTime",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Todos",
+      "model": "List",
       "field": "createdAt",
       "type": "DateTime",
       "arity": "Required"
@@ -135,7 +74,7 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Todos",
+          "model": "List",
           "field": "createdAt"
         },
         "directive": "default"
@@ -147,7 +86,7 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "Todos",
+          "model": "List",
           "field": "createdAt"
         },
         "directive": "default"
@@ -157,7 +96,7 @@
     },
     {
       "tag": "CreateField",
-      "model": "Todos",
+      "model": "List",
       "field": "updatedAt",
       "type": "DateTime",
       "arity": "Required"
@@ -167,11 +106,64 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "Todos",
+          "model": "List",
           "field": "updatedAt"
         },
         "directive": "updatedAt"
       }
+    },
+    {
+      "tag": "CreateField",
+      "model": "Todo",
+      "field": "list",
+      "type": "List",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Todo",
+          "field": "list"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Todo",
+          "field": "list"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[listId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Todo",
+          "field": "list"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Todo",
+      "field": "listId",
+      "type": "Int",
+      "arity": "Optional"
     }
   ]
 }

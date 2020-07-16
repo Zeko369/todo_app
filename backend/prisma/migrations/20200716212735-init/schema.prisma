@@ -7,7 +7,7 @@ datasource db {
   url = "***"
 }
 
-model Todos {
+model Todo {
   id          Int       @default(autoincrement()) @id
   title       String?
   description String?
