@@ -1,7 +1,7 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect, useRef, useCallback } from 'react';
 import { NextPage } from 'next';
 import useSWR from 'swr';
-import { Stack, Box, Heading, Button, Flex, Text } from '@chakra-ui/core';
+import { Stack, Box, Heading, Button, Flex, Text, Collapse } from '@chakra-ui/core';
 
 import config from '../config';
 import { ITodo } from '../ts/api';
@@ -10,6 +10,7 @@ import Todo from '../components/Todo';
 import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
 import http from '../api/http';
+import useKeyPress from '../hooks/useKeyPress';
 
 const isServer = typeof window === 'undefined';
 
@@ -68,7 +69,31 @@ const Home: NextPage = () => {
 
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
-  const [showNew, toggleNew] = useToggle();
+  const [showNew, _toggleNew, setNew] = useToggle();
+
+  const newRef = useRef<HTMLInputElement>(null);
+  const newPressed = useKeyPress('n');
+
+  const openNew = useCallback(() => {
+    setNew(true);
+    setTimeout(() => {
+      newRef.current?.focus();
+    }, 1);
+  }, []);
+
+  const toggleNew = useCallback(() => {
+    if (showNew) {
+      setNew(false);
+    } else {
+      openNew();
+    }
+  }, [showNew]);
+
+  useEffect(() => {
+    if (newPressed) {
+      openNew();
+    }
+  }, [newPressed]);
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
@@ -87,7 +112,9 @@ const Home: NextPage = () => {
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
       </Stack>
-      {showNew && <TodoForm close={toggleNew} />}
+      <Collapse isOpen={showNew}>
+        <TodoForm close={toggleNew} ref={newRef} />
+      </Collapse>
       {!isServer && (
         <Suspense fallback={<Heading>Loading...</Heading>}>
           <Todos order={order} onlyTodo={onlyTodo} setStats={setStats} />

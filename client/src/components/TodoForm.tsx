@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Heading, Stack, Box, Button, Flex, IconButton } from '@chakra-ui/core';
+import { Heading, Stack, Box, Button, Flex, IconButton, Textarea } from '@chakra-ui/core';
 import Input from './Input';
 import config from '../config';
 import { mutate } from 'swr';
@@ -13,13 +13,14 @@ interface Props {
   close?: () => void;
 }
 
-const TodoForm: React.FC<Props> = ({ todo, close }) => {
+const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { register, handleSubmit, reset } = useForm({
     defaultValues: { title: todo?.title, description: todo?.description },
   });
 
   const isUpdate = Boolean(todo);
+  // const titleRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = (data: { title: string; description?: string }) => {
     setLoading(true);
@@ -53,10 +54,22 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
       </Flex>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
-          <Input name="title" ref={register()} isRequired defaultValue={todo?.title} />
           <Input
+            name="title"
+            ref={(e) => {
+              register(e);
+              if (ref) {
+                // @ts-expect-error
+                ref.current = e;
+              }
+            }}
+            isRequired
+            defaultValue={todo?.title}
+          />
+          <Textarea
             name="description"
             ref={register()}
+            placeholder="Description"
             defaultValue={todo?.description || undefined}
           />
           <Stack isInline justify="flex-end">
@@ -68,6 +81,6 @@ const TodoForm: React.FC<Props> = ({ todo, close }) => {
       </form>
     </Box>
   );
-};
+});
 
 export default TodoForm;
