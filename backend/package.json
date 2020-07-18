@@ -11,18 +11,17 @@
     "db:seed": "ts-node utils/seed.ts"
   },
   "dependencies": {
-    "@prisma/cli": "2.2.1",
-    "@prisma/client": "2.2.1",
     "@types/morgan": "^1.9.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "morgan": "^1.10.0",
+    "nexus": "^0.25.0",
+    "nexus-plugin-prisma": "^0.16.1",
     "typescript": "^3.9.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
-    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.7",
     "@types/faker": "^4.1.12",
     "@types/node": "^14.0.23",
