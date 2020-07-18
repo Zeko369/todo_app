@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --no-notify src/index.ts",
-    "start": "ts-node src/index.ts",
+    "dev": "nexus dev",
     "db:generate": "yarn prisma migrate save --experimental",
     "db:migrate": "yarn prisma migrate up --experimental",
     "db:seed": "ts-node utils/seed.ts"
