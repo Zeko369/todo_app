@@ -6,7 +6,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: `http://${process.env.NEXT_PUBLIC_API}/graphql`,
+  uri: process.env.NEXT_PUBLIC_API,
 });
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
