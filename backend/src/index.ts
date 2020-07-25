@@ -2,6 +2,11 @@ import { schema, use } from 'nexus';
 import { intArg } from '@nexus/schema';
 import { prisma } from 'nexus-plugin-prisma';
 
+import cors from 'cors';
+import { server } from 'nexus';
+
+server.express.use(cors());
+
 use(prisma({ migrations: true, features: { crud: true } }));
 
 schema.queryType({
