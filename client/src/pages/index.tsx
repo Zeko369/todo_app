@@ -27,12 +27,6 @@ export interface ITodo {
   checked: boolean;
 }
 
-interface TodosProps {
-  order: boolean;
-  onlyTodo: boolean;
-  setStats: React.Dispatch<React.SetStateAction<string>>;
-}
-
 const CHECK_MUTATION = gql`
   mutation checkTodo($id: Int!) {
     checkTodo(id: $id) {
