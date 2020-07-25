@@ -4,14 +4,14 @@ config();
 module.exports = {
   apps: [
     {
-      name: 'Client',
+      name: 'Todo: Client',
       script: './client/node_modules/.bin/next',
       args: 'start ./client -p 2134',
       log_file: './logs/client.log',
       time: true,
     },
     {
-      name: 'Server',
+      name: 'Todo: Server',
       script: 'node',
       args: './backend/dist/index.js',
       log_file: './logs/server.log',
