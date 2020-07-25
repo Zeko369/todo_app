@@ -9,7 +9,7 @@ import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
 import useKeyPress from '../hooks/useKeyPress';
 
-const TODOS_QUERY = gql`
+export const TODOS_QUERY = gql`
   query Todos {
     todos(orderBy: { id: desc }) {
       id
