@@ -8,7 +8,9 @@
   },
   "author": "Fran Zekan <zekan.fran369@gmail.com>",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  },
   "devDependencies": {
     "pm2": "^4.4.0"
   }

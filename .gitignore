@@ -4,3 +4,7 @@ deploy.pub
 
 keys/
 backend/api.graphql
+
+logs/
+
+.env
