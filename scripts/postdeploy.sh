@@ -17,4 +17,6 @@ cd ../client
 yarn
 yarn build
 
+cd ..
+
 pm2 reload ecosystem.config.js --env production
