@@ -1,20 +1,17 @@
 import React from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { SWRConfig } from 'swr';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
-const fetcher = (url: RequestInfo, args?: RequestInit) =>
-  fetch(url, args).then((res) => res.json());
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: 'http://localhost:4000/graphql',
+});
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
-    <SWRConfig
-      value={{
-        fetcher,
-        suspense: true,
-      }}
-    >
+    <ApolloProvider client={client}>
       <ThemeProvider>
         <Head>
           <title>Todo app</title>
@@ -22,7 +19,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         <CSSReset />
         <Component {...pageProps} />
       </ThemeProvider>
-    </SWRConfig>
+    </ApolloProvider>
   );
 };
 

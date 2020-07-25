@@ -1,18 +1,31 @@
-import React, { Suspense, useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { NextPage } from 'next';
-import useSWR from 'swr';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import { Stack, Box, Heading, Button, Flex, Text, Collapse } from '@chakra-ui/core';
 
-import config from '../config';
-import { ITodo } from '../ts/api';
 import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';
 import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
-import http from '../api/http';
 import useKeyPress from '../hooks/useKeyPress';
 
-const isServer = typeof window === 'undefined';
+const TODOS_QUERY = gql`
+  query Todos {
+    todos(orderBy: { id: desc }) {
+      id
+      title
+      description
+      checked
+    }
+  }
+`;
+
+export interface ITodo {
+  id: number;
+  title: string;
+  description: string | null;
+  checked: boolean;
+}
 
 interface TodosProps {
   order: boolean;
@@ -20,34 +33,50 @@ interface TodosProps {
   setStats: React.Dispatch<React.SetStateAction<string>>;
 }
 
+const CHECK_MUTATION = gql`
+  mutation checkTodo($id: Int!) {
+    checkTodo(id: $id) {
+      id
+      checked
+    }
+  }
+`;
+
+const DELETE_MUTATION = gql`
+  mutation deleteTodo($id: Int!) {
+    deleteOneTodo(where: { id: $id }) {
+      id
+    }
+  }
+`;
+
 const Todos: React.FC<TodosProps> = ({ order, onlyTodo, setStats }) => {
-  const { data, mutate } = useSWR<ITodo[]>(config.apiUrl('/todos'));
+  const { loading, error, data } = useQuery<{ todos: ITodo[] }>(TODOS_QUERY);
 
-  const check = async (id: number): Promise<unknown> => {
-    try {
-      const data = await http.patch(config.apiUrl(`/todos/${id}/check`));
-      return await mutate((current) => current.map((todo) => (todo.id === id ? data : todo)));
-    } catch (err) {
-      console.error(err);
+  const [checkTodo] = useMutation<{ id: number }>(CHECK_MUTATION, {
+    refetchQueries: [{ query: TODOS_QUERY }],
+  });
+  const [removeTodo] = useMutation<{ id: number }>(DELETE_MUTATION, {
+    refetchQueries: [{ query: TODOS_QUERY }],
+  });
+
+  const check = (id: number): any => checkTodo({ variables: { id } });
+  const remove = (id: number): any => {
+    if (confirm('Are you sure?')) {
+      return removeTodo({ variables: { id } });
     }
   };
 
-  const remove = async (id: number): Promise<unknown> => {
-    if (!confirm('Are you sure you want to delete this todo?')) {
-      return;
-    }
+  if (loading) return <h1>Loading...</h1>;
+  if (error) return <h1>Error...</h1>;
 
-    try {
-      const res = await http.delete(config.apiUrl(`/todos/${id}`));
-      if (res.status === 204) {
-        return await mutate((current) => current.filter((todo) => todo.id !== id));
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const filteredData = data?.todos || [];
 
-  const filteredData = (data || []).sort((t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id));
+  // return null;
+
+  // const filteredData = (data?.todos || []).sort((t1, t2) =>
+  //   order ? t1.id - t2.id : t2.id - t1.id
+  // );
 
   setStats(`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`);
 
@@ -113,11 +142,7 @@ const Home: NextPage = () => {
       <Collapse isOpen={showNew}>
         <TodoForm close={toggleNew} ref={newRef} />
       </Collapse>
-      {!isServer && (
-        <Suspense fallback={<Heading>Loading...</Heading>}>
-          <Todos order={order} onlyTodo={onlyTodo} setStats={setStats} />
-        </Suspense>
-      )}
+      <Todos order={order} onlyTodo={onlyTodo} setStats={setStats} />
     </Box>
   );
 };

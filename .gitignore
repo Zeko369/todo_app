@@ -3,3 +3,4 @@ deploy
 deploy.pub
 
 keys/
+backend/api.graphql

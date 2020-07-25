@@ -7,10 +7,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.0.2",
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "emotion-theming": "^10.0.27",
+    "graphql": "^15.3.0",
     "next": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
