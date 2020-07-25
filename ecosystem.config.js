@@ -1,5 +1,5 @@
 const { config } = require('dotenv');
-// config();
+config();
 
 module.exports = {
   apps: [
@@ -30,14 +30,12 @@ module.exports = {
   ],
   deploy: {
     production: {
-      user: 'SSH_USERNAME',
-      host: 'SSH_HOSTMACHINE',
+      user: 'zeko',
+      host: 'c2.zekan.tk',
       ref: 'origin/master',
-      repo: 'GIT_REPOSITORY',
-      path: 'DESTINATION_PATH',
-      'pre-deploy-local': '',
-      'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production',
-      'pre-setup': '',
+      repo: 'git@github.com:Zeko369/todo_app.git',
+      path: '/home/zeko/todo',
+      'post-deploy': './scripts/postdeploy.sh',
     },
   },
 };
