@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.0.2",
@@ -20,11 +21,19 @@
     "swr": "^0.2.3"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.17.4",
+    "@graphql-codegen/typescript": "1.17.4",
     "@types/node": "12.0.12",
     "@types/react": "^16.9.42",
     "@types/react-dom": "^16.9.8",
     "typescript": "^4.0.0-dev.20200711",
-    "vercel": "^19.1.1"
+    "vercel": "^19.1.1",
+    "@graphql-codegen/typescript-operations": "1.17.4",
+    "@graphql-codegen/typescript-react-apollo": "1.17.4",
+    "@graphql-codegen/typescript-graphql-files-modules": "1.17.4",
+    "@graphql-codegen/typescript-document-nodes": "1.17.4",
+    "@graphql-codegen/fragment-matcher": "1.17.4",
+    "@graphql-codegen/introspection": "1.17.4"
   },
   "license": "ISC"
 }
