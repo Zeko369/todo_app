@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Flex, IconButton, Heading, Text, Stack } from '@chakra-ui/core';
-import { ITodo } from '../ts/api';
 import styled from '@emotion/styled';
+
 import useToggle from '../hooks/useToggle';
 import TodoForm from './TodoForm';
+import { ITodo } from '../pages';
 
 interface TodoProps {
   todo: ITodo;
