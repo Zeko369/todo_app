@@ -1,4 +1,4 @@
-import { schema, use } from 'nexus';
+import { schema, use, settings } from 'nexus';
 import { intArg } from '@nexus/schema';
 import { prisma } from 'nexus-plugin-prisma';
 
@@ -6,6 +6,7 @@ import cors from 'cors';
 import { server } from 'nexus';
 
 server.express.use(cors());
+settings.change({ server: { port: parseInt(process.env.PORT || '') || 4000 } });
 
 use(prisma({ migrations: true, features: { crud: true } }));
 
