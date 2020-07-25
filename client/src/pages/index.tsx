@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { Stack, Box, Heading, Button, Flex, Text, Collapse } from '@chakra-ui/core';
@@ -50,8 +50,14 @@ const DELETE_MUTATION = gql`
   }
 `;
 
-const Todos: React.FC<TodosProps> = ({ order, onlyTodo, setStats }) => {
+const Home: NextPage = () => {
   const { loading, error, data } = useQuery<{ todos: ITodo[] }>(TODOS_QUERY);
+
+  const [stats, setStats] = useState<string>('');
+
+  const [order, toggleOrder] = useSaveToggle('order');
+  const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
+  const [showNew, , setNew] = useToggle();
 
   const [checkTodo] = useMutation<{ id: number }>(CHECK_MUTATION, {
     refetchQueries: [{ query: TODOS_QUERY }],
@@ -66,39 +72,6 @@ const Todos: React.FC<TodosProps> = ({ order, onlyTodo, setStats }) => {
       return removeTodo({ variables: { id } });
     }
   };
-
-  if (loading) return <h1>Loading...</h1>;
-  if (error) return <h1>Error...</h1>;
-
-  const filteredData = data?.todos || [];
-
-  // return null;
-
-  // const filteredData = (data?.todos || []).sort((t1, t2) =>
-  //   order ? t1.id - t2.id : t2.id - t1.id
-  // );
-
-  setStats(`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`);
-
-  return filteredData.length > 0 ? (
-    <Stack spacing={4} shouldWrapChildren>
-      {filteredData
-        .filter((todo) => (onlyTodo ? !todo.checked : true))
-        .map((todo) => (
-          <Todo key={todo.id} todo={todo} check={check} remove={remove} />
-        ))}
-    </Stack>
-  ) : (
-    <Heading fontSize={1.75}>No data :(</Heading>
-  );
-};
-
-const Home: NextPage = () => {
-  const [stats, setStats] = useState<string>('');
-
-  const [order, toggleOrder] = useSaveToggle('order');
-  const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
-  const [showNew, , setNew] = useToggle();
 
   const newRef = useRef<HTMLInputElement>(null);
   useKeyPress('n', (down) => {
@@ -122,6 +95,17 @@ const Home: NextPage = () => {
     }
   }, [showNew]);
 
+  const filteredData = new Array(...(data?.todos || [])).sort((t1, t2) =>
+    order ? t1.id - t2.id : t2.id - t1.id
+  );
+
+  useEffect(() => {
+    setStats(`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`);
+  }, [filteredData]);
+
+  if (loading) return <h1>Loading...</h1>;
+  if (error) return <h1>Error...</h1>;
+
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
       <Flex justify="space-between" align="center">
@@ -142,7 +126,17 @@ const Home: NextPage = () => {
       <Collapse isOpen={showNew}>
         <TodoForm close={toggleNew} ref={newRef} />
       </Collapse>
-      <Todos order={order} onlyTodo={onlyTodo} setStats={setStats} />
+      {filteredData.length > 0 ? (
+        <Stack spacing={4} shouldWrapChildren>
+          {filteredData
+            .filter((todo) => (onlyTodo ? !todo.checked : true))
+            .map((todo) => (
+              <Todo key={todo.id} todo={todo} check={check} remove={remove} />
+            ))}
+        </Stack>
+      ) : (
+        <Heading fontSize={1.75}>No data :(</Heading>
+      )}
     </Box>
   );
 };
