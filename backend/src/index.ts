@@ -17,11 +17,18 @@ schema.queryType({
 
     t.crud.list();
     t.crud.lists({ filtering: true, ordering: true });
+
+    t.crud.tag();
+    t.crud.tags();
   },
 });
 
 schema.mutationType({
   definition(t) {
+    t.crud.createOneTag();
+    t.crud.updateOneTag();
+    t.crud.deleteOneTag();
+
     t.crud.createOneTodo();
     t.crud.updateOneTodo();
     t.crud.updateManyTodo();
@@ -53,12 +60,24 @@ schema.mutationType({
 });
 
 schema.objectType({
+  name: 'Tag',
+  definition(t) {
+    t.model.id();
+    t.model.text();
+    t.model.todos();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+schema.objectType({
   name: 'Todo',
   definition(t) {
     t.model.id();
     t.model.title();
     t.model.description();
     t.model.list();
+    t.model.tags();
     t.model.checked();
     t.model.checkedAt();
     t.model.requires();
