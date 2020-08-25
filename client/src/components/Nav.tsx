@@ -13,10 +13,10 @@ const Nav: React.FC<INavProps> = ({ children }) => {
   return (
     <Flex justify="space-between" align="center">
       <Stack isInline align="center" spacing={3}>
-        <Heading mb={3}>
+        <Heading mb={3} style={{ color: router.asPath.startsWith('/list') ? '#888' : '#000' }}>
           <Link href="/">Todos</Link>
         </Heading>
-        <Heading mb={3}>
+        <Heading mb={3} style={{ color: router.asPath.startsWith('/list') ? '#000' : '#888' }}>
           <Link href="/lists">Lists</Link>
         </Heading>
       </Stack>
