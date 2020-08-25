@@ -1,19 +1,24 @@
 import { useEffect, useCallback } from 'react';
 
-const useKeyPress = (targetKey: string, callback: (down: boolean) => any) => {
+const useKeyPress = (
+  targetKey: string,
+  callback: (down: boolean, event?: KeyboardEvent) => any
+) => {
   const downHandler = useCallback(
-    ({ key, target }: KeyboardEvent) => {
+    (event: KeyboardEvent) => {
+      const { key, target } = event;
       if (key === targetKey && (target as any).type === undefined) {
-        callback(true);
+        callback(true, event);
       }
     },
     [targetKey]
   );
 
   const upHandler = useCallback(
-    ({ key, target }: KeyboardEvent) => {
+    (event: KeyboardEvent) => {
+      const { key, target } = event;
       if (key === targetKey && (target as any).type === undefined) {
-        callback(false);
+        callback(false, event);
       }
     },
     [targetKey]

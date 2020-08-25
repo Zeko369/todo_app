@@ -1,35 +1,15 @@
 import React, { useState, forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { Heading, Stack, Box, Button, Flex, IconButton, Textarea } from '@chakra-ui/core';
+
 import Input from './Input';
-import { ITodo, TODOS_QUERY } from '../pages';
-import { gql, useMutation } from '@apollo/client';
+import { useCreateTodoMutation, useUpdateTodoMutation, Todo } from '../generated/graphql';
+import { TODOS_QUERY } from '../graphql/queries';
 
 interface Props {
-  todo?: ITodo;
+  todo?: Pick<Todo, 'id' | 'title' | 'description'>;
   close?: () => void;
 }
-
-const CREATE_TODO = gql`
-  mutation CREATE_TODO($title: String!, $description: String) {
-    createOneTodo(data: { title: $title, description: $description }) {
-      id
-      title
-      description
-    }
-  }
-`;
-
-const UPDATE_TODO = gql`
-  mutation UPDATE_TODO($id: Int!, $title: String, $description: String) {
-    updateOneTodo(where: { id: $id }, data: { title: $title, description: $description }) {
-      id
-      title
-      description
-    }
-  }
-`;
 
 const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,8 +17,8 @@ const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
     defaultValues: { title: todo?.title, description: todo?.description },
   });
 
-  const [createTodo] = useMutation(CREATE_TODO, { refetchQueries: [{ query: TODOS_QUERY }] });
-  const [updateTodo] = useMutation(UPDATE_TODO, { refetchQueries: [{ query: TODOS_QUERY }] });
+  const [createTodo] = useCreateTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
+  const [updateTodo] = useUpdateTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
 
   const isUpdate = Boolean(todo);
 
@@ -87,7 +67,7 @@ const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
               }
             }}
             isRequired
-            defaultValue={todo?.title}
+            defaultValue={todo?.title || ''}
           />
           <Textarea
             name="description"

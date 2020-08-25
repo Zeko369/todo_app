@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NextPage } from 'next';
-import { useQuery, gql, useMutation } from '@apollo/client';
 import { Stack, Box, Heading, Button, Flex, Text, Collapse } from '@chakra-ui/core';
 
 import useSaveToggle from '../hooks/useSaveToggle';
@@ -8,44 +7,11 @@ import Todo from '../components/Todo';
 import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
 import useKeyPress from '../hooks/useKeyPress';
-
-export const TODOS_QUERY = gql`
-  query Todos {
-    todos(orderBy: { id: desc }) {
-      id
-      title
-      description
-      checked
-    }
-  }
-`;
-
-export interface ITodo {
-  id: number;
-  title: string;
-  description: string | null;
-  checked: boolean;
-}
-
-const CHECK_MUTATION = gql`
-  mutation checkTodo($id: Int!) {
-    checkTodo(id: $id) {
-      id
-      checked
-    }
-  }
-`;
-
-const DELETE_MUTATION = gql`
-  mutation deleteTodo($id: Int!) {
-    deleteOneTodo(where: { id: $id }) {
-      id
-    }
-  }
-`;
+import { useTodosQuery, useCheckTodoMutation, useDeleteTodoMutation } from '../generated/graphql';
+import { TODOS_QUERY } from '../graphql/queries';
 
 const Home: NextPage = () => {
-  const { loading, error, data } = useQuery<{ todos: ITodo[] }>(TODOS_QUERY);
+  const { loading, error, data } = useTodosQuery();
 
   const [stats, setStats] = useState<string>('');
 
@@ -53,23 +19,20 @@ const Home: NextPage = () => {
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
   const [showNew, , setNew] = useToggle();
 
-  const [checkTodo] = useMutation<{ id: number }>(CHECK_MUTATION, {
-    refetchQueries: [{ query: TODOS_QUERY }],
-  });
-  const [removeTodo] = useMutation<{ id: number }>(DELETE_MUTATION, {
-    refetchQueries: [{ query: TODOS_QUERY }],
-  });
+  const [checkTodo] = useCheckTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
+  const [deleteTodo] = useDeleteTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
 
-  const check = (id: number): any => checkTodo({ variables: { id } });
-  const remove = (id: number): any => {
+  const check = async (id: number): Promise<any> => checkTodo({ variables: { id } });
+  const remove = async (id: number): Promise<any> => {
     if (confirm('Are you sure?')) {
-      return removeTodo({ variables: { id } });
+      return deleteTodo({ variables: { id } });
     }
   };
 
   const newRef = useRef<HTMLInputElement>(null);
-  useKeyPress('n', (down) => {
+  useKeyPress('n', (down, event) => {
     if (down) {
+      console.log(event?.target);
       openNew();
     }
   });
