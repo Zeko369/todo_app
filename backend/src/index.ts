@@ -19,7 +19,7 @@ schema.queryType({
     t.crud.lists({ filtering: true, ordering: true });
 
     t.crud.tag();
-    t.crud.tags();
+    t.crud.tags({ ordering: true });
   },
 });
 
