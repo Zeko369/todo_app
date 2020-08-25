@@ -19,4 +19,6 @@ yarn build
 
 cd ..
 
+git checkout .
+
 pm2 reload ecosystem.config.js --env production
