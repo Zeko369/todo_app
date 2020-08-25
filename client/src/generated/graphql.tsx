@@ -989,9 +989,30 @@ export type TodosQuery = (
   & { todos: Array<(
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>
-    & { list?: Maybe<(
+    & { tags: Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'id' | 'text'>
+    )>, list?: Maybe<(
       { __typename?: 'List' }
       & Pick<List, 'id'>
+    )> }
+  )> }
+);
+
+export type RemoveTagFromTodoMutationVariables = Exact<{
+  tagId: Scalars['Int'];
+  id: Scalars['Int'];
+}>;
+
+
+export type RemoveTagFromTodoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTodo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id'>
+    & { tags: Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'id'>
     )> }
   )> }
 );
@@ -1388,6 +1409,10 @@ export const TodosDocument = gql`
     description
     checked
     createdAt
+    tags {
+      id
+      text
+    }
     list {
       id
     }
@@ -1419,6 +1444,42 @@ export function useTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Todo
 export type TodosQueryHookResult = ReturnType<typeof useTodosQuery>;
 export type TodosLazyQueryHookResult = ReturnType<typeof useTodosLazyQuery>;
 export type TodosQueryResult = Apollo.QueryResult<TodosQuery, TodosQueryVariables>;
+export const RemoveTagFromTodoDocument = gql`
+    mutation removeTagFromTodo($tagId: Int!, $id: Int!) {
+  updateOneTodo(where: {id: $id}, data: {tags: {disconnect: {id: $tagId}}}) {
+    id
+    tags {
+      id
+    }
+  }
+}
+    `;
+export type RemoveTagFromTodoMutationFn = Apollo.MutationFunction<RemoveTagFromTodoMutation, RemoveTagFromTodoMutationVariables>;
+
+/**
+ * __useRemoveTagFromTodoMutation__
+ *
+ * To run a mutation, you first call `useRemoveTagFromTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveTagFromTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeTagFromTodoMutation, { data, loading, error }] = useRemoveTagFromTodoMutation({
+ *   variables: {
+ *      tagId: // value for 'tagId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveTagFromTodoMutation(baseOptions?: Apollo.MutationHookOptions<RemoveTagFromTodoMutation, RemoveTagFromTodoMutationVariables>) {
+        return Apollo.useMutation<RemoveTagFromTodoMutation, RemoveTagFromTodoMutationVariables>(RemoveTagFromTodoDocument, baseOptions);
+      }
+export type RemoveTagFromTodoMutationHookResult = ReturnType<typeof useRemoveTagFromTodoMutation>;
+export type RemoveTagFromTodoMutationResult = Apollo.MutationResult<RemoveTagFromTodoMutation>;
+export type RemoveTagFromTodoMutationOptions = Apollo.BaseMutationOptions<RemoveTagFromTodoMutation, RemoveTagFromTodoMutationVariables>;
 export const CheckTodoDocument = gql`
     mutation checkTodo($id: Int!) {
   checkTodo(id: $id) {

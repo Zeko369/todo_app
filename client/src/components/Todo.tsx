@@ -1,9 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, IconButton, Heading, Text, Stack, Select, Button } from '@chakra-ui/core';
+import {
+  Box,
+  Flex,
+  IconButton,
+  Heading,
+  Text,
+  Stack,
+  Select,
+  Button,
+  Tag,
+  TagCloseButton,
+} from '@chakra-ui/core';
 
 import useToggle from '../hooks/useToggle';
 import TodoForm from './TodoForm';
-import { Todo as TodoDB, List as ListDB } from '../generated/graphql';
+import {
+  Todo as TodoDB,
+  List as ListDB,
+  Tag as TagDB,
+  useRemoveTagFromTodoMutation,
+} from '../generated/graphql';
 
 interface TodoProps {
   mass: boolean;
@@ -12,6 +28,8 @@ interface TodoProps {
   lists: Pick<ListDB, 'id' | 'title'>[];
   todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'> & {
     list?: Pick<ListDB, 'id'> | null;
+  } & {
+    tags?: Pick<TagDB, 'id' | 'text'>[] | null;
   };
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
@@ -30,10 +48,11 @@ const Todo: React.FC<TodoProps> = ({
   massClick,
   hideButtons,
 }) => {
-  const { id, title, description, checked, list } = todo;
+  const { id, title, description, checked, list, tags } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
+  const [removeTagFromTodo] = useRemoveTagFromTodoMutation();
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
 
   useEffect(() => {
@@ -59,6 +78,10 @@ const Todo: React.FC<TodoProps> = ({
   const onSaveList = () => {
     setLoading(true);
     saveList(id, selected).finally(() => setLoading(false));
+  };
+
+  const removeTag = (tagId: number) => async () => {
+    await removeTagFromTodo({ variables: { tagId, id } });
   };
 
   const onMass = () => {
@@ -88,6 +111,18 @@ const Todo: React.FC<TodoProps> = ({
               <Text>
                 <i>{lists.find((l) => l.id === list.id)?.title}</i>
               </Text>
+            )}
+            {tags && (
+              <Box mt={2}>
+                {tags.map((tag) => (
+                  <Tag key={tag.id} mr={2}>
+                    <Flex alignItems="center">
+                      <Text lineHeight="20px">{tag.text}</Text>
+                      {!hideButtons && <TagCloseButton ml="1" onClick={removeTag(tag.id)} />}
+                    </Flex>
+                  </Tag>
+                ))}
+              </Box>
             )}
             {description && (
               <Text mt={4} wordBreak="break-all">

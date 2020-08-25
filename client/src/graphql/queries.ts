@@ -92,7 +92,22 @@ export const TODOS_QUERY = gql`
       description
       checked
       createdAt
+      tags {
+        id
+        text
+      }
       list {
+        id
+      }
+    }
+  }
+`;
+
+export const removeTagFromTodo = gql`
+  mutation removeTagFromTodo($tagId: Int!, $id: Int!) {
+    updateOneTodo(where: { id: $id }, data: { tags: { disconnect: { id: $tagId } } }) {
+      id
+      tags {
         id
       }
     }
