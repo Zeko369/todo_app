@@ -4,10 +4,10 @@ import styled from '@emotion/styled';
 
 import useToggle from '../hooks/useToggle';
 import TodoForm from './TodoForm';
-import { Todo } from '../generated/graphql';
+import { Todo as TodoDB } from '../generated/graphql';
 
 interface TodoProps {
-  todo: Pick<Todo, 'id' | 'title' | 'description' | 'checked'>;
+  todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked'>;
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
 }
