@@ -1,5 +1,5 @@
-import useToggle, { useToggleReturn } from './useToggle';
 import { useEffect } from 'react';
+import useToggle, { useToggleReturn } from './useToggle';
 
 const isServer = typeof window === 'undefined';
 
