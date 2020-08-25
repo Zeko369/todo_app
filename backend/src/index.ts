@@ -25,6 +25,7 @@ schema.mutationType({
     t.crud.createOneTodo();
     t.crud.updateOneTodo();
     t.crud.deleteOneTodo();
+    t.crud.deleteManyTodo();
 
     t.field('checkTodo', {
       type: 'Todo',
