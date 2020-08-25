@@ -1,7 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { Heading, List, Spinner, ListItem, Box } from '@chakra-ui/core';
+
 import { useListsQuery } from '../../generated/graphql';
-import { Heading, List, Spinner, ListItem, Box, Button } from '@chakra-ui/core';
 import Link, { LinkButton } from '../../components/Link';
 import Nav from '../../components/Nav';
 
@@ -15,7 +16,6 @@ const Lists: NextPage = () => {
           New
         </LinkButton>
       </Nav>
-      <Link href="/lists/new">New</Link>
       {loading ? (
         <Spinner />
       ) : error || !data ? (

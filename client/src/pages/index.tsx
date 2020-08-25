@@ -1,16 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NextPage } from 'next';
-import {
-  Stack,
-  Box,
-  Heading,
-  Button,
-  Flex,
-  Text,
-  Collapse,
-  Select,
-  Spinner,
-} from '@chakra-ui/core';
+import { Stack, Box, Heading, Button, Text, Collapse, Select, Spinner } from '@chakra-ui/core';
 
 import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';

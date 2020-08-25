@@ -1,11 +1,11 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { List, Heading, Spinner, ListItem } from '@chakra-ui/core';
+import { List, Heading, Spinner, ListItem, Box } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
 import { useListQuery } from '../../../generated/graphql';
 import { getId } from '../../../helpers/getId';
-import Link from '../../../components/Link';
+import Nav from '../../../components/Nav';
 
 const ListPage: NextPage = () => {
   const router = useRouter();
@@ -13,9 +13,9 @@ const ListPage: NextPage = () => {
   const { loading, error, data } = useListQuery({ variables: { id } });
 
   return (
-    <>
+    <Box w="90%" maxW="1000px" m="0 auto">
+      <Nav />
       <Heading>List: {data?.list?.title}</Heading>
-      <Link href="/lists">Go back</Link>
       {loading ? (
         <Spinner />
       ) : error || !data ? (
@@ -27,7 +27,7 @@ const ListPage: NextPage = () => {
           ))}
         </List>
       )}
-    </>
+    </Box>
   );
 };
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { Heading, Spinner } from '@chakra-ui/core';
+import { Heading, Spinner, Box } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
 import { useListQuery, useUpdateListMutation } from '../../../generated/graphql';
 import { getId } from '../../../helpers/getId';
-import Link from '../../../components/Link';
 import { LISTS_QUERY, LIST_QUERY } from '../../../graphql/queries';
 import ListForm, { IListData } from '../../../components/ListForm';
+import Nav from '../../../components/Nav';
 
 const ListPage: NextPage = () => {
   const router = useRouter();
@@ -24,9 +24,9 @@ const ListPage: NextPage = () => {
   };
 
   return (
-    <>
+    <Box w="90%" maxW="1000px" m="0 auto">
+      <Nav />
       <Heading>EDIT List: {data?.list?.title}</Heading>
-      <Link href="/lists">Go back</Link>
       {loading ? (
         <Spinner />
       ) : error || !data ? (
@@ -36,7 +36,7 @@ const ListPage: NextPage = () => {
       ) : (
         <ListForm data={data.list} onSubmit={onSubmit} />
       )}
-    </>
+    </Box>
   );
 };
 

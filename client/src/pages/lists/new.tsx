@@ -1,11 +1,13 @@
 import React from 'react';
 import { NextPage } from 'next';
+import { Heading, Box } from '@chakra-ui/core';
+import { useRouter } from 'next/router';
+
 import { useCreateListMutation } from '../../generated/graphql';
-import { Heading } from '@chakra-ui/core';
 import Link from '../../components/Link';
 import ListForm, { IListData } from '../../components/ListForm';
 import { LISTS_QUERY } from '../../graphql/queries';
-import { useRouter } from 'next/router';
+import Nav from '../../components/Nav';
 
 const NewList: NextPage = () => {
   const router = useRouter();
@@ -17,11 +19,12 @@ const NewList: NextPage = () => {
   };
 
   return (
-    <>
+    <Box w="90%" maxW="1000px" m="0 auto">
+      <Nav />
       <Heading>New list</Heading>
       <Link href="/lists">Go back</Link>
       <ListForm onSubmit={onSubmit} />
-    </>
+    </Box>
   );
 };
 
