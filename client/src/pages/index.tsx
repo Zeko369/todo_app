@@ -79,7 +79,7 @@ const Home: NextPage = () => {
   const numberOfSelected = selected.length;
 
   const selectAll = () => {
-    const all = Object.keys(massSelected).length !== numberOfSelected;
+    const all = Object.keys(massSelected).length !== numberOfSelected || numberOfSelected === 0;
 
     setMassSelected(
       (!loading && !error && data ? data.todos.map((t) => t.id) : []).reduce(

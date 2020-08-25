@@ -21,6 +21,8 @@ export type Query = {
   todos: Array<Todo>;
   list?: Maybe<List>;
   lists: Array<List>;
+  tag?: Maybe<Tag>;
+  tags: Array<Tag>;
 };
 
 
@@ -52,6 +54,20 @@ export type QueryListsArgs = {
   after?: Maybe<ListWhereUniqueInput>;
 };
 
+
+export type QueryTagArgs = {
+  where: TagWhereUniqueInput;
+};
+
+
+export type QueryTagsArgs = {
+  orderBy?: Maybe<Array<TagOrderByInput>>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  before?: Maybe<TagWhereUniqueInput>;
+  after?: Maybe<TagWhereUniqueInput>;
+};
+
 export type TodoWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
 };
@@ -62,12 +78,21 @@ export type Todo = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   list?: Maybe<List>;
+  tags: Array<Tag>;
   checked: Scalars['Boolean'];
   checkedAt?: Maybe<Scalars['DateTime']>;
   requires: Array<Todo>;
   requiredBy: Array<Todo>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+};
+
+
+export type TodoTagsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  before?: Maybe<TagWhereUniqueInput>;
+  after?: Maybe<TagWhereUniqueInput>;
 };
 
 
@@ -103,6 +128,27 @@ export type ListTodosArgs = {
   after?: Maybe<TodoWhereUniqueInput>;
 };
 
+
+export type TagWhereUniqueInput = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['Int'];
+  text: Scalars['String'];
+  todos: Array<Todo>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+
+export type TagTodosArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  before?: Maybe<TodoWhereUniqueInput>;
+  after?: Maybe<TodoWhereUniqueInput>;
+};
 
 export type TodoOrderByInput = {
   id?: Maybe<SortOrder>;
@@ -205,6 +251,7 @@ export type TodoWhereInput = {
   listId?: Maybe<IntNullableFilter>;
   requires?: Maybe<TodoListRelationFilter>;
   requiredBy?: Maybe<TodoListRelationFilter>;
+  tags?: Maybe<TagListRelationFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
 };
 
@@ -284,6 +331,51 @@ export type NestedIntNullableFilter = {
   not?: Maybe<NestedIntNullableFilter>;
 };
 
+export type TagListRelationFilter = {
+  every?: Maybe<TagWhereInput>;
+  some?: Maybe<TagWhereInput>;
+  none?: Maybe<TagWhereInput>;
+};
+
+export type TagWhereInput = {
+  AND?: Maybe<Array<TagWhereInput>>;
+  OR?: Maybe<Array<TagWhereInput>>;
+  NOT?: Maybe<Array<TagWhereInput>>;
+  id?: Maybe<IntFilter>;
+  text?: Maybe<StringFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
+  todos?: Maybe<TodoListRelationFilter>;
+};
+
+export type StringFilter = {
+  equals?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  contains?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+  not?: Maybe<NestedStringFilter>;
+};
+
+export type NestedStringFilter = {
+  equals?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  contains?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+  not?: Maybe<NestedStringFilter>;
+};
+
 export type ListOrderByInput = {
   id?: Maybe<SortOrder>;
   title?: Maybe<SortOrder>;
@@ -291,8 +383,18 @@ export type ListOrderByInput = {
   updatedAt?: Maybe<SortOrder>;
 };
 
+export type TagOrderByInput = {
+  id?: Maybe<SortOrder>;
+  text?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createOneTag: Tag;
+  updateOneTag?: Maybe<Tag>;
+  deleteOneTag?: Maybe<Tag>;
   createOneTodo: Todo;
   updateOneTodo?: Maybe<Todo>;
   updateManyTodo: BatchPayload;
@@ -302,6 +404,22 @@ export type Mutation = {
   createOneList: List;
   updateOneList?: Maybe<List>;
   deleteOneList?: Maybe<List>;
+};
+
+
+export type MutationCreateOneTagArgs = {
+  data: TagCreateInput;
+};
+
+
+export type MutationUpdateOneTagArgs = {
+  data: TagUpdateInput;
+  where: TagWhereUniqueInput;
+};
+
+
+export type MutationDeleteOneTagArgs = {
+  where: TagWhereUniqueInput;
 };
 
 
@@ -352,7 +470,19 @@ export type MutationDeleteOneListArgs = {
   where: ListWhereUniqueInput;
 };
 
-export type TodoCreateInput = {
+export type TagCreateInput = {
+  text: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  todos?: Maybe<TodoCreateManyWithoutTagsInput>;
+};
+
+export type TodoCreateManyWithoutTagsInput = {
+  create?: Maybe<Array<TodoCreateWithoutTagsInput>>;
+  connect?: Maybe<Array<TodoWhereUniqueInput>>;
+};
+
+export type TodoCreateWithoutTagsInput = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -389,6 +519,18 @@ export type TodoCreateWithoutRequiredByInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
   list?: Maybe<ListCreateOneWithoutTodosInput>;
   requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
+  tags?: Maybe<TagCreateManyWithoutTodosInput>;
+};
+
+export type TagCreateManyWithoutTodosInput = {
+  create?: Maybe<Array<TagCreateWithoutTodosInput>>;
+  connect?: Maybe<Array<TagWhereUniqueInput>>;
+};
+
+export type TagCreateWithoutTodosInput = {
+  text: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type TodoCreateManyWithoutRequiresInput = {
@@ -405,9 +547,34 @@ export type TodoCreateWithoutRequiresInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
   list?: Maybe<ListCreateOneWithoutTodosInput>;
   requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
+  tags?: Maybe<TagCreateManyWithoutTodosInput>;
 };
 
-export type TodoUpdateInput = {
+export type TagUpdateInput = {
+  text?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  todos?: Maybe<TodoUpdateManyWithoutTagsInput>;
+};
+
+export type TodoUpdateManyWithoutTagsInput = {
+  create?: Maybe<Array<TodoCreateWithoutTagsInput>>;
+  connect?: Maybe<Array<TodoWhereUniqueInput>>;
+  set?: Maybe<Array<TodoWhereUniqueInput>>;
+  disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
+  delete?: Maybe<Array<TodoWhereUniqueInput>>;
+  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutTagsInput>>;
+  updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
+  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutTagsInput>>;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutTagsInput = {
+  where: TodoWhereUniqueInput;
+  data: TodoUpdateWithoutTagsDataInput;
+};
+
+export type TodoUpdateWithoutTagsDataInput = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -465,6 +632,57 @@ export type TodoUpdateWithoutRequiredByDataInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
+  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
+};
+
+export type TagUpdateManyWithoutTodosInput = {
+  create?: Maybe<Array<TagCreateWithoutTodosInput>>;
+  connect?: Maybe<Array<TagWhereUniqueInput>>;
+  set?: Maybe<Array<TagWhereUniqueInput>>;
+  disconnect?: Maybe<Array<TagWhereUniqueInput>>;
+  delete?: Maybe<Array<TagWhereUniqueInput>>;
+  update?: Maybe<Array<TagUpdateWithWhereUniqueWithoutTodosInput>>;
+  updateMany?: Maybe<Array<TagUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<TagScalarWhereInput>>;
+  upsert?: Maybe<Array<TagUpsertWithWhereUniqueWithoutTodosInput>>;
+};
+
+export type TagUpdateWithWhereUniqueWithoutTodosInput = {
+  where: TagWhereUniqueInput;
+  data: TagUpdateWithoutTodosDataInput;
+};
+
+export type TagUpdateWithoutTodosDataInput = {
+  text?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type TagUpdateManyWithWhereNestedInput = {
+  where: TagScalarWhereInput;
+  data: TagUpdateManyDataInput;
+};
+
+export type TagScalarWhereInput = {
+  AND?: Maybe<Array<TagScalarWhereInput>>;
+  OR?: Maybe<Array<TagScalarWhereInput>>;
+  NOT?: Maybe<Array<TagScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  text?: Maybe<StringFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
+};
+
+export type TagUpdateManyDataInput = {
+  text?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type TagUpsertWithWhereUniqueWithoutTodosInput = {
+  where: TagWhereUniqueInput;
+  update: TagUpdateWithoutTodosDataInput;
+  create: TagCreateWithoutTodosInput;
 };
 
 export type TodoUpdateManyWithWhereNestedInput = {
@@ -527,12 +745,45 @@ export type TodoUpdateWithoutRequiresDataInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
+  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
 };
 
 export type TodoUpsertWithWhereUniqueWithoutRequiresInput = {
   where: TodoWhereUniqueInput;
   update: TodoUpdateWithoutRequiresDataInput;
   create: TodoCreateWithoutRequiresInput;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutTagsInput = {
+  where: TodoWhereUniqueInput;
+  update: TodoUpdateWithoutTagsDataInput;
+  create: TodoCreateWithoutTagsInput;
+};
+
+export type TodoCreateInput = {
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  checked?: Maybe<Scalars['Boolean']>;
+  checkedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  list?: Maybe<ListCreateOneWithoutTodosInput>;
+  requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
+  tags?: Maybe<TagCreateManyWithoutTodosInput>;
+};
+
+export type TodoUpdateInput = {
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  checked?: Maybe<Scalars['Boolean']>;
+  checkedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  list?: Maybe<ListUpdateOneWithoutTodosInput>;
+  requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
+  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
 };
 
 export type TodoUpdateManyMutationInput = {
@@ -570,6 +821,7 @@ export type TodoCreateWithoutListInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
   requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
+  tags?: Maybe<TagCreateManyWithoutTodosInput>;
 };
 
 export type ListUpdateInput = {
@@ -605,6 +857,7 @@ export type TodoUpdateWithoutListDataInput = {
   updatedAt?: Maybe<Scalars['DateTime']>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
+  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
 };
 
 export type TodoUpsertWithWhereUniqueWithoutListInput = {
@@ -613,6 +866,21 @@ export type TodoUpsertWithWhereUniqueWithoutListInput = {
   create: TodoCreateWithoutListInput;
 };
 
+
+export type TagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TagsQuery = (
+  { __typename?: 'Query' }
+  & { tags: Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'text'>
+    & { todos: Array<(
+      { __typename?: 'Todo' }
+      & Pick<Todo, 'id'>
+    )> }
+  )> }
+);
 
 export type ListsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -643,6 +911,46 @@ export type ListQuery = (
       { __typename?: 'Todo' }
       & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
     )> }
+  )> }
+);
+
+export type CreateTagMutationVariables = Exact<{
+  text: Scalars['String'];
+}>;
+
+
+export type CreateTagMutation = (
+  { __typename?: 'Mutation' }
+  & { createOneTag: (
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'text'>
+  ) }
+);
+
+export type UpdateTagMutationVariables = Exact<{
+  id: Scalars['Int'];
+  text?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateTagMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTag?: Maybe<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'text'>
+  )> }
+);
+
+export type DeleteTagMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteTagMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteOneTag?: Maybe<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id'>
   )> }
 );
 
@@ -793,6 +1101,42 @@ export type AddTodosToListMutation = (
 );
 
 
+export const TagsDocument = gql`
+    query TAGS {
+  tags {
+    id
+    text
+    todos {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useTagsQuery__
+ *
+ * To run a query within a React component, call `useTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTagsQuery(baseOptions?: Apollo.QueryHookOptions<TagsQuery, TagsQueryVariables>) {
+        return Apollo.useQuery<TagsQuery, TagsQueryVariables>(TagsDocument, baseOptions);
+      }
+export function useTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TagsQuery, TagsQueryVariables>) {
+          return Apollo.useLazyQuery<TagsQuery, TagsQueryVariables>(TagsDocument, baseOptions);
+        }
+export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
+export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
+export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
 export const ListsDocument = gql`
     query LISTS {
   lists(orderBy: {id: desc}) {
@@ -870,6 +1214,105 @@ export function useListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListQ
 export type ListQueryHookResult = ReturnType<typeof useListQuery>;
 export type ListLazyQueryHookResult = ReturnType<typeof useListLazyQuery>;
 export type ListQueryResult = Apollo.QueryResult<ListQuery, ListQueryVariables>;
+export const CreateTagDocument = gql`
+    mutation createTag($text: String!) {
+  createOneTag(data: {text: $text}) {
+    id
+    text
+  }
+}
+    `;
+export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutation, CreateTagMutationVariables>;
+
+/**
+ * __useCreateTagMutation__
+ *
+ * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useCreateTagMutation(baseOptions?: Apollo.MutationHookOptions<CreateTagMutation, CreateTagMutationVariables>) {
+        return Apollo.useMutation<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument, baseOptions);
+      }
+export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
+export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
+export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
+export const UpdateTagDocument = gql`
+    mutation updateTag($id: Int!, $text: String) {
+  updateOneTag(where: {id: $id}, data: {text: $text}) {
+    id
+    text
+  }
+}
+    `;
+export type UpdateTagMutationFn = Apollo.MutationFunction<UpdateTagMutation, UpdateTagMutationVariables>;
+
+/**
+ * __useUpdateTagMutation__
+ *
+ * To run a mutation, you first call `useUpdateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTagMutation, { data, loading, error }] = useUpdateTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useUpdateTagMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTagMutation, UpdateTagMutationVariables>) {
+        return Apollo.useMutation<UpdateTagMutation, UpdateTagMutationVariables>(UpdateTagDocument, baseOptions);
+      }
+export type UpdateTagMutationHookResult = ReturnType<typeof useUpdateTagMutation>;
+export type UpdateTagMutationResult = Apollo.MutationResult<UpdateTagMutation>;
+export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<UpdateTagMutation, UpdateTagMutationVariables>;
+export const DeleteTagDocument = gql`
+    mutation deleteTag($id: Int!) {
+  deleteOneTag(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type DeleteTagMutationFn = Apollo.MutationFunction<DeleteTagMutation, DeleteTagMutationVariables>;
+
+/**
+ * __useDeleteTagMutation__
+ *
+ * To run a mutation, you first call `useDeleteTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTagMutation, { data, loading, error }] = useDeleteTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTagMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTagMutation, DeleteTagMutationVariables>) {
+        return Apollo.useMutation<DeleteTagMutation, DeleteTagMutationVariables>(DeleteTagDocument, baseOptions);
+      }
+export type DeleteTagMutationHookResult = ReturnType<typeof useDeleteTagMutation>;
+export type DeleteTagMutationResult = Apollo.MutationResult<DeleteTagMutation>;
+export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<DeleteTagMutation, DeleteTagMutationVariables>;
 export const CreateListDocument = gql`
     mutation createList($title: String) {
   createOneList(data: {title: $title}) {

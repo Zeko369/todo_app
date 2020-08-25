@@ -1,5 +1,17 @@
 import { gql } from '@apollo/client';
 
+export const TAGS_QUERY = gql`
+  query TAGS {
+    tags {
+      id
+      text
+      todos {
+        id
+      }
+    }
+  }
+`;
+
 export const LISTS_QUERY = gql`
   query LISTS {
     lists(orderBy: { id: desc }) {
@@ -24,6 +36,32 @@ export const LIST_QUERY = gql`
         description
         checked
       }
+    }
+  }
+`;
+
+export const createTag = gql`
+  mutation createTag($text: String!) {
+    createOneTag(data: { text: $text }) {
+      id
+      text
+    }
+  }
+`;
+
+export const updateTag = gql`
+  mutation updateTag($id: Int!, $text: String) {
+    updateOneTag(where: { id: $id }, data: { text: $text }) {
+      id
+      text
+    }
+  }
+`;
+
+export const deleteTag = gql`
+  mutation deleteTag($id: Int!) {
+    deleteOneTag(where: { id: $id }) {
+      id
     }
   }
 `;
