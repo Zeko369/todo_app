@@ -107,8 +107,8 @@ const Todo: React.FC<TodoProps> = (props) => {
             isLoading={loading}
             onClick={mass ? onMass : onCheck}
           />
-          <Box>
-            <Flex>
+          <Box flex="1">
+            <Flex flex="1">
               <Stack w="100%">
                 <Heading fontSize="xl" wordBreak="break-all">
                   {title}
