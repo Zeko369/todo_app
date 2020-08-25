@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "",
+    "deploy": "pm2 deploy production update",
     "dev": "concurrently \"cd client && yarn dev\" \"cd backend && yarn dev\""
   },
   "author": "Fran Zekan <zekan.fran369@gmail.com>",
