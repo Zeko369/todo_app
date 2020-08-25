@@ -24,6 +24,7 @@ schema.mutationType({
   definition(t) {
     t.crud.createOneTodo();
     t.crud.updateOneTodo();
+    t.crud.updateManyTodo();
     t.crud.deleteOneTodo();
     t.crud.deleteManyTodo();
 

@@ -3,7 +3,7 @@ import { lorem, date } from 'faker';
 
 (async () => {
   const db = new PrismaClient();
-  await db.connect();
+  await db.$connect();
 
   const lists: number[] = [];
 
@@ -50,5 +50,5 @@ import { lorem, date } from 'faker';
     data: { requires: { connect: requirements.map((id) => ({ id })) } },
   });
 
-  await db.disconnect();
+  await db.$disconnect();
 })().finally(() => console.log('Done'));
