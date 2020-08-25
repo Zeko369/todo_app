@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const LISTS_QUERY = gql`
-  query Lists {
+  query LISTS {
     lists(orderBy: { id: desc }) {
       id
       title
@@ -13,8 +13,23 @@ export const LISTS_QUERY = gql`
   }
 `;
 
+export const LIST_QUERY = gql`
+  query LIST($id: Int!) {
+    list(where: { id: $id }) {
+      id
+      title
+      todos {
+        id
+        title
+        description
+        checked
+      }
+    }
+  }
+`;
+
 export const TODOS_QUERY = gql`
-  query Todos {
+  query TODOS {
     todos(orderBy: { id: desc }) {
       id
       title

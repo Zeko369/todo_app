@@ -1,7 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { useListsQuery } from '../generated/graphql';
+import { useListsQuery } from '../../generated/graphql';
 import { Heading, List, Spinner, ListItem } from '@chakra-ui/core';
+import Link from '../../components/Link';
 
 const Lists: NextPage = () => {
   const { loading, error, data } = useListsQuery();
@@ -16,7 +17,11 @@ const Lists: NextPage = () => {
       ) : (
         <List styleType="disc">
           {data.lists.map((list) => (
-            <ListItem key={list.id}>{list.title}</ListItem>
+            <ListItem key={list.id}>
+              <Link href="/lists/[id]" as={`/lists/${list.id}`}>
+                {list.title}
+              </Link>
+            </ListItem>
           ))}
         </List>
       )}
