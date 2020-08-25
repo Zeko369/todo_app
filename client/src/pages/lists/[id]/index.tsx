@@ -3,9 +3,9 @@ import { NextPage } from 'next';
 import { List, Heading, Spinner, ListItem } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
-import { useListQuery } from '../../generated/graphql';
-import { getId } from '../../helpers/getId';
-import Link from '../../components/Link';
+import { useListQuery } from '../../../generated/graphql';
+import { getId } from '../../../helpers/getId';
+import Link from '../../../components/Link';
 
 const ListPage: NextPage = () => {
   const router = useRouter();

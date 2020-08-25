@@ -10,6 +10,7 @@ const Lists: NextPage = () => {
   return (
     <>
       <Heading>Lists</Heading>
+      <Link href="/lists/new">New</Link>
       {loading ? (
         <Spinner />
       ) : error || !data ? (
@@ -20,6 +21,10 @@ const Lists: NextPage = () => {
             <ListItem key={list.id}>
               <Link href="/lists/[id]" as={`/lists/${list.id}`}>
                 {list.title}
+              </Link>
+              {'  '}
+              <Link href="/lists/[id]/edit" as={`/lists/${list.id}/edit`}>
+                Edit
               </Link>
             </ListItem>
           ))}

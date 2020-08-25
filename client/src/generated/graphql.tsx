@@ -565,6 +565,33 @@ export type ListQuery = (
   )> }
 );
 
+export type CreateListMutationVariables = Exact<{
+  title?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateListMutation = (
+  { __typename?: 'Mutation' }
+  & { createOneList: (
+    { __typename?: 'List' }
+    & Pick<List, 'id' | 'title'>
+  ) }
+);
+
+export type UpdateListMutationVariables = Exact<{
+  id: Scalars['Int'];
+  title?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateListMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneList?: Maybe<(
+    { __typename?: 'List' }
+    & Pick<List, 'id' | 'title'>
+  )> }
+);
+
 export type TodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -709,6 +736,73 @@ export function useListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListQ
 export type ListQueryHookResult = ReturnType<typeof useListQuery>;
 export type ListLazyQueryHookResult = ReturnType<typeof useListLazyQuery>;
 export type ListQueryResult = Apollo.QueryResult<ListQuery, ListQueryVariables>;
+export const CreateListDocument = gql`
+    mutation createList($title: String) {
+  createOneList(data: {title: $title}) {
+    id
+    title
+  }
+}
+    `;
+export type CreateListMutationFn = Apollo.MutationFunction<CreateListMutation, CreateListMutationVariables>;
+
+/**
+ * __useCreateListMutation__
+ *
+ * To run a mutation, you first call `useCreateListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createListMutation, { data, loading, error }] = useCreateListMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useCreateListMutation(baseOptions?: Apollo.MutationHookOptions<CreateListMutation, CreateListMutationVariables>) {
+        return Apollo.useMutation<CreateListMutation, CreateListMutationVariables>(CreateListDocument, baseOptions);
+      }
+export type CreateListMutationHookResult = ReturnType<typeof useCreateListMutation>;
+export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>;
+export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
+export const UpdateListDocument = gql`
+    mutation updateList($id: Int!, $title: String) {
+  updateOneList(where: {id: $id}, data: {title: $title}) {
+    id
+    title
+  }
+}
+    `;
+export type UpdateListMutationFn = Apollo.MutationFunction<UpdateListMutation, UpdateListMutationVariables>;
+
+/**
+ * __useUpdateListMutation__
+ *
+ * To run a mutation, you first call `useUpdateListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateListMutation, { data, loading, error }] = useUpdateListMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateListMutation(baseOptions?: Apollo.MutationHookOptions<UpdateListMutation, UpdateListMutationVariables>) {
+        return Apollo.useMutation<UpdateListMutation, UpdateListMutationVariables>(UpdateListDocument, baseOptions);
+      }
+export type UpdateListMutationHookResult = ReturnType<typeof useUpdateListMutation>;
+export type UpdateListMutationResult = Apollo.MutationResult<UpdateListMutation>;
+export type UpdateListMutationOptions = Apollo.BaseMutationOptions<UpdateListMutation, UpdateListMutationVariables>;
 export const TodosDocument = gql`
     query TODOS {
   todos(orderBy: {id: desc}) {
