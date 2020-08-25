@@ -24,7 +24,7 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production',
         PORT: 2135,
-        // DATABASE_URL: process.env.DATABASE_URL,
+        DATABASE_URL: process.env.DATABASE_URL,
       },
     },
   ],

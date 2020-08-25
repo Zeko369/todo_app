@@ -28,6 +28,7 @@ import {
   useAddTodosToListMutation,
 } from '../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
+import Nav from '../components/Nav';
 
 const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
@@ -139,22 +140,24 @@ const Home: NextPage = () => {
     setStats(`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`);
   }, [filteredData]);
 
-  if (loading) return <h1>Loading...</h1>;
-  if (error) return <h1>Error...</h1>;
+  if (loading || error) {
+    return (
+      <Box w="90%" maxW="1000px" m="0 auto">
+        <Nav>
+          <Spinner />
+        </Nav>
+      </Box>
+    );
+  }
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
-      <Flex justify="space-between" align="center">
-        <Stack isInline align="center">
-          <Heading mb={3}>Todos</Heading>
-        </Stack>
-        <Stack isInline align="center">
-          <Text>{stats}</Text>
-          <Button onClick={toggleNew} variantColor="blue">
-            {showNew ? 'Hide new' : 'Show new'}
-          </Button>
-        </Stack>
-      </Flex>
+      <Nav>
+        <Text>{stats}</Text>
+        <Button onClick={toggleNew} variantColor="blue">
+          {showNew ? 'Hide new' : 'Show new'}
+        </Button>
+      </Nav>
       <Stack isInline mb={3}>
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
