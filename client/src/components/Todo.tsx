@@ -97,55 +97,53 @@ const Todo: React.FC<TodoProps> = (props) => {
     <TodoForm todo={todo} close={() => setUpdate(false)} />
   ) : (
     <Box p={4} shadow="md" borderWidth="1px">
-      <Flex align="center" justify="space-between" pos="relative">
-        <Flex>
-          <IconButton
-            icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
-            variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
-            aria-label="check"
-            mr={4}
-            isLoading={loading}
-            onClick={mass ? onMass : onCheck}
-          />
-          <Box flex="1">
-            <Flex flex="1">
-              <Stack w="100%">
-                <Heading fontSize="xl" wordBreak="break-all">
-                  {title}
-                </Heading>
-                <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>
-                {list?.id && (
-                  <Text>
-                    <i>{lists.find((l) => l.id === list.id)?.title}</i>
-                  </Text>
-                )}
-                {tags && (
-                  <Box mt={2}>
-                    {tags.map((tag) => (
-                      <Tag key={tag.id} mr={2}>
-                        <Flex alignItems="center">
-                          <TagLabel>{tag.text}</TagLabel>
-                          {!hideButtons && <TagCloseButton ml="1" onClick={removeTag(tag.id)} />}
-                        </Flex>
-                      </Tag>
-                    ))}
-                  </Box>
-                )}
-              </Stack>
-              <IconButton
-                aria-label="show controls"
-                icon="settings"
-                onClick={toggleButtons}
-                variantColor={!showButtons ? 'gray' : 'blue'}
-              />
-            </Flex>
-            {description && (
-              <Text mt={4} wordBreak="break-all">
-                {description}
-              </Text>
-            )}
-          </Box>
-        </Flex>
+      <Flex justify="space-between" pos="relative">
+        <IconButton
+          icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
+          variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
+          aria-label="check"
+          mr={4}
+          isLoading={loading}
+          onClick={mass ? onMass : onCheck}
+        />
+        <Box w="100%">
+          <Flex w="100%">
+            <Stack w="100%">
+              <Heading fontSize="xl" wordBreak="break-all">
+                {title}
+              </Heading>
+              <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>
+              {list?.id && (
+                <Text>
+                  <i>{lists.find((l) => l.id === list.id)?.title}</i>
+                </Text>
+              )}
+              {tags && (
+                <Box mt={2}>
+                  {tags.map((tag) => (
+                    <Tag key={tag.id} mr={2}>
+                      <Flex alignItems="center">
+                        <TagLabel>{tag.text}</TagLabel>
+                        {!hideButtons && <TagCloseButton ml="1" onClick={removeTag(tag.id)} />}
+                      </Flex>
+                    </Tag>
+                  ))}
+                </Box>
+              )}
+            </Stack>
+            <IconButton
+              aria-label="show controls"
+              icon="settings"
+              onClick={toggleButtons}
+              variantColor={!showButtons ? 'gray' : 'blue'}
+            />
+          </Flex>
+          {description && (
+            <Text mt={4} wordBreak="break-all">
+              {description}
+            </Text>
+          )}
+        </Box>
       </Flex>
       {!hideButtons && (
         <Stack spacing={3} mt={5}>
