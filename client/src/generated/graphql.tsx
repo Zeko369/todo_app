@@ -1017,6 +1017,24 @@ export type RemoveTagFromTodoMutation = (
   )> }
 );
 
+export type AddTagToTodoMutationVariables = Exact<{
+  tagId: Scalars['Int'];
+  id: Scalars['Int'];
+}>;
+
+
+export type AddTagToTodoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTodo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id'>
+    & { tags: Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'id'>
+    )> }
+  )> }
+);
+
 export type CheckTodoMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1480,6 +1498,42 @@ export function useRemoveTagFromTodoMutation(baseOptions?: Apollo.MutationHookOp
 export type RemoveTagFromTodoMutationHookResult = ReturnType<typeof useRemoveTagFromTodoMutation>;
 export type RemoveTagFromTodoMutationResult = Apollo.MutationResult<RemoveTagFromTodoMutation>;
 export type RemoveTagFromTodoMutationOptions = Apollo.BaseMutationOptions<RemoveTagFromTodoMutation, RemoveTagFromTodoMutationVariables>;
+export const AddTagToTodoDocument = gql`
+    mutation addTagToTodo($tagId: Int!, $id: Int!) {
+  updateOneTodo(where: {id: $id}, data: {tags: {connect: {id: $tagId}}}) {
+    id
+    tags {
+      id
+    }
+  }
+}
+    `;
+export type AddTagToTodoMutationFn = Apollo.MutationFunction<AddTagToTodoMutation, AddTagToTodoMutationVariables>;
+
+/**
+ * __useAddTagToTodoMutation__
+ *
+ * To run a mutation, you first call `useAddTagToTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTagToTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTagToTodoMutation, { data, loading, error }] = useAddTagToTodoMutation({
+ *   variables: {
+ *      tagId: // value for 'tagId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAddTagToTodoMutation(baseOptions?: Apollo.MutationHookOptions<AddTagToTodoMutation, AddTagToTodoMutationVariables>) {
+        return Apollo.useMutation<AddTagToTodoMutation, AddTagToTodoMutationVariables>(AddTagToTodoDocument, baseOptions);
+      }
+export type AddTagToTodoMutationHookResult = ReturnType<typeof useAddTagToTodoMutation>;
+export type AddTagToTodoMutationResult = Apollo.MutationResult<AddTagToTodoMutation>;
+export type AddTagToTodoMutationOptions = Apollo.BaseMutationOptions<AddTagToTodoMutation, AddTagToTodoMutationVariables>;
 export const CheckTodoDocument = gql`
     mutation checkTodo($id: Int!) {
   checkTodo(id: $id) {

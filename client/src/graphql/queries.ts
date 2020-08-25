@@ -114,6 +114,17 @@ export const removeTagFromTodo = gql`
   }
 `;
 
+export const addTagToTodo = gql`
+  mutation addTagToTodo($tagId: Int!, $id: Int!) {
+    updateOneTodo(where: { id: $id }, data: { tags: { connect: { id: $tagId } } }) {
+      id
+      tags {
+        id
+      }
+    }
+  }
+`;
+
 export const checkTodo = gql`
   mutation checkTodo($id: Int!) {
     checkTodo(id: $id) {

@@ -163,7 +163,9 @@ const Home: NextPage = () => {
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
         <Button onClick={toggleMass}>{mass ? 'Close mass' : 'Select mass'}</Button>
-        <Button onClick={toggleButtons}>{hideButtons ? 'Show buttons' : 'Hide buttons'}</Button>
+        <Button onClick={toggleButtons}>
+          {hideButtons ? 'Show ALL buttons' : 'Hide ALL buttons'}
+        </Button>
       </Stack>
       {mass && (
         <Stack spacing={2} mb={3}>
