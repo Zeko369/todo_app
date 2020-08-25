@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Flex, IconButton, Heading, Text, Stack, Select, Button } from '@chakra-ui/core';
 import styled from '@emotion/styled';
 
@@ -7,6 +7,9 @@ import TodoForm from './TodoForm';
 import { Todo as TodoDB, List as ListDB } from '../generated/graphql';
 
 interface TodoProps {
+  mass: boolean;
+  massSelect: boolean;
+  massClick: (id: number) => void;
   lists: Pick<ListDB, 'id' | 'title'>[];
   todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked'> & {
     list?: Pick<ListDB, 'id'> | null;
@@ -33,12 +36,27 @@ const CustomBox = styled(Box)`
   }
 `;
 
-const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => {
+const Todo: React.FC<TodoProps> = ({
+  todo,
+  check,
+  remove,
+  saveList,
+  lists,
+  mass,
+  massSelect,
+  massClick,
+}) => {
   const { id, title, description, checked, list } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
+
+  useEffect(() => {
+    if (selected !== list?.id) {
+      setSelected(list?.id || -1);
+    }
+  }, [list?.id]);
 
   const changeList = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelected(parseInt(e.target.value));
@@ -59,6 +77,10 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => 
     saveList(id, selected).finally(() => setLoading(false));
   };
 
+  const onMass = () => {
+    massClick(id);
+  };
+
   return showUpdate ? (
     <TodoForm todo={todo} close={() => setUpdate(false)} />
   ) : (
@@ -66,12 +88,12 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => 
       <Flex align="center" justify="space-between" pos="relative">
         <Flex>
           <IconButton
-            icon={checked ? 'check' : 'minus'}
-            variantColor={checked ? 'green' : 'gray'}
+            icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
+            variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
             aria-label="check"
             mr={4}
             isLoading={loading}
-            onClick={onCheck}
+            onClick={mass ? onMass : onCheck}
           />
           <Box>
             <Heading fontSize="xl" wordBreak="break-all">

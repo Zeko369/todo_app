@@ -1,6 +1,16 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NextPage } from 'next';
-import { Stack, Box, Heading, Button, Flex, Text, Collapse } from '@chakra-ui/core';
+import {
+  Stack,
+  Box,
+  Heading,
+  Button,
+  Flex,
+  Text,
+  Collapse,
+  Select,
+  Spinner,
+} from '@chakra-ui/core';
 
 import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';
@@ -14,25 +24,34 @@ import {
   useListsQuery,
   useUpdateTodoMutation,
   useRemoveTodoFromListMutation,
+  useDeleteManyTodoMutation,
+  useAddTodosToListMutation,
 } from '../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
+
+const apolloOptions = {
+  refetchQueries: [{ query: TODOS_QUERY }],
+};
 
 const Home: NextPage = () => {
   const { loading, error, data } = useTodosQuery();
   const { loading: lLoading, error: lError, data: lData } = useListsQuery();
 
   const [stats, setStats] = useState<string>('');
+  const [selectedList, setSelectedList] = useState<number>(-1);
+  const [massSelected, setMassSelected] = useState<Record<number, boolean>>({});
 
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
   const [showNew, , setNew] = useToggle();
+  const [mass, toggleMass] = useToggle(false);
 
-  const [checkTodo] = useCheckTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
-  const [deleteTodo] = useDeleteTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
-  const [updateTodo] = useUpdateTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
-  const [removeTodoFromList] = useRemoveTodoFromListMutation({
-    refetchQueries: [{ query: TODOS_QUERY }],
-  });
+  const [checkTodo] = useCheckTodoMutation(apolloOptions);
+  const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
+  const [deleteManyTodos] = useDeleteManyTodoMutation(apolloOptions);
+  const [updateTodo] = useUpdateTodoMutation(apolloOptions);
+  const [removeTodoFromList] = useRemoveTodoFromListMutation(apolloOptions);
+  const [addTodosToList] = useAddTodosToListMutation(apolloOptions);
 
   const check = (id: number): Promise<any> => checkTodo({ variables: { id } });
   const saveList = async (id: number, listId: number) => {
@@ -46,6 +65,47 @@ const Home: NextPage = () => {
     if (confirm('Are you sure?')) {
       deleteTodo({ variables: { id } });
     }
+  };
+
+  const massClick = (id: number) => {
+    setMassSelected((current) => ({ ...current, [id]: !current[id] }));
+  };
+
+  const selected = Object.keys(massSelected)
+    .map((k) => (massSelected[parseInt(k)] ? parseInt(k) : undefined))
+    .filter(Boolean) as number[];
+  const numberOfSelected = selected.length;
+
+  const selectAll = () => {
+    const all = Object.keys(massSelected).length !== numberOfSelected;
+
+    setMassSelected(
+      (!loading && !error && data ? data.todos.map((t) => t.id) : []).reduce(
+        (p, c) => ({ ...p, [c]: all }),
+        {} as Record<number, boolean>
+      )
+    );
+  };
+
+  const bulkDelete = async () => {
+    if (confirm(`Are you sure you want to delete [${selected.join(', ')}] Todos?`)) {
+      const countAfter = await deleteManyTodos({ variables: { ids: selected } });
+      if (countAfter.data?.deleteManyTodo.count !== numberOfSelected) {
+        console.log(countAfter, numberOfSelected);
+        console.log('Something went wrong');
+      }
+      setMassSelected({});
+    }
+  };
+
+  const bulkChangeList = async () => {
+    if (selectedList === -1) {
+      return alert(`Can't do that yet`);
+    }
+
+    await addTodosToList({
+      variables: { listId: selectedList, todos: selected.map((id) => ({ id })) },
+    });
   };
 
   const newRef = useRef<HTMLInputElement>(null);
@@ -98,7 +158,46 @@ const Home: NextPage = () => {
       <Stack isInline mb={3}>
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
+        <Button onClick={toggleMass}>{mass ? 'Close mass' : 'Select mass'}</Button>
       </Stack>
+      {mass && (
+        <Stack spacing={2} mb={3}>
+          <Box>Selected: {numberOfSelected}</Box>
+          <Stack isInline>
+            <Button onClick={selectAll} variantColor="yellow">
+              Select all
+            </Button>
+            <Button onClick={bulkDelete} variantColor="red" isDisabled={numberOfSelected === 0}>
+              Bulk delete
+            </Button>
+            <Button
+              onClick={bulkChangeList}
+              variantColor="green"
+              isDisabled={numberOfSelected === 0}
+            >
+              Bulk change list
+            </Button>
+            {lLoading ? (
+              <Spinner />
+            ) : lError || !lData ? (
+              <Heading size="xl">Something went wrong</Heading>
+            ) : (
+              <Select
+                maxW="50%"
+                value={selectedList}
+                onChange={(e) => setSelectedList(parseInt(e.target.value))}
+              >
+                <option value={-1}></option>
+                {lData?.lists.map((list) => (
+                  <option key={list.id} value={list.id}>
+                    {list.title}
+                  </option>
+                ))}
+              </Select>
+            )}
+          </Stack>
+        </Stack>
+      )}
       <Collapse isOpen={showNew}>
         <TodoForm close={toggleNew} ref={newRef} />
       </Collapse>
@@ -114,6 +213,9 @@ const Home: NextPage = () => {
                 check={check}
                 remove={remove}
                 lists={lLoading || lError || !lData ? [] : lData.lists}
+                mass={mass}
+                massSelect={massSelected[todo.id]}
+                massClick={massClick}
               />
             ))}
         </Stack>

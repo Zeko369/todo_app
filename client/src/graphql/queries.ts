@@ -109,3 +109,25 @@ export const removeTodoFromList = gql`
     }
   }
 `;
+
+export const removeManyTodos = gql`
+  mutation deleteManyTodo($ids: [Int!]) {
+    deleteManyTodo(where: { id: { in: $ids } }) {
+      count
+    }
+  }
+`;
+
+export const addTodosToList = gql`
+  mutation addTodosToList($todos: [TodoWhereUniqueInput!], $listId: Int!) {
+    updateOneList(where: { id: $listId }, data: { todos: { connect: $todos } }) {
+      id
+      todos {
+        id
+        list {
+          id
+        }
+      }
+    }
+  }
+`;

@@ -30,7 +30,7 @@ export type QueryTodoArgs = {
 
 
 export type QueryTodosArgs = {
-  orderBy?: Maybe<TodoOrderByInput>;
+  orderBy?: Maybe<Array<TodoOrderByInput>>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   before?: Maybe<TodoWhereUniqueInput>;
@@ -45,7 +45,7 @@ export type QueryListArgs = {
 
 export type QueryListsArgs = {
   where?: Maybe<ListWhereInput>;
-  orderBy?: Maybe<ListOrderByInput>;
+  orderBy?: Maybe<Array<ListOrderByInput>>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   before?: Maybe<ListWhereUniqueInput>;
@@ -105,17 +105,17 @@ export type ListTodosArgs = {
 
 
 export type TodoOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  title?: Maybe<OrderByArg>;
-  description?: Maybe<OrderByArg>;
-  checked?: Maybe<OrderByArg>;
-  checkedAt?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  listId?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  title?: Maybe<SortOrder>;
+  description?: Maybe<SortOrder>;
+  checked?: Maybe<SortOrder>;
+  checkedAt?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  listId?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
-export enum OrderByArg {
+export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
 }
@@ -125,30 +125,40 @@ export type ListWhereUniqueInput = {
 };
 
 export type ListWhereInput = {
-  id?: Maybe<IntFilter>;
-  title?: Maybe<NullableStringFilter>;
-  todos?: Maybe<TodoFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
   AND?: Maybe<Array<ListWhereInput>>;
   OR?: Maybe<Array<ListWhereInput>>;
   NOT?: Maybe<Array<ListWhereInput>>;
+  id?: Maybe<IntFilter>;
+  title?: Maybe<StringNullableFilter>;
+  todos?: Maybe<TodoListRelationFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
 };
 
 export type IntFilter = {
   equals?: Maybe<Scalars['Int']>;
-  not?: Maybe<Scalars['Int']>;
   in?: Maybe<Array<Scalars['Int']>>;
   notIn?: Maybe<Array<Scalars['Int']>>;
   lt?: Maybe<Scalars['Int']>;
   lte?: Maybe<Scalars['Int']>;
   gt?: Maybe<Scalars['Int']>;
   gte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntFilter>;
 };
 
-export type NullableStringFilter = {
+export type NestedIntFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntFilter>;
+};
+
+export type StringNullableFilter = {
   equals?: Maybe<Scalars['String']>;
-  not?: Maybe<Scalars['String']>;
   in?: Maybe<Array<Scalars['String']>>;
   notIn?: Maybe<Array<Scalars['String']>>;
   lt?: Maybe<Scalars['String']>;
@@ -158,81 +168,136 @@ export type NullableStringFilter = {
   contains?: Maybe<Scalars['String']>;
   startsWith?: Maybe<Scalars['String']>;
   endsWith?: Maybe<Scalars['String']>;
+  not?: Maybe<NestedStringNullableFilter>;
 };
 
-export type TodoFilter = {
+export type NestedStringNullableFilter = {
+  equals?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  notIn?: Maybe<Array<Scalars['String']>>;
+  lt?: Maybe<Scalars['String']>;
+  lte?: Maybe<Scalars['String']>;
+  gt?: Maybe<Scalars['String']>;
+  gte?: Maybe<Scalars['String']>;
+  contains?: Maybe<Scalars['String']>;
+  startsWith?: Maybe<Scalars['String']>;
+  endsWith?: Maybe<Scalars['String']>;
+  not?: Maybe<NestedStringNullableFilter>;
+};
+
+export type TodoListRelationFilter = {
   every?: Maybe<TodoWhereInput>;
   some?: Maybe<TodoWhereInput>;
   none?: Maybe<TodoWhereInput>;
 };
 
 export type TodoWhereInput = {
-  id?: Maybe<IntFilter>;
-  title?: Maybe<NullableStringFilter>;
-  description?: Maybe<NullableStringFilter>;
-  checked?: Maybe<BooleanFilter>;
-  checkedAt?: Maybe<NullableDateTimeFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  listId?: Maybe<NullableIntFilter>;
-  requires?: Maybe<TodoFilter>;
-  requiredBy?: Maybe<TodoFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
   AND?: Maybe<Array<TodoWhereInput>>;
   OR?: Maybe<Array<TodoWhereInput>>;
   NOT?: Maybe<Array<TodoWhereInput>>;
+  id?: Maybe<IntFilter>;
+  title?: Maybe<StringNullableFilter>;
+  description?: Maybe<StringNullableFilter>;
+  checked?: Maybe<BoolFilter>;
+  checkedAt?: Maybe<DateTimeNullableFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
   list?: Maybe<ListWhereInput>;
+  listId?: Maybe<IntNullableFilter>;
+  requires?: Maybe<TodoListRelationFilter>;
+  requiredBy?: Maybe<TodoListRelationFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
 };
 
-export type BooleanFilter = {
+export type BoolFilter = {
   equals?: Maybe<Scalars['Boolean']>;
-  not?: Maybe<Scalars['Boolean']>;
+  not?: Maybe<NestedBoolFilter>;
 };
 
-export type NullableDateTimeFilter = {
+export type NestedBoolFilter = {
+  equals?: Maybe<Scalars['Boolean']>;
+  not?: Maybe<NestedBoolFilter>;
+};
+
+export type DateTimeNullableFilter = {
   equals?: Maybe<Scalars['DateTime']>;
-  not?: Maybe<Scalars['DateTime']>;
   in?: Maybe<Array<Scalars['DateTime']>>;
   notIn?: Maybe<Array<Scalars['DateTime']>>;
   lt?: Maybe<Scalars['DateTime']>;
   lte?: Maybe<Scalars['DateTime']>;
   gt?: Maybe<Scalars['DateTime']>;
   gte?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<NestedDateTimeNullableFilter>;
+};
+
+export type NestedDateTimeNullableFilter = {
+  equals?: Maybe<Scalars['DateTime']>;
+  in?: Maybe<Array<Scalars['DateTime']>>;
+  notIn?: Maybe<Array<Scalars['DateTime']>>;
+  lt?: Maybe<Scalars['DateTime']>;
+  lte?: Maybe<Scalars['DateTime']>;
+  gt?: Maybe<Scalars['DateTime']>;
+  gte?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<NestedDateTimeNullableFilter>;
 };
 
 export type DateTimeFilter = {
   equals?: Maybe<Scalars['DateTime']>;
-  not?: Maybe<Scalars['DateTime']>;
   in?: Maybe<Array<Scalars['DateTime']>>;
   notIn?: Maybe<Array<Scalars['DateTime']>>;
   lt?: Maybe<Scalars['DateTime']>;
   lte?: Maybe<Scalars['DateTime']>;
   gt?: Maybe<Scalars['DateTime']>;
   gte?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<NestedDateTimeFilter>;
 };
 
-export type NullableIntFilter = {
+export type NestedDateTimeFilter = {
+  equals?: Maybe<Scalars['DateTime']>;
+  in?: Maybe<Array<Scalars['DateTime']>>;
+  notIn?: Maybe<Array<Scalars['DateTime']>>;
+  lt?: Maybe<Scalars['DateTime']>;
+  lte?: Maybe<Scalars['DateTime']>;
+  gt?: Maybe<Scalars['DateTime']>;
+  gte?: Maybe<Scalars['DateTime']>;
+  not?: Maybe<NestedDateTimeFilter>;
+};
+
+export type IntNullableFilter = {
   equals?: Maybe<Scalars['Int']>;
-  not?: Maybe<Scalars['Int']>;
   in?: Maybe<Array<Scalars['Int']>>;
   notIn?: Maybe<Array<Scalars['Int']>>;
   lt?: Maybe<Scalars['Int']>;
   lte?: Maybe<Scalars['Int']>;
   gt?: Maybe<Scalars['Int']>;
   gte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntNullableFilter>;
+};
+
+export type NestedIntNullableFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntNullableFilter>;
 };
 
 export type ListOrderByInput = {
-  id?: Maybe<OrderByArg>;
-  title?: Maybe<OrderByArg>;
-  createdAt?: Maybe<OrderByArg>;
-  updatedAt?: Maybe<OrderByArg>;
+  id?: Maybe<SortOrder>;
+  title?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createOneTodo: Todo;
   updateOneTodo?: Maybe<Todo>;
+  updateManyTodo: BatchPayload;
   deleteOneTodo?: Maybe<Todo>;
+  deleteManyTodo: BatchPayload;
   checkTodo?: Maybe<Todo>;
   createOneList: List;
   updateOneList?: Maybe<List>;
@@ -251,8 +316,19 @@ export type MutationUpdateOneTodoArgs = {
 };
 
 
+export type MutationUpdateManyTodoArgs = {
+  data: TodoUpdateManyMutationInput;
+  where?: Maybe<TodoWhereInput>;
+};
+
+
 export type MutationDeleteOneTodoArgs = {
   where: TodoWhereUniqueInput;
+};
+
+
+export type MutationDeleteManyTodoArgs = {
+  where?: Maybe<TodoWhereInput>;
 };
 
 
@@ -332,7 +408,6 @@ export type TodoCreateWithoutRequiresInput = {
 };
 
 export type TodoUpdateInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -354,7 +429,6 @@ export type ListUpdateOneWithoutTodosInput = {
 };
 
 export type ListUpdateWithoutTodosDataInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -383,7 +457,6 @@ export type TodoUpdateWithWhereUniqueWithoutRequiredByInput = {
 };
 
 export type TodoUpdateWithoutRequiredByDataInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -400,23 +473,20 @@ export type TodoUpdateManyWithWhereNestedInput = {
 };
 
 export type TodoScalarWhereInput = {
-  id?: Maybe<IntFilter>;
-  title?: Maybe<NullableStringFilter>;
-  description?: Maybe<NullableStringFilter>;
-  checked?: Maybe<BooleanFilter>;
-  checkedAt?: Maybe<NullableDateTimeFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  listId?: Maybe<NullableIntFilter>;
-  requires?: Maybe<TodoFilter>;
-  requiredBy?: Maybe<TodoFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
   AND?: Maybe<Array<TodoScalarWhereInput>>;
   OR?: Maybe<Array<TodoScalarWhereInput>>;
   NOT?: Maybe<Array<TodoScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  title?: Maybe<StringNullableFilter>;
+  description?: Maybe<StringNullableFilter>;
+  checked?: Maybe<BoolFilter>;
+  checkedAt?: Maybe<DateTimeNullableFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  listId?: Maybe<IntNullableFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
 };
 
 export type TodoUpdateManyDataInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -449,7 +519,6 @@ export type TodoUpdateWithWhereUniqueWithoutRequiresInput = {
 };
 
 export type TodoUpdateWithoutRequiresDataInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -464,6 +533,20 @@ export type TodoUpsertWithWhereUniqueWithoutRequiresInput = {
   where: TodoWhereUniqueInput;
   update: TodoUpdateWithoutRequiresDataInput;
   create: TodoCreateWithoutRequiresInput;
+};
+
+export type TodoUpdateManyMutationInput = {
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  checked?: Maybe<Scalars['Boolean']>;
+  checkedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type BatchPayload = {
+  __typename?: 'BatchPayload';
+  count: Scalars['Int'];
 };
 
 export type ListCreateInput = {
@@ -490,7 +573,6 @@ export type TodoCreateWithoutListInput = {
 };
 
 export type ListUpdateInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -515,7 +597,6 @@ export type TodoUpdateWithWhereUniqueWithoutListInput = {
 };
 
 export type TodoUpdateWithoutListDataInput = {
-  id?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -673,6 +754,41 @@ export type RemoveTodoFromListMutation = (
   & { updateOneTodo?: Maybe<(
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'description'>
+  )> }
+);
+
+export type DeleteManyTodoMutationVariables = Exact<{
+  ids?: Maybe<Array<Scalars['Int']>>;
+}>;
+
+
+export type DeleteManyTodoMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteManyTodo: (
+    { __typename?: 'BatchPayload' }
+    & Pick<BatchPayload, 'count'>
+  ) }
+);
+
+export type AddTodosToListMutationVariables = Exact<{
+  todos?: Maybe<Array<TodoWhereUniqueInput>>;
+  listId: Scalars['Int'];
+}>;
+
+
+export type AddTodosToListMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneList?: Maybe<(
+    { __typename?: 'List' }
+    & Pick<List, 'id'>
+    & { todos: Array<(
+      { __typename?: 'Todo' }
+      & Pick<Todo, 'id'>
+      & { list?: Maybe<(
+        { __typename?: 'List' }
+        & Pick<List, 'id'>
+      )> }
+    )> }
   )> }
 );
 
@@ -1030,6 +1146,77 @@ export function useRemoveTodoFromListMutation(baseOptions?: Apollo.MutationHookO
 export type RemoveTodoFromListMutationHookResult = ReturnType<typeof useRemoveTodoFromListMutation>;
 export type RemoveTodoFromListMutationResult = Apollo.MutationResult<RemoveTodoFromListMutation>;
 export type RemoveTodoFromListMutationOptions = Apollo.BaseMutationOptions<RemoveTodoFromListMutation, RemoveTodoFromListMutationVariables>;
+export const DeleteManyTodoDocument = gql`
+    mutation deleteManyTodo($ids: [Int!]) {
+  deleteManyTodo(where: {id: {in: $ids}}) {
+    count
+  }
+}
+    `;
+export type DeleteManyTodoMutationFn = Apollo.MutationFunction<DeleteManyTodoMutation, DeleteManyTodoMutationVariables>;
+
+/**
+ * __useDeleteManyTodoMutation__
+ *
+ * To run a mutation, you first call `useDeleteManyTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteManyTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteManyTodoMutation, { data, loading, error }] = useDeleteManyTodoMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteManyTodoMutation(baseOptions?: Apollo.MutationHookOptions<DeleteManyTodoMutation, DeleteManyTodoMutationVariables>) {
+        return Apollo.useMutation<DeleteManyTodoMutation, DeleteManyTodoMutationVariables>(DeleteManyTodoDocument, baseOptions);
+      }
+export type DeleteManyTodoMutationHookResult = ReturnType<typeof useDeleteManyTodoMutation>;
+export type DeleteManyTodoMutationResult = Apollo.MutationResult<DeleteManyTodoMutation>;
+export type DeleteManyTodoMutationOptions = Apollo.BaseMutationOptions<DeleteManyTodoMutation, DeleteManyTodoMutationVariables>;
+export const AddTodosToListDocument = gql`
+    mutation addTodosToList($todos: [TodoWhereUniqueInput!], $listId: Int!) {
+  updateOneList(where: {id: $listId}, data: {todos: {connect: $todos}}) {
+    id
+    todos {
+      id
+      list {
+        id
+      }
+    }
+  }
+}
+    `;
+export type AddTodosToListMutationFn = Apollo.MutationFunction<AddTodosToListMutation, AddTodosToListMutationVariables>;
+
+/**
+ * __useAddTodosToListMutation__
+ *
+ * To run a mutation, you first call `useAddTodosToListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTodosToListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTodosToListMutation, { data, loading, error }] = useAddTodosToListMutation({
+ *   variables: {
+ *      todos: // value for 'todos'
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useAddTodosToListMutation(baseOptions?: Apollo.MutationHookOptions<AddTodosToListMutation, AddTodosToListMutationVariables>) {
+        return Apollo.useMutation<AddTodosToListMutation, AddTodosToListMutationVariables>(AddTodosToListDocument, baseOptions);
+      }
+export type AddTodosToListMutationHookResult = ReturnType<typeof useAddTodosToListMutation>;
+export type AddTodosToListMutationResult = Apollo.MutationResult<AddTodosToListMutation>;
+export type AddTodosToListMutationOptions = Apollo.BaseMutationOptions<AddTodosToListMutation, AddTodosToListMutationVariables>;
 
       export interface IntrospectionResultData {
         __schema: {
