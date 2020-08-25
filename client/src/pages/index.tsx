@@ -13,6 +13,7 @@ import {
   useDeleteTodoMutation,
   useListsQuery,
   useUpdateTodoMutation,
+  useRemoveTodoFromListMutation,
 } from '../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 
@@ -29,13 +30,21 @@ const Home: NextPage = () => {
   const [checkTodo] = useCheckTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
   const [deleteTodo] = useDeleteTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
   const [updateTodo] = useUpdateTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
+  const [removeTodoFromList] = useRemoveTodoFromListMutation({
+    refetchQueries: [{ query: TODOS_QUERY }],
+  });
 
-  const saveList = async (id: number, listId: number): Promise<any> =>
-    updateTodo({ variables: { id, listId } });
-  const check = async (id: number): Promise<any> => checkTodo({ variables: { id } });
-  const remove = async (id: number): Promise<any> => {
+  const check = (id: number): Promise<any> => checkTodo({ variables: { id } });
+  const saveList = async (id: number, listId: number) => {
+    if (listId === -1) {
+      return removeTodoFromList({ variables: { id } });
+    }
+
+    return updateTodo({ variables: { id, listId } });
+  };
+  const remove = async (id: number) => {
     if (confirm('Are you sure?')) {
-      return deleteTodo({ variables: { id } });
+      deleteTodo({ variables: { id } });
     }
   };
 

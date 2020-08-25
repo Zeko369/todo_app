@@ -37,7 +37,7 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => 
   const { id, title, description, checked, list } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [selected, setSelected] = useState<number | undefined>(list?.id);
+  const [selected, setSelected] = useState<number>(list?.id || -1);
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
 
   const changeList = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -75,7 +75,7 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => 
           />
           <Box>
             <Heading fontSize="xl" wordBreak="break-all">
-              {title}
+              {`[${id}] ${title}`}
             </Heading>
             {description && (
               <Text mt={4} wordBreak="break-all">
@@ -103,6 +103,7 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => 
       </Flex>
       <Flex mt={5}>
         <Select value={selected} onChange={changeList}>
+          <option value={-1}></option>
           {lists.map((list) => (
             <option key={list.id} value={list.id}>
               {list.title}

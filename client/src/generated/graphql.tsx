@@ -663,6 +663,19 @@ export type UpdateTodoMutation = (
   )> }
 );
 
+export type RemoveTodoFromListMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type RemoveTodoFromListMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTodo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'description'>
+  )> }
+);
+
 
 export const ListsDocument = gql`
     query LISTS {
@@ -983,6 +996,40 @@ export function useUpdateTodoMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateTodoMutationHookResult = ReturnType<typeof useUpdateTodoMutation>;
 export type UpdateTodoMutationResult = Apollo.MutationResult<UpdateTodoMutation>;
 export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<UpdateTodoMutation, UpdateTodoMutationVariables>;
+export const RemoveTodoFromListDocument = gql`
+    mutation removeTodoFromList($id: Int!) {
+  updateOneTodo(where: {id: $id}, data: {list: {disconnect: true}}) {
+    id
+    title
+    description
+  }
+}
+    `;
+export type RemoveTodoFromListMutationFn = Apollo.MutationFunction<RemoveTodoFromListMutation, RemoveTodoFromListMutationVariables>;
+
+/**
+ * __useRemoveTodoFromListMutation__
+ *
+ * To run a mutation, you first call `useRemoveTodoFromListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveTodoFromListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeTodoFromListMutation, { data, loading, error }] = useRemoveTodoFromListMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveTodoFromListMutation(baseOptions?: Apollo.MutationHookOptions<RemoveTodoFromListMutation, RemoveTodoFromListMutationVariables>) {
+        return Apollo.useMutation<RemoveTodoFromListMutation, RemoveTodoFromListMutationVariables>(RemoveTodoFromListDocument, baseOptions);
+      }
+export type RemoveTodoFromListMutationHookResult = ReturnType<typeof useRemoveTodoFromListMutation>;
+export type RemoveTodoFromListMutationResult = Apollo.MutationResult<RemoveTodoFromListMutation>;
+export type RemoveTodoFromListMutationOptions = Apollo.BaseMutationOptions<RemoveTodoFromListMutation, RemoveTodoFromListMutationVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

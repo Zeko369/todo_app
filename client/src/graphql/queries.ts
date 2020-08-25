@@ -99,3 +99,13 @@ export const updateTodo = gql`
     }
   }
 `;
+
+export const removeTodoFromList = gql`
+  mutation removeTodoFromList($id: Int!) {
+    updateOneTodo(where: { id: $id }, data: { list: { disconnect: true } }) {
+      id
+      title
+      description
+    }
+  }
+`;
