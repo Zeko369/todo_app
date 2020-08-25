@@ -8,7 +8,13 @@ import { server } from 'nexus';
 server.express.use(cors());
 settings.change({ server: { port: parseInt(process.env.PORT || '') || 4000 } });
 
-use(prisma({ migrations: true, features: { crud: true } }));
+use(
+  prisma({
+    migrations: true,
+    features: { crud: true },
+    client: { options: { log: ['query', 'info', 'warn'] } },
+  })
+);
 
 schema.queryType({
   definition(t) {

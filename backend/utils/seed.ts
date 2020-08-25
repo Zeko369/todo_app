@@ -5,8 +5,13 @@ import { lorem, date } from 'faker';
   const db = new PrismaClient();
   await db.$connect();
 
-  const lists: number[] = [];
+  const tags: number[] = [];
+  for (let i = 0; i < 3; i++) {
+    const tag = await db.tag.create({ data: { text: lorem.word() } });
+    tags.push(tag.id);
+  }
 
+  const lists: number[] = [];
   for (let i = 0; i < 3; i++) {
     const list = await db.list.create({
       data: {
@@ -17,8 +22,8 @@ import { lorem, date } from 'faker';
     lists.push(list.id);
   }
 
-  const randomListId = () => {
-    return lists[Math.floor(lists.length * Math.random())];
+  const random = <T>(arr: T[]): T => {
+    return arr[Math.floor(arr.length * Math.random())];
   };
 
   const ids: number[] = [];
@@ -32,7 +37,8 @@ import { lorem, date } from 'faker';
         description: lorem.paragraph(),
         checked,
         checkedAt: checked ? date.past() : null,
-        list: { connect: { id: randomListId() } },
+        list: { connect: { id: random(lists) } },
+        tags: { connect: { id: random(tags) } },
       },
     });
 
