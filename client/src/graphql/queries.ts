@@ -53,6 +53,9 @@ export const TODOS_QUERY = gql`
       title
       description
       checked
+      list {
+        id
+      }
     }
   }
 `;
@@ -85,8 +88,11 @@ export const createTodo = gql`
 `;
 
 export const updateTodo = gql`
-  mutation updateTodo($id: Int!, $title: String, $description: String) {
-    updateOneTodo(where: { id: $id }, data: { title: $title, description: $description }) {
+  mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
+    updateOneTodo(
+      where: { id: $id }
+      data: { title: $title, description: $description, list: { connect: { id: $listId } } }
+    ) {
       id
       title
       description

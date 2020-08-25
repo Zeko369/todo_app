@@ -7,11 +7,18 @@ import Todo from '../components/Todo';
 import useToggle from '../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
 import useKeyPress from '../hooks/useKeyPress';
-import { useTodosQuery, useCheckTodoMutation, useDeleteTodoMutation } from '../generated/graphql';
+import {
+  useTodosQuery,
+  useCheckTodoMutation,
+  useDeleteTodoMutation,
+  useListsQuery,
+  useUpdateTodoMutation,
+} from '../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 
 const Home: NextPage = () => {
   const { loading, error, data } = useTodosQuery();
+  const { loading: lLoading, error: lError, data: lData } = useListsQuery();
 
   const [stats, setStats] = useState<string>('');
 
@@ -21,7 +28,10 @@ const Home: NextPage = () => {
 
   const [checkTodo] = useCheckTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
   const [deleteTodo] = useDeleteTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
+  const [updateTodo] = useUpdateTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
 
+  const saveList = async (id: number, listId: number): Promise<any> =>
+    updateTodo({ variables: { id, listId } });
   const check = async (id: number): Promise<any> => checkTodo({ variables: { id } });
   const remove = async (id: number): Promise<any> => {
     if (confirm('Are you sure?')) {
@@ -88,7 +98,14 @@ const Home: NextPage = () => {
           {filteredData
             .filter((todo) => (onlyTodo ? !todo.checked : true))
             .map((todo) => (
-              <Todo key={todo.id} todo={todo} check={check} remove={remove} />
+              <Todo
+                key={todo.id}
+                todo={todo}
+                saveList={saveList}
+                check={check}
+                remove={remove}
+                lists={lLoading || lError || !lData ? [] : lData.lists}
+              />
             ))}
         </Stack>
       ) : (

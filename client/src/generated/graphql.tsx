@@ -600,6 +600,10 @@ export type TodosQuery = (
   & { todos: Array<(
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
+    & { list?: Maybe<(
+      { __typename?: 'List' }
+      & Pick<List, 'id'>
+    )> }
   )> }
 );
 
@@ -647,6 +651,7 @@ export type UpdateTodoMutationVariables = Exact<{
   id: Scalars['Int'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  listId?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -810,6 +815,9 @@ export const TodosDocument = gql`
     title
     description
     checked
+    list {
+      id
+    }
   }
 }
     `;
@@ -939,8 +947,8 @@ export type CreateTodoMutationHookResult = ReturnType<typeof useCreateTodoMutati
 export type CreateTodoMutationResult = Apollo.MutationResult<CreateTodoMutation>;
 export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<CreateTodoMutation, CreateTodoMutationVariables>;
 export const UpdateTodoDocument = gql`
-    mutation updateTodo($id: Int!, $title: String, $description: String) {
-  updateOneTodo(where: {id: $id}, data: {title: $title, description: $description}) {
+    mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
+  updateOneTodo(where: {id: $id}, data: {title: $title, description: $description, list: {connect: {id: $listId}}}) {
     id
     title
     description
@@ -965,6 +973,7 @@ export type UpdateTodoMutationFn = Apollo.MutationFunction<UpdateTodoMutation, U
  *      id: // value for 'id'
  *      title: // value for 'title'
  *      description: // value for 'description'
+ *      listId: // value for 'listId'
  *   },
  * });
  */

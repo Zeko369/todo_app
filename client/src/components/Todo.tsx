@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Flex, IconButton, Heading, Text, Stack } from '@chakra-ui/core';
+import { Box, Flex, IconButton, Heading, Text, Stack, Select, Button } from '@chakra-ui/core';
 import styled from '@emotion/styled';
 
 import useToggle from '../hooks/useToggle';
 import TodoForm from './TodoForm';
-import { Todo as TodoDB } from '../generated/graphql';
+import { Todo as TodoDB, List as ListDB } from '../generated/graphql';
 
 interface TodoProps {
-  todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked'>;
+  lists: Pick<ListDB, 'id' | 'title'>[];
+  todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked'> & {
+    list?: Pick<ListDB, 'id'> | null;
+  };
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
+  saveList: (id: number, listId: number) => Promise<unknown>;
 }
 
 const CustomBox = styled(Box)`
@@ -29,10 +33,16 @@ const CustomBox = styled(Box)`
   }
 `;
 
-const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
+const Todo: React.FC<TodoProps> = ({ todo, check, remove, saveList, lists }) => {
+  const { id, title, description, checked, list } = todo;
+
   const [loading, setLoading] = useState<boolean>(false);
+  const [selected, setSelected] = useState<number | undefined>(list?.id);
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
-  const { id, title, description, checked } = todo;
+
+  const changeList = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelected(parseInt(e.target.value));
+  };
 
   const onCheck = () => {
     setLoading(true);
@@ -42,6 +52,11 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
   const onDelete = () => {
     setLoading(true);
     remove(id).finally(() => setLoading(false));
+  };
+
+  const onSaveList = () => {
+    setLoading(true);
+    saveList(id, selected).finally(() => setLoading(false));
   };
 
   return showUpdate ? (
@@ -85,6 +100,20 @@ const Todo: React.FC<TodoProps> = ({ todo, check, remove }) => {
             onClick={toggleUpdate}
           />
         </Stack>
+      </Flex>
+      <Flex mt={5}>
+        <Select value={selected} onChange={changeList}>
+          {lists.map((list) => (
+            <option key={list.id} value={list.id}>
+              {list.title}
+            </option>
+          ))}
+        </Select>
+        {todo.list?.id !== selected && (
+          <Button ml={5} variantColor="blue" onClick={onSaveList}>
+            Save
+          </Button>
+        )}
       </Flex>
     </CustomBox>
   );
