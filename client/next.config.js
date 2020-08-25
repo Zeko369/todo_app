@@ -1,4 +1,4 @@
 // @ts-check
 module.exports = {
-  trailingSlash: true,
+  trailingSlash: false,
 };

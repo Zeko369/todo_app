@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import {
-  Box,
-  Spinner,
-  Heading,
-  Text,
-  Tag,
-  Grid,
-  Flex,
-  Button,
-  Stack,
-  IconButton,
-} from '@chakra-ui/core';
+import { Box, Spinner, Heading, Text, Tag, Button, Stack, IconButton } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 
 import Nav from '../../components/Nav';
-import { LinkIconButton } from '../../components/Link';
 import {
   useTagsQuery,
   Tag as TagDB,
