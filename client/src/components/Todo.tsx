@@ -84,6 +84,11 @@ const Todo: React.FC<TodoProps> = ({
               {title}
             </Heading>
             <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>
+            {list?.id && (
+              <Text>
+                <i>{lists.find((l) => l.id === list.id)?.title}</i>
+              </Text>
+            )}
             {description && (
               <Text mt={4} wordBreak="break-all">
                 {description}
