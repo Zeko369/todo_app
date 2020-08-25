@@ -53,6 +53,7 @@ export const TODOS_QUERY = gql`
       title
       description
       checked
+      createdAt
       list {
         id
       }

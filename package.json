@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": ""
+    "deploy": "",
+    "dev": "concurrently \"cd client && yarn dev\" \"cd backend && yarn dev\""
   },
   "author": "Fran Zekan <zekan.fran369@gmail.com>",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "dotenv": "^8.2.0"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "pm2": "^4.4.0"
   }
 }

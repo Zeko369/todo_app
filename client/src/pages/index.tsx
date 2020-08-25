@@ -46,6 +46,7 @@ const Home: NextPage = () => {
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
   const [showNew, , setNew] = useToggle();
   const [mass, toggleMass] = useToggle(false);
+  const [hideButtons, toggleButtons] = useSaveToggle('buttons');
 
   const [checkTodo] = useCheckTodoMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
@@ -162,6 +163,7 @@ const Home: NextPage = () => {
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
         <Button onClick={toggleMass}>{mass ? 'Close mass' : 'Select mass'}</Button>
+        <Button onClick={toggleButtons}>{hideButtons ? 'Show buttons' : 'Hide buttons'}</Button>
       </Stack>
       {mass && (
         <Stack spacing={2} mb={3}>
@@ -218,6 +220,7 @@ const Home: NextPage = () => {
                 mass={mass}
                 massSelect={massSelected[todo.id]}
                 massClick={massClick}
+                hideButtons={hideButtons}
               />
             ))}
         </Stack>

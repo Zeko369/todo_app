@@ -680,7 +680,7 @@ export type TodosQuery = (
   { __typename?: 'Query' }
   & { todos: Array<(
     { __typename?: 'Todo' }
-    & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
+    & Pick<Todo, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>
     & { list?: Maybe<(
       { __typename?: 'List' }
       & Pick<List, 'id'>
@@ -944,6 +944,7 @@ export const TodosDocument = gql`
     title
     description
     checked
+    createdAt
     list {
       id
     }

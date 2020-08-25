@@ -10,12 +10,13 @@ interface TodoProps {
   massSelect: boolean;
   massClick: (id: number) => void;
   lists: Pick<ListDB, 'id' | 'title'>[];
-  todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked'> & {
+  todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'> & {
     list?: Pick<ListDB, 'id'> | null;
   };
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
+  hideButtons: boolean;
 }
 
 const Todo: React.FC<TodoProps> = ({
@@ -27,6 +28,7 @@ const Todo: React.FC<TodoProps> = ({
   mass,
   massSelect,
   massClick,
+  hideButtons,
 }) => {
   const { id, title, description, checked, list } = todo;
 
@@ -79,8 +81,9 @@ const Todo: React.FC<TodoProps> = ({
           />
           <Box>
             <Heading fontSize="xl" wordBreak="break-all">
-              <Text>[{id}]</Text> {title}
+              {title}
             </Heading>
+            <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>
             {description && (
               <Text mt={4} wordBreak="break-all">
                 {description}
@@ -89,37 +92,39 @@ const Todo: React.FC<TodoProps> = ({
           </Box>
         </Flex>
       </Flex>
-      <Stack isInline spacing={3} mt={5}>
-        <Select value={selected} onChange={changeList}>
-          <option value={-1}></option>
-          {lists.map((list) => (
-            <option key={list.id} value={list.id}>
-              {list.title}
-            </option>
-          ))}
-        </Select>
-        {todo.list?.id !== selected && (
-          <Button variantColor="blue" onClick={onSaveList}>
-            Save
-          </Button>
-        )}
-        <Stack spacing={3} isInline>
-          <IconButton
-            icon="delete"
-            variantColor="red"
-            aria-label="Delete"
-            isLoading={loading}
-            onClick={onDelete}
-          />
-          <IconButton
-            icon="edit"
-            variantColor="green"
-            aria-label="Update"
-            isLoading={loading}
-            onClick={toggleUpdate}
-          />
+      {!hideButtons && (
+        <Stack isInline spacing={3} mt={5}>
+          <Select value={selected} onChange={changeList}>
+            <option value={-1}></option>
+            {lists.map((list) => (
+              <option key={list.id} value={list.id}>
+                {list.title}
+              </option>
+            ))}
+          </Select>
+          {todo.list?.id !== selected && (
+            <Button variantColor="blue" onClick={onSaveList}>
+              Save
+            </Button>
+          )}
+          <Stack spacing={3} isInline>
+            <IconButton
+              icon="delete"
+              variantColor="red"
+              aria-label="Delete"
+              isLoading={loading}
+              onClick={onDelete}
+            />
+            <IconButton
+              icon="edit"
+              variantColor="green"
+              aria-label="Update"
+              isLoading={loading}
+              onClick={toggleUpdate}
+            />
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </Box>
   );
 };
