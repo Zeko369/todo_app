@@ -16,7 +16,7 @@ schema.queryType({
     t.crud.todos({ ordering: true });
 
     t.crud.list();
-    t.crud.lists({ filtering: true });
+    t.crud.lists({ filtering: true, ordering: true });
   },
 });
 
@@ -25,6 +25,7 @@ schema.mutationType({
     t.crud.createOneTodo();
     t.crud.updateOneTodo();
     t.crud.deleteOneTodo();
+
     t.field('checkTodo', {
       type: 'Todo',
       args: { id: intArg({ required: true }) },

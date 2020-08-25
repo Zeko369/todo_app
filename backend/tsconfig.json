@@ -3,11 +3,14 @@
     "plugins": [{ "name": "nexus/typescript-language-service" }],
     "target": "es6",
     "module": "commonjs",
+    "rootDir": ".",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["node_modules/@types", "types"],
+    "noEmit": true
   },
-  "include": ["./src/**/*", "./utils/**/*"]
+  "include": ["types.d.ts", "."]
 }
