@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Flex, IconButton, Heading, Text, Stack, Select, Button } from '@chakra-ui/core';
-import styled from '@emotion/styled';
 
 import useToggle from '../hooks/useToggle';
 import TodoForm from './TodoForm';
@@ -18,23 +17,6 @@ interface TodoProps {
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
 }
-
-const CustomBox = styled(Box)`
-  .remove {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition-duration: 0.2s;
-  }
-
-  &:hover {
-    .remove {
-      opacity: 1;
-    }
-  }
-`;
 
 const Todo: React.FC<TodoProps> = ({
   todo,
@@ -84,7 +66,7 @@ const Todo: React.FC<TodoProps> = ({
   return showUpdate ? (
     <TodoForm todo={todo} close={() => setUpdate(false)} />
   ) : (
-    <CustomBox p={4} shadow="md" borderWidth="1px">
+    <Box p={4} shadow="md" borderWidth="1px">
       <Flex align="center" justify="space-between" pos="relative">
         <Flex>
           <IconButton
@@ -97,7 +79,7 @@ const Todo: React.FC<TodoProps> = ({
           />
           <Box>
             <Heading fontSize="xl" wordBreak="break-all">
-              {`[${id}] ${title}`}
+              <Text>[{id}]</Text> {title}
             </Heading>
             {description && (
               <Text mt={4} wordBreak="break-all">
@@ -106,7 +88,22 @@ const Todo: React.FC<TodoProps> = ({
             )}
           </Box>
         </Flex>
-        <Stack className="remove" spacing={3} isInline>
+      </Flex>
+      <Stack isInline spacing={3} mt={5}>
+        <Select value={selected} onChange={changeList}>
+          <option value={-1}></option>
+          {lists.map((list) => (
+            <option key={list.id} value={list.id}>
+              {list.title}
+            </option>
+          ))}
+        </Select>
+        {todo.list?.id !== selected && (
+          <Button variantColor="blue" onClick={onSaveList}>
+            Save
+          </Button>
+        )}
+        <Stack spacing={3} isInline>
           <IconButton
             icon="delete"
             variantColor="red"
@@ -122,23 +119,8 @@ const Todo: React.FC<TodoProps> = ({
             onClick={toggleUpdate}
           />
         </Stack>
-      </Flex>
-      <Flex mt={5}>
-        <Select value={selected} onChange={changeList}>
-          <option value={-1}></option>
-          {lists.map((list) => (
-            <option key={list.id} value={list.id}>
-              {list.title}
-            </option>
-          ))}
-        </Select>
-        {todo.list?.id !== selected && (
-          <Button ml={5} variantColor="blue" onClick={onSaveList}>
-            Save
-          </Button>
-        )}
-      </Flex>
-    </CustomBox>
+      </Stack>
+    </Box>
   );
 };
 

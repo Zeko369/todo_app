@@ -1,6 +1,16 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NextPage } from 'next';
-import { Stack, Box, Heading, Button, Text, Collapse, Select, Spinner } from '@chakra-ui/core';
+import {
+  Stack,
+  Box,
+  Heading,
+  Button,
+  Text,
+  Collapse,
+  Select,
+  Spinner,
+  SimpleGrid,
+} from '@chakra-ui/core';
 
 import useSaveToggle from '../hooks/useSaveToggle';
 import Todo from '../components/Todo';
@@ -156,7 +166,7 @@ const Home: NextPage = () => {
       {mass && (
         <Stack spacing={2} mb={3}>
           <Box>Selected: {numberOfSelected}</Box>
-          <Stack isInline>
+          <SimpleGrid columns={[2, null, 4]} spacingX="20px" spacingY="10px">
             <Button onClick={selectAll} variantColor="yellow">
               Select all
             </Button>
@@ -176,7 +186,6 @@ const Home: NextPage = () => {
               <Heading size="xl">Something went wrong</Heading>
             ) : (
               <Select
-                maxW="50%"
                 value={selectedList}
                 onChange={(e) => setSelectedList(parseInt(e.target.value))}
               >
@@ -188,7 +197,7 @@ const Home: NextPage = () => {
                 ))}
               </Select>
             )}
-          </Stack>
+          </SimpleGrid>
         </Stack>
       )}
       <Collapse isOpen={showNew}>
