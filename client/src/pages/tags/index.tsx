@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import { Box, Spinner, Heading, Text, Tag, Button, Stack, IconButton } from '@chakra-ui/core';
+import {
+  Box,
+  Spinner,
+  Heading,
+  Text,
+  Tag,
+  Button,
+  Stack,
+  IconButton,
+  CloseButton,
+  Flex,
+} from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 
 import Nav from '../../components/Nav';
@@ -9,6 +20,7 @@ import {
   Tag as TagDB,
   useCreateTagMutation,
   useDeleteTagMutation,
+  useUpdateTagMutation,
 } from '../../generated/graphql';
 import useToggle from '../../hooks/useToggle';
 import Input from '../../components/Input';
@@ -21,13 +33,20 @@ const Tags: NextPage = () => {
 
   const { loading, error, data } = useTagsQuery();
   const [createTag] = useCreateTagMutation({ refetchQueries: [{ query: TAGS_QUERY }] });
+  const [updateTag] = useUpdateTagMutation({ refetchQueries: [{ query: TAGS_QUERY }] });
   const [deleteTag] = useDeleteTagMutation({ refetchQueries: [{ query: TAGS_QUERY }] });
 
   const [showNew, toggleNew, setNew] = useToggle();
   const [editingId, setEditingId] = useState(-1);
 
   const onSubmit = async (data: ITag) => {
-    await createTag({ variables: { ...data } });
+    if (editingId !== -1) {
+      setEditingId(-1);
+      await updateTag({ variables: { id: editingId, ...data } });
+    } else {
+      await createTag({ variables: { ...data } });
+    }
+
     setValue('text', '');
   };
 
@@ -52,11 +71,21 @@ const Tags: NextPage = () => {
       </Nav>
       {showNew && (
         <Box mb="5">
-          <Heading>{editingId === -1 ? 'Add new tag' : `Editing tag-[${editingId}]`}</Heading>
+          <Flex justifyContent="space-between" align="center">
+            <Heading>{editingId === -1 ? 'Add new tag' : `Editing tag-[${editingId}]`}</Heading>
+            {editingId !== -1 && (
+              <CloseButton
+                onClick={() => {
+                  setEditingId(-1);
+                  setValue('text', '');
+                }}
+              />
+            )}
+          </Flex>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={3}>
               <Input name="text" ref={register({ required: true })} isRequired />
-              <Button type="submit">Create</Button>
+              <Button type="submit">{editingId === -1 ? 'Create' : 'Update'}</Button>
             </Stack>
           </form>
         </Box>

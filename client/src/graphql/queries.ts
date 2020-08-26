@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const TAGS_QUERY = gql`
   query TAGS {
-    tags {
+    tags(orderBy: { id: desc }) {
       id
       text
       todos {
