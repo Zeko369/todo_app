@@ -44,6 +44,7 @@ interface TodoProps {
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
   hideButtons: boolean;
+  compact: boolean;
 }
 
 const Todo: React.FC<TodoProps> = (props) => {
@@ -57,8 +58,10 @@ const Todo: React.FC<TodoProps> = (props) => {
 
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
   const [showButtons, toggleButtons] = useToggle();
+  const [localCompact, toggleCompact] = useToggle();
 
   const hideButtons = !(showButtons || !props.hideButtons);
+  const compact = !(localCompact || !props.compact);
 
   useEffect(() => {
     if (selected !== list?.id) {
@@ -96,7 +99,7 @@ const Todo: React.FC<TodoProps> = (props) => {
   return showUpdate ? (
     <TodoForm todo={todo} close={() => setUpdate(false)} />
   ) : (
-    <Box p={4} shadow="md" borderWidth="1px">
+    <Box p={4} shadow="md" borderWidth="1px" onClick={toggleCompact}>
       <Flex justify="space-between" pos="relative">
         <IconButton
           icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
@@ -112,7 +115,7 @@ const Todo: React.FC<TodoProps> = (props) => {
               <Heading fontSize="xl" wordBreak="break-all">
                 {title}
               </Heading>
-              <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>
+              {!compact && <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>}
               {list?.id && (
                 <Text>
                   <i>{lists.find((l) => l.id === list.id)?.title}</i>
@@ -121,7 +124,7 @@ const Todo: React.FC<TodoProps> = (props) => {
               {tags && (
                 <Box mt={2}>
                   {tags.map((tag) => (
-                    <Tag key={tag.id} mr={2}>
+                    <Tag key={tag.id} mr={2} mb={2}>
                       <Flex alignItems="center">
                         <TagLabel>{tag.text}</TagLabel>
                         {!hideButtons && <TagCloseButton ml="1" onClick={removeTag(tag.id)} />}
@@ -131,14 +134,34 @@ const Todo: React.FC<TodoProps> = (props) => {
                 </Box>
               )}
             </Stack>
-            <IconButton
-              aria-label="show controls"
-              icon="settings"
-              onClick={toggleButtons}
-              variantColor={!showButtons ? 'gray' : 'blue'}
-            />
+            <Stack spacing={3}>
+              <IconButton
+                aria-label="show controls"
+                icon="settings"
+                onClick={toggleButtons}
+                variantColor={!showButtons ? 'gray' : 'blue'}
+              />
+              {!hideButtons && (
+                <Stack spacing={3}>
+                  <IconButton
+                    icon="delete"
+                    variantColor="red"
+                    aria-label="Delete"
+                    isLoading={loading}
+                    onClick={onDelete}
+                  />
+                  <IconButton
+                    icon="edit"
+                    variantColor="green"
+                    aria-label="Update"
+                    isLoading={loading}
+                    onClick={toggleUpdate}
+                  />
+                </Stack>
+              )}
+            </Stack>
           </Flex>
-          {description && (
+          {!compact && description && (
             <Text mt={4} wordBreak="break-all">
               {description}
             </Text>
@@ -161,22 +184,6 @@ const Todo: React.FC<TodoProps> = (props) => {
                 Save
               </Button>
             )}
-            <Stack spacing={3} isInline>
-              <IconButton
-                icon="delete"
-                variantColor="red"
-                aria-label="Delete"
-                isLoading={loading}
-                onClick={onDelete}
-              />
-              <IconButton
-                icon="edit"
-                variantColor="green"
-                aria-label="Update"
-                isLoading={loading}
-                onClick={toggleUpdate}
-              />
-            </Stack>
           </Stack>
           <Box>
             <FormThingy tags={tags?.map((t) => t.id) || []} id={id} />

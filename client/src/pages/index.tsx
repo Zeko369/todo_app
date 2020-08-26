@@ -46,6 +46,7 @@ const Home: NextPage = () => {
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
   const [showNew, , setNew] = useToggle();
   const [mass, toggleMass] = useToggle(false);
+  const [compact, toggleCompact] = useSaveToggle('compact');
   const [hideButtons, toggleButtons] = useSaveToggle('buttons');
 
   const [checkTodo] = useCheckTodoMutation(apolloOptions);
@@ -154,18 +155,20 @@ const Home: NextPage = () => {
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
       <Nav>
-        <Text>{stats}</Text>
         <Button onClick={toggleNew} variantColor="blue">
           {showNew ? 'Hide new' : 'Show new'}
         </Button>
       </Nav>
+      <Text mb={3}>
+        <b>Done: </b>
+        {stats}
+      </Text>
       <Stack isInline mb={3}>
         <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
         <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
-        <Button onClick={toggleMass}>{mass ? 'Close mass' : 'Select mass'}</Button>
-        <Button onClick={toggleButtons}>
-          {hideButtons ? 'Show ALL buttons' : 'Hide ALL buttons'}
-        </Button>
+        <Button onClick={toggleMass}>{mass ? '-mass' : '+mass'}</Button>
+        <Button onClick={toggleButtons}>{hideButtons ? '+ALL btn' : '-ALL btn'}</Button>
+        <Button onClick={toggleCompact}>{compact ? '-' : '+'}</Button>
       </Stack>
       {mass && (
         <Stack spacing={2} mb={3}>
@@ -220,6 +223,7 @@ const Home: NextPage = () => {
                 remove={remove}
                 lists={lLoading || lError || !lData ? [] : lData.lists}
                 mass={mass}
+                compact={compact}
                 massSelect={massSelected[todo.id]}
                 massClick={massClick}
                 hideButtons={hideButtons}
