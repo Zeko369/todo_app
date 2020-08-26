@@ -156,7 +156,7 @@ const Home: NextPage = () => {
     <Box w="90%" maxW="1000px" m="0 auto">
       <Nav>
         <Button onClick={toggleNew} variantColor="blue">
-          {showNew ? 'Hide new' : 'Show new'}
+          {showNew ? '-new' : '+new'}
         </Button>
       </Nav>
       <Text mb={3}>

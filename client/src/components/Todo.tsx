@@ -29,6 +29,7 @@ import {
 } from '../generated/graphql';
 import Input from './Input';
 import { useForm } from 'react-hook-form';
+import useMediaQuery from '../hooks/useMedia';
 
 interface TodoProps {
   mass: boolean;
@@ -96,6 +97,8 @@ const Todo: React.FC<TodoProps> = (props) => {
     massClick(id);
   };
 
+  const isMobile = useMediaQuery('(max-width: 576px)');
+
   return showUpdate ? (
     <TodoForm todo={todo} close={() => setUpdate(false)} />
   ) : (
@@ -134,15 +137,19 @@ const Todo: React.FC<TodoProps> = (props) => {
                 </Box>
               )}
             </Stack>
-            <Stack spacing={3}>
-              <IconButton
-                aria-label="show controls"
-                icon="settings"
-                onClick={toggleButtons}
-                variantColor={!showButtons ? 'gray' : 'blue'}
-              />
+            <RevIf
+              cond={isMobile}
+              one={
+                <IconButton
+                  aria-label="show controls"
+                  icon="settings"
+                  onClick={toggleButtons}
+                  variantColor={!showButtons ? 'gray' : 'blue'}
+                />
+              }
+            >
               {!hideButtons && (
-                <Stack spacing={3}>
+                <Stack spacing={3} isInline={!isMobile}>
                   <IconButton
                     icon="delete"
                     variantColor="red"
@@ -159,7 +166,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                   />
                 </Stack>
               )}
-            </Stack>
+            </RevIf>
           </Flex>
           {!compact && description && (
             <Text mt={4} wordBreak="break-all">
@@ -258,3 +265,21 @@ const FormThingy: React.FC<{ tags: number[]; id: number }> = ({ tags, id }) => {
 };
 
 export default Todo;
+
+const RevIf: React.FC<{ cond: boolean; one: React.ReactNode }> = ({ children, cond, one }) => {
+  if (cond) {
+    return (
+      <Stack spacing={3} isInline={!cond}>
+        {one}
+        {children}
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack spacing={3} isInline={!cond}>
+      {children}
+      {one}
+    </Stack>
+  );
+};
