@@ -116,14 +116,10 @@ const Todo: React.FC<TodoProps> = (props) => {
           <Flex w="100%">
             <Stack w="100%">
               <Heading fontSize="xl" wordBreak="break-all">
+                {list?.id && `[${lists.find((l) => l.id === list.id)?.title}] `}
                 {title}
               </Heading>
               {!compact && <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>}
-              {list?.id && (
-                <Text>
-                  <i>{lists.find((l) => l.id === list.id)?.title}</i>
-                </Text>
-              )}
               {tags && (
                 <Box mt={2}>
                   {tags.map((tag) => (
