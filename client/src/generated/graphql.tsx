@@ -122,11 +122,28 @@ export type List = {
 
 
 export type ListTodosArgs = {
+  orderBy?: Maybe<Array<TodoOrderByInput>>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   before?: Maybe<TodoWhereUniqueInput>;
   after?: Maybe<TodoWhereUniqueInput>;
 };
+
+export type TodoOrderByInput = {
+  id?: Maybe<SortOrder>;
+  title?: Maybe<SortOrder>;
+  description?: Maybe<SortOrder>;
+  checked?: Maybe<SortOrder>;
+  checkedAt?: Maybe<SortOrder>;
+  createdAt?: Maybe<SortOrder>;
+  listId?: Maybe<SortOrder>;
+  updatedAt?: Maybe<SortOrder>;
+};
+
+export enum SortOrder {
+  Asc = 'asc',
+  Desc = 'desc'
+}
 
 
 export type TagWhereUniqueInput = {
@@ -149,22 +166,6 @@ export type TagTodosArgs = {
   before?: Maybe<TodoWhereUniqueInput>;
   after?: Maybe<TodoWhereUniqueInput>;
 };
-
-export type TodoOrderByInput = {
-  id?: Maybe<SortOrder>;
-  title?: Maybe<SortOrder>;
-  description?: Maybe<SortOrder>;
-  checked?: Maybe<SortOrder>;
-  checkedAt?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  listId?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
-};
-
-export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc'
-}
 
 export type ListWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
@@ -910,6 +911,10 @@ export type ListQuery = (
     & { todos: Array<(
       { __typename?: 'Todo' }
       & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
+      & { tags: Array<(
+        { __typename?: 'Tag' }
+        & Pick<Tag, 'id' | 'text'>
+      )> }
     )> }
   )> }
 );
@@ -1142,7 +1147,7 @@ export type AddTodosToListMutation = (
 
 export const TagsDocument = gql`
     query TAGS {
-  tags {
+  tags(orderBy: {id: desc}) {
     id
     text
     todos {
@@ -1218,11 +1223,15 @@ export const ListDocument = gql`
   list(where: {id: $id}) {
     id
     title
-    todos {
+    todos(orderBy: {id: desc}) {
       id
       title
       description
       checked
+      tags {
+        id
+        text
+      }
     }
   }
 }

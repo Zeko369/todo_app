@@ -30,11 +30,15 @@ export const LIST_QUERY = gql`
     list(where: { id: $id }) {
       id
       title
-      todos {
+      todos(orderBy: { id: desc }) {
         id
         title
         description
         checked
+        tags {
+          id
+          text
+        }
       }
     }
   }
