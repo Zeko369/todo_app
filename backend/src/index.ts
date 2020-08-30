@@ -98,7 +98,7 @@ schema.objectType({
   definition(t) {
     t.model.id();
     t.model.title();
-    t.model.todos();
+    t.model.todos({ ordering: true });
     t.model.createdAt();
     t.model.updatedAt();
   },
