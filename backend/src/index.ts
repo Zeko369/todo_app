@@ -70,6 +70,7 @@ schema.objectType({
   definition(t) {
     t.model.id();
     t.model.text();
+    t.model.color();
     t.model.todos();
     t.model.createdAt();
     t.model.updatedAt();
