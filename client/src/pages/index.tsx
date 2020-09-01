@@ -208,7 +208,12 @@ const Home: NextPage = () => {
         </Stack>
       )}
       <Collapse isOpen={showNew}>
-        <TodoForm close={toggleNew} ref={newRef} />
+        <TodoForm
+          close={toggleNew}
+          ref={newRef}
+          listsLoading={Boolean(lLoading || lError)}
+          lists={lData?.lists || []}
+        />
       </Collapse>
       {filteredData.length > 0 ? (
         <Stack spacing={4} shouldWrapChildren>

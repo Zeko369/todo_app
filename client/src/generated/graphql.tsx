@@ -1080,6 +1080,25 @@ export type CreateTodoMutation = (
   ) }
 );
 
+export type CreateTodoWithListMutationVariables = Exact<{
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  listId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreateTodoWithListMutation = (
+  { __typename?: 'Mutation' }
+  & { createOneTodo: (
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'description'>
+    & { list?: Maybe<(
+      { __typename?: 'List' }
+      & Pick<List, 'id'>
+    )> }
+  ) }
+);
+
 export type UpdateTodoMutationVariables = Exact<{
   id: Scalars['Int'];
   title?: Maybe<Scalars['String']>;
@@ -1643,6 +1662,45 @@ export function useCreateTodoMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateTodoMutationHookResult = ReturnType<typeof useCreateTodoMutation>;
 export type CreateTodoMutationResult = Apollo.MutationResult<CreateTodoMutation>;
 export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<CreateTodoMutation, CreateTodoMutationVariables>;
+export const CreateTodoWithListDocument = gql`
+    mutation createTodoWithList($title: String!, $description: String, $listId: Int) {
+  createOneTodo(data: {title: $title, description: $description, list: {connect: {id: $listId}}}) {
+    id
+    title
+    description
+    list {
+      id
+    }
+  }
+}
+    `;
+export type CreateTodoWithListMutationFn = Apollo.MutationFunction<CreateTodoWithListMutation, CreateTodoWithListMutationVariables>;
+
+/**
+ * __useCreateTodoWithListMutation__
+ *
+ * To run a mutation, you first call `useCreateTodoWithListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTodoWithListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTodoWithListMutation, { data, loading, error }] = useCreateTodoWithListMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useCreateTodoWithListMutation(baseOptions?: Apollo.MutationHookOptions<CreateTodoWithListMutation, CreateTodoWithListMutationVariables>) {
+        return Apollo.useMutation<CreateTodoWithListMutation, CreateTodoWithListMutationVariables>(CreateTodoWithListDocument, baseOptions);
+      }
+export type CreateTodoWithListMutationHookResult = ReturnType<typeof useCreateTodoWithListMutation>;
+export type CreateTodoWithListMutationResult = Apollo.MutationResult<CreateTodoWithListMutation>;
+export type CreateTodoWithListMutationOptions = Apollo.BaseMutationOptions<CreateTodoWithListMutation, CreateTodoWithListMutationVariables>;
 export const UpdateTodoDocument = gql`
     mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
   updateOneTodo(where: {id: $id}, data: {title: $title, description: $description, list: {connect: {id: $listId}}}) {
