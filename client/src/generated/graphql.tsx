@@ -154,6 +154,7 @@ export type Tag = {
   __typename?: 'Tag';
   id: Scalars['Int'];
   text: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -344,6 +345,7 @@ export type TagWhereInput = {
   NOT?: Maybe<Array<TagWhereInput>>;
   id?: Maybe<IntFilter>;
   text?: Maybe<StringFilter>;
+  color?: Maybe<StringNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
   todos?: Maybe<TodoListRelationFilter>;
@@ -387,6 +389,7 @@ export type ListOrderByInput = {
 export type TagOrderByInput = {
   id?: Maybe<SortOrder>;
   text?: Maybe<SortOrder>;
+  color?: Maybe<SortOrder>;
   createdAt?: Maybe<SortOrder>;
   updatedAt?: Maybe<SortOrder>;
 };
@@ -473,6 +476,7 @@ export type MutationDeleteOneListArgs = {
 
 export type TagCreateInput = {
   text: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   todos?: Maybe<TodoCreateManyWithoutTagsInput>;
@@ -530,6 +534,7 @@ export type TagCreateManyWithoutTodosInput = {
 
 export type TagCreateWithoutTodosInput = {
   text: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -553,6 +558,7 @@ export type TodoCreateWithoutRequiresInput = {
 
 export type TagUpdateInput = {
   text?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   todos?: Maybe<TodoUpdateManyWithoutTagsInput>;
@@ -655,6 +661,7 @@ export type TagUpdateWithWhereUniqueWithoutTodosInput = {
 
 export type TagUpdateWithoutTodosDataInput = {
   text?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -670,12 +677,14 @@ export type TagScalarWhereInput = {
   NOT?: Maybe<Array<TagScalarWhereInput>>;
   id?: Maybe<IntFilter>;
   text?: Maybe<StringFilter>;
+  color?: Maybe<StringNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
 };
 
 export type TagUpdateManyDataInput = {
   text?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
@@ -875,7 +884,7 @@ export type TagsQuery = (
   { __typename?: 'Query' }
   & { tags: Array<(
     { __typename?: 'Tag' }
-    & Pick<Tag, 'id' | 'text'>
+    & Pick<Tag, 'id' | 'text' | 'color'>
     & { todos: Array<(
       { __typename?: 'Todo' }
       & Pick<Todo, 'id'>
@@ -913,7 +922,7 @@ export type ListQuery = (
       & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
       & { tags: Array<(
         { __typename?: 'Tag' }
-        & Pick<Tag, 'id' | 'text'>
+        & Pick<Tag, 'id' | 'text' | 'color'>
       )> }
     )> }
   )> }
@@ -921,6 +930,7 @@ export type ListQuery = (
 
 export type CreateTagMutationVariables = Exact<{
   text: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -935,6 +945,7 @@ export type CreateTagMutation = (
 export type UpdateTagMutationVariables = Exact<{
   id: Scalars['Int'];
   text?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -996,7 +1007,7 @@ export type TodosQuery = (
     & Pick<Todo, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>
     & { tags: Array<(
       { __typename?: 'Tag' }
-      & Pick<Tag, 'id' | 'text'>
+      & Pick<Tag, 'id' | 'text' | 'color'>
     )>, list?: Maybe<(
       { __typename?: 'List' }
       & Pick<List, 'id'>
@@ -1169,6 +1180,7 @@ export const TagsDocument = gql`
   tags(orderBy: {id: desc}) {
     id
     text
+    color
     todos {
       id
     }
@@ -1250,6 +1262,7 @@ export const ListDocument = gql`
       tags {
         id
         text
+        color
       }
     }
   }
@@ -1282,8 +1295,8 @@ export type ListQueryHookResult = ReturnType<typeof useListQuery>;
 export type ListLazyQueryHookResult = ReturnType<typeof useListLazyQuery>;
 export type ListQueryResult = Apollo.QueryResult<ListQuery, ListQueryVariables>;
 export const CreateTagDocument = gql`
-    mutation createTag($text: String!) {
-  createOneTag(data: {text: $text}) {
+    mutation createTag($text: String!, $color: String) {
+  createOneTag(data: {text: $text, color: $color}) {
     id
     text
   }
@@ -1305,6 +1318,7 @@ export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutation, Cre
  * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
  *   variables: {
  *      text: // value for 'text'
+ *      color: // value for 'color'
  *   },
  * });
  */
@@ -1315,8 +1329,8 @@ export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation
 export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
 export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
 export const UpdateTagDocument = gql`
-    mutation updateTag($id: Int!, $text: String) {
-  updateOneTag(where: {id: $id}, data: {text: $text}) {
+    mutation updateTag($id: Int!, $text: String, $color: String) {
+  updateOneTag(where: {id: $id}, data: {text: $text, color: $color}) {
     id
     text
   }
@@ -1339,6 +1353,7 @@ export type UpdateTagMutationFn = Apollo.MutationFunction<UpdateTagMutation, Upd
  *   variables: {
  *      id: // value for 'id'
  *      text: // value for 'text'
+ *      color: // value for 'color'
  *   },
  * });
  */
@@ -1458,6 +1473,7 @@ export const TodosDocument = gql`
     tags {
       id
       text
+      color
     }
     list {
       id

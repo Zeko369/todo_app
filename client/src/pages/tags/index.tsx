@@ -11,6 +11,8 @@ import {
   IconButton,
   CloseButton,
   Flex,
+  theme,
+  Select,
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 
@@ -26,10 +28,12 @@ import useToggle from '../../hooks/useToggle';
 import Input from '../../components/Input';
 import { TAGS_QUERY } from '../../graphql/queries';
 
-type ITag = Pick<TagDB, 'text'>;
+type ITag = Pick<TagDB, 'text' | 'color'>;
+const ignoreColors = ['transparent'];
+const colors = Object.keys(theme.colors).filter((color) => !ignoreColors.includes(color));
 
 const Tags: NextPage = () => {
-  const { handleSubmit, register, setValue } = useForm<ITag>();
+  const { handleSubmit, register, reset, setValue, watch } = useForm<ITag>();
 
   const { loading, error, data } = useTagsQuery();
   const [createTag] = useCreateTagMutation({ refetchQueries: [{ query: TAGS_QUERY }] });
@@ -39,6 +43,8 @@ const Tags: NextPage = () => {
   const [showNew, toggleNew, setNew] = useToggle();
   const [editingId, setEditingId] = useState(-1);
 
+  const color = watch('color');
+
   const onSubmit = async (data: ITag) => {
     if (editingId !== -1) {
       setEditingId(-1);
@@ -47,12 +53,15 @@ const Tags: NextPage = () => {
       await createTag({ variables: { ...data } });
     }
 
-    setValue('text', '');
+    reset();
   };
 
-  const edit = (id: number, text: string) => () => {
+  const edit = ({ id, color, text }: Pick<TagDB, 'id' | 'text' | 'color'>) => () => {
+    console.log(id, text, color);
+
     setEditingId(id);
     setValue('text', text);
+    setValue('color', color);
     setNew(true);
   };
 
@@ -85,6 +94,16 @@ const Tags: NextPage = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={3}>
               <Input name="text" ref={register({ required: true })} isRequired />
+              <Select
+                ref={register({ required: true })}
+                isRequired
+                name="color"
+                bg={`${color}.100`}
+              >
+                {colors.map((color) => (
+                  <option value={color}>{color}</option>
+                ))}
+              </Select>
               <Button type="submit">{editingId === -1 ? 'Create' : 'Update'}</Button>
             </Stack>
           </form>
@@ -97,7 +116,14 @@ const Tags: NextPage = () => {
       ) : (
         <Box>
           {data.tags.map((tag) => (
-            <Tag key={tag.id} cursor="pointer" d="inline-block" mr={4} mb={4}>
+            <Tag
+              key={tag.id}
+              cursor="pointer"
+              d="inline-block"
+              mr={4}
+              mb={4}
+              variantColor={tag.color || undefined}
+            >
               <Stack isInline alignItems="center" spacing={3} mt="4px">
                 <Text lineHeight="24px" h="24px" mr={10}>
                   [{tag.todos.length}] <b>{tag.text}</b>
@@ -105,7 +131,7 @@ const Tags: NextPage = () => {
                 <Stack isInline spacing={1}>
                   <IconButton
                     aria-label="edit"
-                    onClick={edit(tag.id, tag.text)}
+                    onClick={edit(tag)}
                     variant="ghost"
                     variantColor="green"
                     icon="edit"

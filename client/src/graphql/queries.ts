@@ -5,6 +5,7 @@ export const TAGS_QUERY = gql`
     tags(orderBy: { id: desc }) {
       id
       text
+      color
       todos {
         id
       }
@@ -38,6 +39,7 @@ export const LIST_QUERY = gql`
         tags {
           id
           text
+          color
         }
       }
     }
@@ -45,8 +47,8 @@ export const LIST_QUERY = gql`
 `;
 
 export const createTag = gql`
-  mutation createTag($text: String!) {
-    createOneTag(data: { text: $text }) {
+  mutation createTag($text: String!, $color: String) {
+    createOneTag(data: { text: $text, color: $color }) {
       id
       text
     }
@@ -54,8 +56,8 @@ export const createTag = gql`
 `;
 
 export const updateTag = gql`
-  mutation updateTag($id: Int!, $text: String) {
-    updateOneTag(where: { id: $id }, data: { text: $text }) {
+  mutation updateTag($id: Int!, $text: String, $color: String) {
+    updateOneTag(where: { id: $id }, data: { text: $text, color: $color }) {
       id
       text
     }
@@ -99,6 +101,7 @@ export const TODOS_QUERY = gql`
       tags {
         id
         text
+        color
       }
       list {
         id
