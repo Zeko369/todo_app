@@ -35,7 +35,7 @@ const apolloOptions = {
 };
 
 const Home: NextPage = () => {
-  const { loading, error, data } = useTodosQuery();
+  const { loading, error, data } = useTodosQuery({ pollInterval: 2000 });
   const { loading: lLoading, error: lError, data: lData } = useListsQuery();
 
   const [stats, setStats] = useState<string>('');
@@ -44,7 +44,7 @@ const Home: NextPage = () => {
 
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
-  const [showNew, , setNew] = useToggle();
+  const [showNew, , setNew] = useSaveToggle('show:new');
   const [mass, toggleMass] = useToggle(false);
   const [compact, toggleCompact] = useSaveToggle('compact');
   const [hideButtons, toggleButtons] = useSaveToggle('buttons');
