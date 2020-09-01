@@ -21,7 +21,7 @@ import Nav from '../../../components/Nav';
 import { TODOS_QUERY } from '../../../graphql/queries';
 import useSaveToggle from '../../../hooks/useSaveToggle';
 
-type Tag = Pick<TagDB, 'id' | 'text'>;
+type Tag = Pick<TagDB, 'id' | 'text' | 'color'>;
 
 const getTagIds = (tagIds: string | string[] | undefined): number[] => {
   if (tagIds && !Array.isArray(tagIds)) {
@@ -101,7 +101,7 @@ const ListPage: NextPage = () => {
                 <Tag
                   key={tag.id}
                   size="sm"
-                  variantColor="blue"
+                  variantColor={tag.color || 'blue'}
                   variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
                   as="button"
                   onClick={selectTag(tag.id)}
@@ -130,6 +130,7 @@ const ListPage: NextPage = () => {
                     <Tag
                       key={tag.id}
                       size="sm"
+                      variantColor={tag.color || 'blue'}
                       variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
                     >
                       <Flex alignItems="center">
