@@ -17,7 +17,7 @@ import {
   TagLabel,
 } from '@chakra-ui/core';
 
-import useToggle from '../hooks/useToggle';
+import useToggle from '../../../hooks/useToggle';
 import TodoForm from './TodoForm';
 import {
   Todo as TodoDB,
@@ -26,10 +26,10 @@ import {
   useRemoveTagFromTodoMutation,
   useTagsQuery,
   useAddTagToTodoMutation,
-} from '../generated/graphql';
-import Input from './Input';
+} from '../../../generated/graphql';
+import Input from '../../../components/Input';
 import { useForm } from 'react-hook-form';
-import useMediaQuery from '../hooks/useMedia';
+import useMediaQuery from '../../../hooks/useMedia';
 
 interface TodoProps {
   mass: boolean;

@@ -12,14 +12,14 @@ import {
   Spinner,
 } from '@chakra-ui/core';
 
-import Input from './Input';
+import Input from '../../../components/Input';
 import {
   useCreateTodoMutation,
   useUpdateTodoMutation,
   Todo as TodoDB,
   List as ListDB,
   useCreateTodoWithListMutation,
-} from '../generated/graphql';
+} from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 
 interface Props {

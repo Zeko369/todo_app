@@ -1,95 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const TAGS_QUERY = gql`
-  query TAGS {
-    tags(orderBy: { id: desc }) {
-      id
-      text
-      color
-      todos {
-        id
-      }
-    }
-  }
-`;
-
-export const LISTS_QUERY = gql`
-  query LISTS {
-    lists(orderBy: { id: desc }) {
-      id
-      title
-      todos(last: 5) {
-        id
-        title
-      }
-    }
-  }
-`;
-
-export const LIST_QUERY = gql`
-  query LIST($id: Int!) {
-    list(where: { id: $id }) {
-      id
-      title
-      todos(orderBy: { id: desc }) {
-        id
-        title
-        description
-        checked
-        tags {
-          id
-          text
-          color
-        }
-      }
-    }
-  }
-`;
-
-export const createTag = gql`
-  mutation createTag($text: String!, $color: String) {
-    createOneTag(data: { text: $text, color: $color }) {
-      id
-      text
-    }
-  }
-`;
-
-export const updateTag = gql`
-  mutation updateTag($id: Int!, $text: String, $color: String) {
-    updateOneTag(where: { id: $id }, data: { text: $text, color: $color }) {
-      id
-      text
-    }
-  }
-`;
-
-export const deleteTag = gql`
-  mutation deleteTag($id: Int!) {
-    deleteOneTag(where: { id: $id }) {
-      id
-    }
-  }
-`;
-
-export const createList = gql`
-  mutation createList($title: String) {
-    createOneList(data: { title: $title }) {
-      id
-      title
-    }
-  }
-`;
-
-export const updateList = gql`
-  mutation updateList($id: Int!, $title: String) {
-    updateOneList(where: { id: $id }, data: { title: $title }) {
-      id
-      title
-    }
-  }
-`;
-
 export const TODOS_QUERY = gql`
   query TODOS {
     todos(orderBy: { id: desc }) {
@@ -193,14 +103,6 @@ export const removeTodoFromList = gql`
       id
       title
       description
-    }
-  }
-`;
-
-export const removeManyTodos = gql`
-  mutation deleteManyTodo($ids: [Int!]) {
-    deleteManyTodo(where: { id: { in: $ids } }) {
-      count
     }
   }
 `;

@@ -877,126 +877,6 @@ export type TodoUpsertWithWhereUniqueWithoutListInput = {
 };
 
 
-export type TagsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TagsQuery = (
-  { __typename?: 'Query' }
-  & { tags: Array<(
-    { __typename?: 'Tag' }
-    & Pick<Tag, 'id' | 'text' | 'color'>
-    & { todos: Array<(
-      { __typename?: 'Todo' }
-      & Pick<Todo, 'id'>
-    )> }
-  )> }
-);
-
-export type ListsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ListsQuery = (
-  { __typename?: 'Query' }
-  & { lists: Array<(
-    { __typename?: 'List' }
-    & Pick<List, 'id' | 'title'>
-    & { todos: Array<(
-      { __typename?: 'Todo' }
-      & Pick<Todo, 'id' | 'title'>
-    )> }
-  )> }
-);
-
-export type ListQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type ListQuery = (
-  { __typename?: 'Query' }
-  & { list?: Maybe<(
-    { __typename?: 'List' }
-    & Pick<List, 'id' | 'title'>
-    & { todos: Array<(
-      { __typename?: 'Todo' }
-      & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
-      & { tags: Array<(
-        { __typename?: 'Tag' }
-        & Pick<Tag, 'id' | 'text' | 'color'>
-      )> }
-    )> }
-  )> }
-);
-
-export type CreateTagMutationVariables = Exact<{
-  text: Scalars['String'];
-  color?: Maybe<Scalars['String']>;
-}>;
-
-
-export type CreateTagMutation = (
-  { __typename?: 'Mutation' }
-  & { createOneTag: (
-    { __typename?: 'Tag' }
-    & Pick<Tag, 'id' | 'text'>
-  ) }
-);
-
-export type UpdateTagMutationVariables = Exact<{
-  id: Scalars['Int'];
-  text?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
-}>;
-
-
-export type UpdateTagMutation = (
-  { __typename?: 'Mutation' }
-  & { updateOneTag?: Maybe<(
-    { __typename?: 'Tag' }
-    & Pick<Tag, 'id' | 'text'>
-  )> }
-);
-
-export type DeleteTagMutationVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type DeleteTagMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteOneTag?: Maybe<(
-    { __typename?: 'Tag' }
-    & Pick<Tag, 'id'>
-  )> }
-);
-
-export type CreateListMutationVariables = Exact<{
-  title?: Maybe<Scalars['String']>;
-}>;
-
-
-export type CreateListMutation = (
-  { __typename?: 'Mutation' }
-  & { createOneList: (
-    { __typename?: 'List' }
-    & Pick<List, 'id' | 'title'>
-  ) }
-);
-
-export type UpdateListMutationVariables = Exact<{
-  id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-}>;
-
-
-export type UpdateListMutation = (
-  { __typename?: 'Mutation' }
-  & { updateOneList?: Maybe<(
-    { __typename?: 'List' }
-    & Pick<List, 'id' | 'title'>
-  )> }
-);
-
 export type TodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1174,294 +1054,127 @@ export type AddTodosToListMutation = (
   )> }
 );
 
+export type CreateListMutationVariables = Exact<{
+  title?: Maybe<Scalars['String']>;
+}>;
 
-export const TagsDocument = gql`
-    query TAGS {
-  tags(orderBy: {id: desc}) {
-    id
-    text
-    color
-    todos {
-      id
-    }
-  }
-}
-    `;
 
-/**
- * __useTagsQuery__
- *
- * To run a query within a React component, call `useTagsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTagsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useTagsQuery(baseOptions?: Apollo.QueryHookOptions<TagsQuery, TagsQueryVariables>) {
-        return Apollo.useQuery<TagsQuery, TagsQueryVariables>(TagsDocument, baseOptions);
-      }
-export function useTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TagsQuery, TagsQueryVariables>) {
-          return Apollo.useLazyQuery<TagsQuery, TagsQueryVariables>(TagsDocument, baseOptions);
-        }
-export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
-export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
-export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
-export const ListsDocument = gql`
-    query LISTS {
-  lists(orderBy: {id: desc}) {
-    id
-    title
-    todos(last: 5) {
-      id
-      title
-    }
-  }
-}
-    `;
+export type CreateListMutation = (
+  { __typename?: 'Mutation' }
+  & { createOneList: (
+    { __typename?: 'List' }
+    & Pick<List, 'id' | 'title'>
+  ) }
+);
 
-/**
- * __useListsQuery__
- *
- * To run a query within a React component, call `useListsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useListsQuery(baseOptions?: Apollo.QueryHookOptions<ListsQuery, ListsQueryVariables>) {
-        return Apollo.useQuery<ListsQuery, ListsQueryVariables>(ListsDocument, baseOptions);
-      }
-export function useListsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListsQuery, ListsQueryVariables>) {
-          return Apollo.useLazyQuery<ListsQuery, ListsQueryVariables>(ListsDocument, baseOptions);
-        }
-export type ListsQueryHookResult = ReturnType<typeof useListsQuery>;
-export type ListsLazyQueryHookResult = ReturnType<typeof useListsLazyQuery>;
-export type ListsQueryResult = Apollo.QueryResult<ListsQuery, ListsQueryVariables>;
-export const ListDocument = gql`
-    query LIST($id: Int!) {
-  list(where: {id: $id}) {
-    id
-    title
-    todos(orderBy: {id: desc}) {
-      id
-      title
-      description
-      checked
-      tags {
-        id
-        text
-        color
-      }
-    }
-  }
-}
-    `;
+export type UpdateListMutationVariables = Exact<{
+  id: Scalars['Int'];
+  title?: Maybe<Scalars['String']>;
+}>;
 
-/**
- * __useListQuery__
- *
- * To run a query within a React component, call `useListQuery` and pass it any options that fit your needs.
- * When your component renders, `useListQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useListQuery(baseOptions?: Apollo.QueryHookOptions<ListQuery, ListQueryVariables>) {
-        return Apollo.useQuery<ListQuery, ListQueryVariables>(ListDocument, baseOptions);
-      }
-export function useListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListQuery, ListQueryVariables>) {
-          return Apollo.useLazyQuery<ListQuery, ListQueryVariables>(ListDocument, baseOptions);
-        }
-export type ListQueryHookResult = ReturnType<typeof useListQuery>;
-export type ListLazyQueryHookResult = ReturnType<typeof useListLazyQuery>;
-export type ListQueryResult = Apollo.QueryResult<ListQuery, ListQueryVariables>;
-export const CreateTagDocument = gql`
-    mutation createTag($text: String!, $color: String) {
-  createOneTag(data: {text: $text, color: $color}) {
-    id
-    text
-  }
-}
-    `;
-export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutation, CreateTagMutationVariables>;
 
-/**
- * __useCreateTagMutation__
- *
- * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
- *   variables: {
- *      text: // value for 'text'
- *      color: // value for 'color'
- *   },
- * });
- */
-export function useCreateTagMutation(baseOptions?: Apollo.MutationHookOptions<CreateTagMutation, CreateTagMutationVariables>) {
-        return Apollo.useMutation<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument, baseOptions);
-      }
-export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
-export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
-export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
-export const UpdateTagDocument = gql`
-    mutation updateTag($id: Int!, $text: String, $color: String) {
-  updateOneTag(where: {id: $id}, data: {text: $text, color: $color}) {
-    id
-    text
-  }
-}
-    `;
-export type UpdateTagMutationFn = Apollo.MutationFunction<UpdateTagMutation, UpdateTagMutationVariables>;
+export type UpdateListMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneList?: Maybe<(
+    { __typename?: 'List' }
+    & Pick<List, 'id' | 'title'>
+  )> }
+);
 
-/**
- * __useUpdateTagMutation__
- *
- * To run a mutation, you first call `useUpdateTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTagMutation, { data, loading, error }] = useUpdateTagMutation({
- *   variables: {
- *      id: // value for 'id'
- *      text: // value for 'text'
- *      color: // value for 'color'
- *   },
- * });
- */
-export function useUpdateTagMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTagMutation, UpdateTagMutationVariables>) {
-        return Apollo.useMutation<UpdateTagMutation, UpdateTagMutationVariables>(UpdateTagDocument, baseOptions);
-      }
-export type UpdateTagMutationHookResult = ReturnType<typeof useUpdateTagMutation>;
-export type UpdateTagMutationResult = Apollo.MutationResult<UpdateTagMutation>;
-export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<UpdateTagMutation, UpdateTagMutationVariables>;
-export const DeleteTagDocument = gql`
-    mutation deleteTag($id: Int!) {
-  deleteOneTag(where: {id: $id}) {
-    id
-  }
-}
-    `;
-export type DeleteTagMutationFn = Apollo.MutationFunction<DeleteTagMutation, DeleteTagMutationVariables>;
+export type ListsQueryVariables = Exact<{ [key: string]: never; }>;
 
-/**
- * __useDeleteTagMutation__
- *
- * To run a mutation, you first call `useDeleteTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTagMutation, { data, loading, error }] = useDeleteTagMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteTagMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTagMutation, DeleteTagMutationVariables>) {
-        return Apollo.useMutation<DeleteTagMutation, DeleteTagMutationVariables>(DeleteTagDocument, baseOptions);
-      }
-export type DeleteTagMutationHookResult = ReturnType<typeof useDeleteTagMutation>;
-export type DeleteTagMutationResult = Apollo.MutationResult<DeleteTagMutation>;
-export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<DeleteTagMutation, DeleteTagMutationVariables>;
-export const CreateListDocument = gql`
-    mutation createList($title: String) {
-  createOneList(data: {title: $title}) {
-    id
-    title
-  }
-}
-    `;
-export type CreateListMutationFn = Apollo.MutationFunction<CreateListMutation, CreateListMutationVariables>;
 
-/**
- * __useCreateListMutation__
- *
- * To run a mutation, you first call `useCreateListMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateListMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createListMutation, { data, loading, error }] = useCreateListMutation({
- *   variables: {
- *      title: // value for 'title'
- *   },
- * });
- */
-export function useCreateListMutation(baseOptions?: Apollo.MutationHookOptions<CreateListMutation, CreateListMutationVariables>) {
-        return Apollo.useMutation<CreateListMutation, CreateListMutationVariables>(CreateListDocument, baseOptions);
-      }
-export type CreateListMutationHookResult = ReturnType<typeof useCreateListMutation>;
-export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>;
-export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
-export const UpdateListDocument = gql`
-    mutation updateList($id: Int!, $title: String) {
-  updateOneList(where: {id: $id}, data: {title: $title}) {
-    id
-    title
-  }
-}
-    `;
-export type UpdateListMutationFn = Apollo.MutationFunction<UpdateListMutation, UpdateListMutationVariables>;
+export type ListsQuery = (
+  { __typename?: 'Query' }
+  & { lists: Array<(
+    { __typename?: 'List' }
+    & Pick<List, 'id' | 'title'>
+    & { todos: Array<(
+      { __typename?: 'Todo' }
+      & Pick<Todo, 'id' | 'title'>
+    )> }
+  )> }
+);
 
-/**
- * __useUpdateListMutation__
- *
- * To run a mutation, you first call `useUpdateListMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateListMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateListMutation, { data, loading, error }] = useUpdateListMutation({
- *   variables: {
- *      id: // value for 'id'
- *      title: // value for 'title'
- *   },
- * });
- */
-export function useUpdateListMutation(baseOptions?: Apollo.MutationHookOptions<UpdateListMutation, UpdateListMutationVariables>) {
-        return Apollo.useMutation<UpdateListMutation, UpdateListMutationVariables>(UpdateListDocument, baseOptions);
-      }
-export type UpdateListMutationHookResult = ReturnType<typeof useUpdateListMutation>;
-export type UpdateListMutationResult = Apollo.MutationResult<UpdateListMutation>;
-export type UpdateListMutationOptions = Apollo.BaseMutationOptions<UpdateListMutation, UpdateListMutationVariables>;
+export type ListQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ListQuery = (
+  { __typename?: 'Query' }
+  & { list?: Maybe<(
+    { __typename?: 'List' }
+    & Pick<List, 'id' | 'title'>
+    & { todos: Array<(
+      { __typename?: 'Todo' }
+      & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
+      & { tags: Array<(
+        { __typename?: 'Tag' }
+        & Pick<Tag, 'id' | 'text' | 'color'>
+      )> }
+    )> }
+  )> }
+);
+
+export type CreateTagMutationVariables = Exact<{
+  text: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
+}>;
+
+
+export type CreateTagMutation = (
+  { __typename?: 'Mutation' }
+  & { createOneTag: (
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'text'>
+  ) }
+);
+
+export type UpdateTagMutationVariables = Exact<{
+  id: Scalars['Int'];
+  text?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateTagMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTag?: Maybe<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'text'>
+  )> }
+);
+
+export type DeleteTagMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteTagMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteOneTag?: Maybe<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id'>
+  )> }
+);
+
+export type TagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TagsQuery = (
+  { __typename?: 'Query' }
+  & { tags: Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'id' | 'text' | 'color'>
+    & { todos: Array<(
+      { __typename?: 'Todo' }
+      & Pick<Todo, 'id'>
+    )> }
+  )> }
+);
+
+
 export const TodosDocument = gql`
     query TODOS {
   todos(orderBy: {id: desc}) {
@@ -1859,6 +1572,293 @@ export function useAddTodosToListMutation(baseOptions?: Apollo.MutationHookOptio
 export type AddTodosToListMutationHookResult = ReturnType<typeof useAddTodosToListMutation>;
 export type AddTodosToListMutationResult = Apollo.MutationResult<AddTodosToListMutation>;
 export type AddTodosToListMutationOptions = Apollo.BaseMutationOptions<AddTodosToListMutation, AddTodosToListMutationVariables>;
+export const CreateListDocument = gql`
+    mutation createList($title: String) {
+  createOneList(data: {title: $title}) {
+    id
+    title
+  }
+}
+    `;
+export type CreateListMutationFn = Apollo.MutationFunction<CreateListMutation, CreateListMutationVariables>;
+
+/**
+ * __useCreateListMutation__
+ *
+ * To run a mutation, you first call `useCreateListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createListMutation, { data, loading, error }] = useCreateListMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useCreateListMutation(baseOptions?: Apollo.MutationHookOptions<CreateListMutation, CreateListMutationVariables>) {
+        return Apollo.useMutation<CreateListMutation, CreateListMutationVariables>(CreateListDocument, baseOptions);
+      }
+export type CreateListMutationHookResult = ReturnType<typeof useCreateListMutation>;
+export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>;
+export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
+export const UpdateListDocument = gql`
+    mutation updateList($id: Int!, $title: String) {
+  updateOneList(where: {id: $id}, data: {title: $title}) {
+    id
+    title
+  }
+}
+    `;
+export type UpdateListMutationFn = Apollo.MutationFunction<UpdateListMutation, UpdateListMutationVariables>;
+
+/**
+ * __useUpdateListMutation__
+ *
+ * To run a mutation, you first call `useUpdateListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateListMutation, { data, loading, error }] = useUpdateListMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateListMutation(baseOptions?: Apollo.MutationHookOptions<UpdateListMutation, UpdateListMutationVariables>) {
+        return Apollo.useMutation<UpdateListMutation, UpdateListMutationVariables>(UpdateListDocument, baseOptions);
+      }
+export type UpdateListMutationHookResult = ReturnType<typeof useUpdateListMutation>;
+export type UpdateListMutationResult = Apollo.MutationResult<UpdateListMutation>;
+export type UpdateListMutationOptions = Apollo.BaseMutationOptions<UpdateListMutation, UpdateListMutationVariables>;
+export const ListsDocument = gql`
+    query LISTS {
+  lists(orderBy: {id: desc}) {
+    id
+    title
+    todos(last: 5) {
+      id
+      title
+    }
+  }
+}
+    `;
+
+/**
+ * __useListsQuery__
+ *
+ * To run a query within a React component, call `useListsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListsQuery(baseOptions?: Apollo.QueryHookOptions<ListsQuery, ListsQueryVariables>) {
+        return Apollo.useQuery<ListsQuery, ListsQueryVariables>(ListsDocument, baseOptions);
+      }
+export function useListsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListsQuery, ListsQueryVariables>) {
+          return Apollo.useLazyQuery<ListsQuery, ListsQueryVariables>(ListsDocument, baseOptions);
+        }
+export type ListsQueryHookResult = ReturnType<typeof useListsQuery>;
+export type ListsLazyQueryHookResult = ReturnType<typeof useListsLazyQuery>;
+export type ListsQueryResult = Apollo.QueryResult<ListsQuery, ListsQueryVariables>;
+export const ListDocument = gql`
+    query LIST($id: Int!) {
+  list(where: {id: $id}) {
+    id
+    title
+    todos(orderBy: {id: desc}) {
+      id
+      title
+      description
+      checked
+      tags {
+        id
+        text
+        color
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useListQuery__
+ *
+ * To run a query within a React component, call `useListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useListQuery(baseOptions?: Apollo.QueryHookOptions<ListQuery, ListQueryVariables>) {
+        return Apollo.useQuery<ListQuery, ListQueryVariables>(ListDocument, baseOptions);
+      }
+export function useListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListQuery, ListQueryVariables>) {
+          return Apollo.useLazyQuery<ListQuery, ListQueryVariables>(ListDocument, baseOptions);
+        }
+export type ListQueryHookResult = ReturnType<typeof useListQuery>;
+export type ListLazyQueryHookResult = ReturnType<typeof useListLazyQuery>;
+export type ListQueryResult = Apollo.QueryResult<ListQuery, ListQueryVariables>;
+export const CreateTagDocument = gql`
+    mutation createTag($text: String!, $color: String) {
+  createOneTag(data: {text: $text, color: $color}) {
+    id
+    text
+  }
+}
+    `;
+export type CreateTagMutationFn = Apollo.MutationFunction<CreateTagMutation, CreateTagMutationVariables>;
+
+/**
+ * __useCreateTagMutation__
+ *
+ * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      color: // value for 'color'
+ *   },
+ * });
+ */
+export function useCreateTagMutation(baseOptions?: Apollo.MutationHookOptions<CreateTagMutation, CreateTagMutationVariables>) {
+        return Apollo.useMutation<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument, baseOptions);
+      }
+export type CreateTagMutationHookResult = ReturnType<typeof useCreateTagMutation>;
+export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
+export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
+export const UpdateTagDocument = gql`
+    mutation updateTag($id: Int!, $text: String, $color: String) {
+  updateOneTag(where: {id: $id}, data: {text: $text, color: $color}) {
+    id
+    text
+  }
+}
+    `;
+export type UpdateTagMutationFn = Apollo.MutationFunction<UpdateTagMutation, UpdateTagMutationVariables>;
+
+/**
+ * __useUpdateTagMutation__
+ *
+ * To run a mutation, you first call `useUpdateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTagMutation, { data, loading, error }] = useUpdateTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      text: // value for 'text'
+ *      color: // value for 'color'
+ *   },
+ * });
+ */
+export function useUpdateTagMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTagMutation, UpdateTagMutationVariables>) {
+        return Apollo.useMutation<UpdateTagMutation, UpdateTagMutationVariables>(UpdateTagDocument, baseOptions);
+      }
+export type UpdateTagMutationHookResult = ReturnType<typeof useUpdateTagMutation>;
+export type UpdateTagMutationResult = Apollo.MutationResult<UpdateTagMutation>;
+export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<UpdateTagMutation, UpdateTagMutationVariables>;
+export const DeleteTagDocument = gql`
+    mutation deleteTag($id: Int!) {
+  deleteOneTag(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type DeleteTagMutationFn = Apollo.MutationFunction<DeleteTagMutation, DeleteTagMutationVariables>;
+
+/**
+ * __useDeleteTagMutation__
+ *
+ * To run a mutation, you first call `useDeleteTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTagMutation, { data, loading, error }] = useDeleteTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTagMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTagMutation, DeleteTagMutationVariables>) {
+        return Apollo.useMutation<DeleteTagMutation, DeleteTagMutationVariables>(DeleteTagDocument, baseOptions);
+      }
+export type DeleteTagMutationHookResult = ReturnType<typeof useDeleteTagMutation>;
+export type DeleteTagMutationResult = Apollo.MutationResult<DeleteTagMutation>;
+export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<DeleteTagMutation, DeleteTagMutationVariables>;
+export const TagsDocument = gql`
+    query TAGS {
+  tags(orderBy: {id: desc}) {
+    id
+    text
+    color
+    todos {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useTagsQuery__
+ *
+ * To run a query within a React component, call `useTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTagsQuery(baseOptions?: Apollo.QueryHookOptions<TagsQuery, TagsQueryVariables>) {
+        return Apollo.useQuery<TagsQuery, TagsQueryVariables>(TagsDocument, baseOptions);
+      }
+export function useTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TagsQuery, TagsQueryVariables>) {
+          return Apollo.useLazyQuery<TagsQuery, TagsQueryVariables>(TagsDocument, baseOptions);
+        }
+export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
+export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
+export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

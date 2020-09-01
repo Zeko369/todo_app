@@ -2,8 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@chakra-ui/core';
 
-import Input from './Input';
-import { List } from '../generated/graphql';
+import Input from '../../../components/Input';
+import { List } from '../../../generated/graphql';
 
 export type IListData = Pick<List, 'title'>;
 
