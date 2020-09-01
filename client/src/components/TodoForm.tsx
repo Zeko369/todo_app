@@ -11,10 +11,15 @@ interface Props {
   close?: () => void;
 }
 
+interface FormData {
+  title: string;
+  description?: string | null;
+}
+
 const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { register, handleSubmit, reset } = useForm({
-    defaultValues: { title: todo?.title, description: todo?.description },
+  const { register, handleSubmit, reset, getValues } = useForm<FormData>({
+    defaultValues: { title: todo?.title || '', description: todo?.description },
   });
 
   const [createTodo] = useCreateTodoMutation({ refetchQueries: [{ query: TODOS_QUERY }] });
@@ -22,7 +27,7 @@ const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
 
   const isUpdate = Boolean(todo);
 
-  const onSubmit = async (data: { title: string; description?: string }) => {
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
 
     const attrs = {
@@ -41,8 +46,12 @@ const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
     } finally {
       setLoading(false);
       reset();
-      close && close();
     }
+  };
+
+  const onClose = async () => {
+    await onSubmit(getValues());
+    close && close();
   };
 
   return (
@@ -76,8 +85,11 @@ const TodoForm = forwardRef<HTMLInputElement, Props>(({ todo, close }, ref) => {
             defaultValue={todo?.description || undefined}
           />
           <Stack isInline justify="flex-end">
-            <Button type="submit" variantColor="green" isLoading={loading}>
+            <Button type="submit" variantColor="green" variant="outline" isLoading={loading}>
               {!isUpdate ? 'Add' : 'Update'}
+            </Button>
+            <Button variantColor="green" isLoading={loading} onClick={onClose}>
+              {!isUpdate ? 'Add' : 'Update'} and close
             </Button>
           </Stack>
         </Stack>
