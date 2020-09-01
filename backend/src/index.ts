@@ -12,7 +12,7 @@ use(
   prisma({
     migrations: true,
     features: { crud: true },
-    client: { options: { log: ['query', 'info', 'warn'] } },
+    client: { options: { log: process.env.LOG ? ['query', 'info', 'warn'] : [] } },
   })
 );
 
