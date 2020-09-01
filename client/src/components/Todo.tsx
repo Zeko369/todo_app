@@ -36,10 +36,11 @@ interface TodoProps {
   massSelect: boolean;
   massClick: (id: number) => void;
   lists: Pick<ListDB, 'id' | 'title'>[];
+  listsLoading: boolean;
   todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'> & {
     list?: Pick<ListDB, 'id'> | null;
   } & {
-    tags?: Pick<TagDB, 'id' | 'text'>[] | null;
+    tags?: Pick<TagDB, 'id' | 'text' | 'color'>[] | null;
   };
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
@@ -49,7 +50,7 @@ interface TodoProps {
 }
 
 const Todo: React.FC<TodoProps> = (props) => {
-  const { todo, check, remove, saveList, lists, mass, massSelect, massClick } = props;
+  const { todo, check, remove, saveList, lists, listsLoading, mass, massSelect, massClick } = props;
   const { id, title, description, checked, list, tags } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -100,7 +101,12 @@ const Todo: React.FC<TodoProps> = (props) => {
   const isMobile = useMediaQuery('(max-width: 576px)');
 
   return showUpdate ? (
-    <TodoForm todo={todo} close={() => setUpdate(false)} />
+    <TodoForm
+      todo={todo}
+      close={() => setUpdate(false)}
+      lists={lists}
+      listsLoading={listsLoading}
+    />
   ) : (
     <Box p={4} shadow="md" borderWidth="1px" onClick={toggleCompact}>
       <Flex justify="space-between" pos="relative">
@@ -123,7 +129,7 @@ const Todo: React.FC<TodoProps> = (props) => {
               {tags && (
                 <Box mt={2}>
                   {tags.map((tag) => (
-                    <Tag key={tag.id} mr={2} mb={2}>
+                    <Tag key={tag.id} mr={2} mb={2} variantColor={tag.color || undefined}>
                       <Flex alignItems="center">
                         <TagLabel>{tag.text}</TagLabel>
                         {!hideButtons && <TagCloseButton ml="1" onClick={removeTag(tag.id)} />}
@@ -134,7 +140,7 @@ const Todo: React.FC<TodoProps> = (props) => {
               )}
             </Stack>
             <RevIf
-              cond={isMobile}
+              cond={isMobile || false}
               one={
                 <IconButton
                   aria-label="show controls"
@@ -248,7 +254,7 @@ const FormThingy: React.FC<{ tags: number[]; id: number }> = ({ tags, id }) => {
         <List styleType="dot">
           {items.map((tag) => (
             <ListItem key={tag.id} mb={1}>
-              <Tag>
+              <Tag variantColor={tag.color || undefined}>
                 <TagIcon cursor="pointer" onClick={addTag(tag.id)} icon="add" size="12px" />
                 <TagLabel>{tag.text}</TagLabel>
               </Tag>

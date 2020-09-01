@@ -23,7 +23,7 @@ import {
 import { TODOS_QUERY } from '../graphql/queries';
 
 interface Props {
-  todo?: Pick<TodoDB, 'id' | 'title' | 'description'> & { list?: Pick<ListDB, 'id'> };
+  todo?: Pick<TodoDB, 'id' | 'title' | 'description'> & { list?: Pick<ListDB, 'id'> | null };
   lists: Pick<ListDB, 'id' | 'title'>[];
   listsLoading: boolean;
   close?: () => void;

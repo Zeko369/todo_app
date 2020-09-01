@@ -226,7 +226,8 @@ const Home: NextPage = () => {
                 saveList={saveList}
                 check={check}
                 remove={remove}
-                lists={lLoading || lError || !lData ? [] : lData.lists}
+                listsLoading={Boolean(lLoading || lError || !data)}
+                lists={lData?.lists || []}
                 mass={mass}
                 compact={compact}
                 massSelect={massSelected[todo.id]}
