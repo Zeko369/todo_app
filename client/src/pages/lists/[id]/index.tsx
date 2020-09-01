@@ -51,11 +51,11 @@ const ListPage: NextPage = () => {
           {data.list?.todos
             .filter((todo) => showAll || !todo.checked)
             .map((todo) => (
-              <Stack key={todo.id} isInline spacing={3} alignItems="center">
+              <Stack key={todo.id} isInline spacing={2} alignItems="center">
                 <Checkbox isChecked={todo.checked} onChange={check(todo.id)} />
                 <Text textDecoration={todo.checked ? 'line-through' : ''}>{todo.title}</Text>
                 {todo.tags.map((tag) => (
-                  <Tag key={tag.id} mb={2}>
+                  <Tag key={tag.id} size="sm">
                     <Flex alignItems="center">
                       <TagLabel>{tag.text}</TagLabel>
                     </Flex>
