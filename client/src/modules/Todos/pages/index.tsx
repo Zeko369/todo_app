@@ -32,8 +32,6 @@ import {
   useAddTodosToListMutation,
   useTagsQuery,
   useAddTagToTodosMutation,
-  TodosQueryResult,
-  TodosQueryHookResult,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
@@ -59,7 +57,7 @@ export const HomePage: NextPage = () => {
   const [showNew, , setNew] = useSaveToggle('show:new');
   const [mass, toggleMass] = useToggle(false);
   const [compact, toggleCompact] = useSaveToggle('compact');
-  const [tagsCycle, toggleTagsCycle] = useSaveCycle('show:tags:cycle', 0, 3);
+  const [tagsCycle, , setCycle] = useSaveCycle('show:tags:cycle', 0, 3);
 
   const [addTagToTodos] = useAddTagToTodosMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
@@ -70,6 +68,16 @@ export const HomePage: NextPage = () => {
 
   const [selectTag, tagIds] = useSelectTags({ href: '/', as: `/` });
 
+  const smartSwitch = () => {
+    switch (tagsCycle) {
+      case 0:
+        return setCycle(1);
+      case 1:
+        return setCycle(2);
+      case 2:
+        return setCycle(1);
+    }
+  };
   const saveList = async (id: number, listId: number) => {
     if (listId === -1) {
       return removeTodoFromList({ variables: { id } });
@@ -206,7 +214,7 @@ export const HomePage: NextPage = () => {
             mass
           </Button>
           <Button
-            onClick={toggleTagsCycle}
+            onClick={smartSwitch}
             leftIcon={tagsCycle === 0 ? 'view-off' : tagsCycle === 1 ? 'view' : 'lock'}
             variantColor={tagsCycle > 0 ? 'purple' : undefined}
           >
@@ -341,7 +349,15 @@ export const HomePage: NextPage = () => {
                   <TagLabel>NONE</TagLabel>
                 </Flex>
               </Tag>
-              <Tag size="sm" variantColor="blue" as="button" onClick={selectTag(-1)}>
+              <Tag
+                size="sm"
+                variantColor="blue"
+                as="button"
+                onClick={() => {
+                  setCycle(0);
+                  selectTag(-1);
+                }}
+              >
                 <Flex alignItems="center">
                   <TagLabel>CLEAR</TagLabel>
                   <TagIcon icon="close" size="12px" />
