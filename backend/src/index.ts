@@ -100,6 +100,7 @@ schema.objectType({
     t.model.id();
     t.model.title();
     t.model.todos({ ordering: true });
+    t.model.archivedAt();
     t.model.createdAt();
     t.model.updatedAt();
   },
