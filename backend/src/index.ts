@@ -52,9 +52,24 @@ schema.mutationType({
 
         const task = await ctx.db.task.findOne({ where: { id } });
         if (task) {
+          const date = new Date();
+
+          if (!task.checkedAt) {
+            const remaining = await ctx.db.task.count({
+              where: { todoId: task.todoId, checkedAt: { equals: null } },
+            });
+
+            if (remaining === 1) {
+              await ctx.db.todo.update({
+                where: { id: task.todoId },
+                data: { checked: { set: true }, checkedAt: { set: date } },
+              });
+            }
+          }
+
           return ctx.db.task.update({
             where: { id },
-            data: { checkedAt: task.checkedAt ? null : new Date() },
+            data: { checkedAt: { set: task.checkedAt ? null : date } },
           });
         }
 
@@ -74,11 +89,23 @@ schema.mutationType({
       resolve: async (parent, args, ctx) => {
         const { id } = args;
 
-        const todo = await ctx.db.todo.findOne({ where: { id } });
+        const todo = await ctx.db.todo.findOne({ where: { id }, include: { tasks: true } });
         if (todo) {
+          const date = new Date();
+
+          if (!todo.checked) {
+            await ctx.db.task.updateMany({
+              where: { todoId: id },
+              data: { checkedAt: { set: date } },
+            });
+          }
+
           return ctx.db.todo.update({
             where: { id },
-            data: { checked: !todo.checked, checkedAt: todo.checked ? null : new Date() },
+            data: {
+              checked: { set: !todo.checked },
+              checkedAt: { set: todo.checked ? null : date },
+            },
           });
         }
 
