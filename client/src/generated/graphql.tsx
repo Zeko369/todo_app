@@ -1192,7 +1192,10 @@ export type ListQuery = (
     & { todos: Array<(
       { __typename?: 'Todo' }
       & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
-      & { tags: Array<(
+      & { tasks: Array<(
+        { __typename?: 'Task' }
+        & Pick<Task, 'id' | 'title' | 'checkedAt'>
+      )>, tags: Array<(
         { __typename?: 'Tag' }
         & Pick<Tag, 'id' | 'text' | 'color'>
       )> }
@@ -1623,7 +1626,12 @@ export const ListDocument = gql`
       title
       description
       checked
-      tags {
+      tasks(orderBy: {id: asc}) {
+        id
+        title
+        checkedAt
+      }
+      tags(orderBy: {id: desc}) {
         id
         text
         color

@@ -15,12 +15,19 @@ import {
 } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
-import { useListQuery, useCheckTodoMutation, Tag as TagDB } from '../../../../generated/graphql';
+import {
+  useListQuery,
+  useCheckTodoMutation,
+  Tag as TagDB,
+  useCheckTaskMutation,
+  useCheckAllTasksMutation,
+} from '../../../../generated/graphql';
 import { getId } from '../../../../helpers/getId';
 import Nav from '../../../../components/Nav';
-import { TODOS_QUERY } from '../../../Todos/graphql/queries';
+import { TODO_QUERY } from '../../../Todos/graphql/queries';
 import useSaveToggle from '../../../../hooks/useSaveToggle';
 import { LinkButton } from '../../../../components/Link';
+import { LIST_QUERY } from '../../graphql/queries';
 
 type Tag = Pick<TagDB, 'id' | 'text' | 'color'>;
 
@@ -38,14 +45,32 @@ export const ListPage: NextPage = () => {
   const tagIds: number[] = getTagIds(router.query.tags);
 
   const { loading, error, data } = useListQuery({ variables: { id } });
+
+  const [checkAllTasks] = useCheckAllTasksMutation();
+  const [checkTask] = useCheckTaskMutation();
   const [checkTodo] = useCheckTodoMutation({
-    refetchQueries: [{ query: TODOS_QUERY }],
+    refetchQueries: [{ query: LIST_QUERY, variables: { id } }],
   });
 
+  const toggleTask = (taskId: number, todoId: number) => async () => {
+    await checkTask({
+      variables: { id: taskId },
+      refetchQueries: [{ query: TODO_QUERY, variables: { id: todoId } }],
+    });
+  };
+
   const [showAll, toggleAll] = useSaveToggle('lists:all');
+  const [showTasks, toggleTasks] = useSaveToggle('lists:tasks');
 
   const check = (id: number) => async () => {
-    await checkTodo({ variables: { id } });
+    await checkTodo({ variables: { id } }).then(({ data }) =>
+      data?.checkTodo?.checked
+        ? checkAllTasks({
+            variables: { todoId: id, checkedAt: new Date() },
+            refetchQueries: [{ query: TODO_QUERY, variables: { id } }],
+          })
+        : {}
+    );
   };
 
   const tags = useMemo(() => {
@@ -85,17 +110,22 @@ export const ListPage: NextPage = () => {
       <Nav />
       <Stack spacing={3} isInline>
         <Heading>List: {data?.list?.title}</Heading>
-        <Button onClick={toggleAll}>{!showAll ? 'Only todo' : 'All'}</Button>
         <LinkButton href="/lists/[id]/edit" as={`/lists/${id}/edit`} variantColor="green">
           Edit
         </LinkButton>
+        <Button onClick={toggleAll}>{!showAll ? 'Only todo' : 'All'}</Button>
+        <Button onClick={toggleTasks}>{!showTasks ? '+' : '-'}tasks</Button>
       </Stack>
       {loading ? (
         <Spinner />
-      ) : error || !data ? (
+      ) : error || !data || !data.list ? (
         <Heading size="xl">Error :(</Heading>
       ) : (
         <>
+          <Heading size="lg">
+            Todos: {data.list.todos.filter((todo) => todo.checked).length} /{' '}
+            {data.list.todos.length}
+          </Heading>
           {tags.length > 0 && (
             <Box mb={5}>
               <Heading size="md" mb={2}>
@@ -129,22 +159,43 @@ export const ListPage: NextPage = () => {
             {data.list?.todos
               .filter((todo) => showAll || !todo.checked)
               .map((todo) => (
-                <Stack key={todo.id} isInline spacing={2} alignItems="center">
-                  <Checkbox isChecked={todo.checked} onChange={check(todo.id)} />
-                  <Text textDecoration={todo.checked ? 'line-through' : ''}>{todo.title}</Text>
-                  {todo.tags.map((tag) => (
-                    <Tag
-                      key={tag.id}
-                      size="sm"
-                      variantColor={tag.color || 'blue'}
-                      variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
-                    >
-                      <Flex alignItems="center">
-                        <TagLabel>{tag.text}</TagLabel>
-                      </Flex>
-                    </Tag>
-                  ))}
-                </Stack>
+                <Box key={todo.id}>
+                  <Stack isInline spacing={2} alignItems="center">
+                    <Checkbox isChecked={todo.checked} onChange={check(todo.id)}>
+                      <Heading size="sm">{todo.title}</Heading>
+                    </Checkbox>
+                    <Heading size="xs" color="grey.600">
+                      {todo.tasks.filter((task) => task.checkedAt).length} / {todo.tasks.length}
+                    </Heading>
+                    {todo.tags.map((tag) => (
+                      <Tag
+                        key={tag.id}
+                        size="sm"
+                        variantColor={tag.color || 'blue'}
+                        variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
+                      >
+                        <Flex alignItems="center">
+                          <TagLabel>{tag.text}</TagLabel>
+                        </Flex>
+                      </Tag>
+                    ))}
+                  </Stack>
+                  {showTasks && todo.tasks.length > 0 && (
+                    <Stack pl={6}>
+                      {todo.tasks.map((task) => (
+                        <Checkbox
+                          key={task.id}
+                          isChecked={Boolean(task.checkedAt)}
+                          onChange={toggleTask(task.id, todo.id)}
+                        >
+                          <Text textDecoration={task.checkedAt ? 'line-through' : ''}>
+                            {task.title}
+                          </Text>
+                        </Checkbox>
+                      ))}
+                    </Stack>
+                  )}
+                </Box>
               ))}
           </Stack>
         </>

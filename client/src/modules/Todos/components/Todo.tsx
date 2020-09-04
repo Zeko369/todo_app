@@ -89,7 +89,10 @@ const Todo: React.FC<TodoProps> = (props) => {
   const onCheck = loader(() =>
     checkTodo({ variables: { id } }).then(({ data }) =>
       data?.checkTodo?.checked
-        ? checkAllTasks({ variables: { todoId: id, checkedAt: new Date() } })
+        ? checkAllTasks({
+            variables: { todoId: id, checkedAt: new Date() },
+            refetchQueries: [{ query: TODO_QUERY, variables: { id } }],
+          })
         : {}
     )
   );

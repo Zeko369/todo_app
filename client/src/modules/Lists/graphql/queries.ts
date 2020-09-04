@@ -23,7 +23,12 @@ export const LIST_QUERY = gql`
         title
         description
         checked
-        tags {
+        tasks(orderBy: { id: asc }) {
+          id
+          title
+          checkedAt
+        }
+        tags(orderBy: { id: desc }) {
           id
           text
           color
