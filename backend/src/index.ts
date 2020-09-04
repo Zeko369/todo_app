@@ -44,6 +44,24 @@ schema.mutationType({
     t.crud.deleteOneTask();
     t.crud.deleteManyTask();
 
+    t.field('checkTask', {
+      type: 'Task',
+      args: { id: intArg({ required: true }) },
+      resolve: async (parent, args, ctx) => {
+        const { id } = args;
+
+        const task = await ctx.db.task.findOne({ where: { id } });
+        if (task) {
+          return ctx.db.task.update({
+            where: { id },
+            data: { checkedAt: task.checkedAt ? null : new Date() },
+          });
+        }
+
+        return null;
+      },
+    });
+
     t.crud.createOneTodo();
     t.crud.updateOneTodo();
     t.crud.updateManyTodo();

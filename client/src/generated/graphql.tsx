@@ -478,6 +478,7 @@ export type Mutation = {
   updateManyTask: BatchPayload;
   deleteOneTask?: Maybe<Task>;
   deleteManyTask: BatchPayload;
+  checkTask?: Maybe<Task>;
   createOneTodo: Todo;
   updateOneTodo?: Maybe<Todo>;
   updateManyTodo: BatchPayload;
@@ -530,6 +531,11 @@ export type MutationDeleteOneTaskArgs = {
 
 export type MutationDeleteManyTaskArgs = {
   where?: Maybe<TaskWhereInput>;
+};
+
+
+export type MutationCheckTaskArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -1272,6 +1278,63 @@ export type TodosQuery = (
   )> }
 );
 
+export type CheckAllTasksMutationVariables = Exact<{
+  todoId?: Maybe<Scalars['Int']>;
+  checkedAt?: Maybe<Scalars['DateTime']>;
+}>;
+
+
+export type CheckAllTasksMutation = (
+  { __typename?: 'Mutation' }
+  & { updateManyTask: (
+    { __typename?: 'BatchPayload' }
+    & Pick<BatchPayload, 'count'>
+  ) }
+);
+
+export type TaskQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type TaskQuery = (
+  { __typename?: 'Query' }
+  & { task?: Maybe<(
+    { __typename?: 'Task' }
+    & Pick<Task, 'id' | 'title' | 'checkedAt'>
+  )> }
+);
+
+export type TodoQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type TodoQuery = (
+  { __typename?: 'Query' }
+  & { todo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id'>
+    & { tasks: Array<(
+      { __typename?: 'Task' }
+      & Pick<Task, 'id' | 'title' | 'checkedAt'>
+    )> }
+  )> }
+);
+
+export type CheckTaskMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CheckTaskMutation = (
+  { __typename?: 'Mutation' }
+  & { checkTask?: Maybe<(
+    { __typename: 'Task' }
+    & Pick<Task, 'id' | 'checkedAt'>
+  )> }
+);
+
 export type DeleteManyTodosMutationVariables = Exact<{
   ids?: Maybe<Array<Scalars['Int']>>;
 }>;
@@ -1768,6 +1831,146 @@ export function useTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Todo
 export type TodosQueryHookResult = ReturnType<typeof useTodosQuery>;
 export type TodosLazyQueryHookResult = ReturnType<typeof useTodosLazyQuery>;
 export type TodosQueryResult = Apollo.QueryResult<TodosQuery, TodosQueryVariables>;
+export const CheckAllTasksDocument = gql`
+    mutation checkAllTasks($todoId: Int, $checkedAt: DateTime) {
+  updateManyTask(where: {todoId: {equals: $todoId}}, data: {checkedAt: $checkedAt}) {
+    count
+  }
+}
+    `;
+export type CheckAllTasksMutationFn = Apollo.MutationFunction<CheckAllTasksMutation, CheckAllTasksMutationVariables>;
+
+/**
+ * __useCheckAllTasksMutation__
+ *
+ * To run a mutation, you first call `useCheckAllTasksMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCheckAllTasksMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [checkAllTasksMutation, { data, loading, error }] = useCheckAllTasksMutation({
+ *   variables: {
+ *      todoId: // value for 'todoId'
+ *      checkedAt: // value for 'checkedAt'
+ *   },
+ * });
+ */
+export function useCheckAllTasksMutation(baseOptions?: Apollo.MutationHookOptions<CheckAllTasksMutation, CheckAllTasksMutationVariables>) {
+        return Apollo.useMutation<CheckAllTasksMutation, CheckAllTasksMutationVariables>(CheckAllTasksDocument, baseOptions);
+      }
+export type CheckAllTasksMutationHookResult = ReturnType<typeof useCheckAllTasksMutation>;
+export type CheckAllTasksMutationResult = Apollo.MutationResult<CheckAllTasksMutation>;
+export type CheckAllTasksMutationOptions = Apollo.BaseMutationOptions<CheckAllTasksMutation, CheckAllTasksMutationVariables>;
+export const TaskDocument = gql`
+    query TASK($id: Int!) {
+  task(where: {id: $id}) {
+    id
+    title
+    checkedAt
+  }
+}
+    `;
+
+/**
+ * __useTaskQuery__
+ *
+ * To run a query within a React component, call `useTaskQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTaskQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTaskQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTaskQuery(baseOptions?: Apollo.QueryHookOptions<TaskQuery, TaskQueryVariables>) {
+        return Apollo.useQuery<TaskQuery, TaskQueryVariables>(TaskDocument, baseOptions);
+      }
+export function useTaskLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TaskQuery, TaskQueryVariables>) {
+          return Apollo.useLazyQuery<TaskQuery, TaskQueryVariables>(TaskDocument, baseOptions);
+        }
+export type TaskQueryHookResult = ReturnType<typeof useTaskQuery>;
+export type TaskLazyQueryHookResult = ReturnType<typeof useTaskLazyQuery>;
+export type TaskQueryResult = Apollo.QueryResult<TaskQuery, TaskQueryVariables>;
+export const TodoDocument = gql`
+    query TODO($id: Int!) {
+  todo(where: {id: $id}) {
+    id
+    tasks {
+      id
+      title
+      checkedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useTodoQuery__
+ *
+ * To run a query within a React component, call `useTodoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTodoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTodoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTodoQuery(baseOptions?: Apollo.QueryHookOptions<TodoQuery, TodoQueryVariables>) {
+        return Apollo.useQuery<TodoQuery, TodoQueryVariables>(TodoDocument, baseOptions);
+      }
+export function useTodoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TodoQuery, TodoQueryVariables>) {
+          return Apollo.useLazyQuery<TodoQuery, TodoQueryVariables>(TodoDocument, baseOptions);
+        }
+export type TodoQueryHookResult = ReturnType<typeof useTodoQuery>;
+export type TodoLazyQueryHookResult = ReturnType<typeof useTodoLazyQuery>;
+export type TodoQueryResult = Apollo.QueryResult<TodoQuery, TodoQueryVariables>;
+export const CheckTaskDocument = gql`
+    mutation checkTask($id: Int!) {
+  checkTask(id: $id) {
+    id
+    checkedAt
+    __typename
+  }
+}
+    `;
+export type CheckTaskMutationFn = Apollo.MutationFunction<CheckTaskMutation, CheckTaskMutationVariables>;
+
+/**
+ * __useCheckTaskMutation__
+ *
+ * To run a mutation, you first call `useCheckTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCheckTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [checkTaskMutation, { data, loading, error }] = useCheckTaskMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCheckTaskMutation(baseOptions?: Apollo.MutationHookOptions<CheckTaskMutation, CheckTaskMutationVariables>) {
+        return Apollo.useMutation<CheckTaskMutation, CheckTaskMutationVariables>(CheckTaskDocument, baseOptions);
+      }
+export type CheckTaskMutationHookResult = ReturnType<typeof useCheckTaskMutation>;
+export type CheckTaskMutationResult = Apollo.MutationResult<CheckTaskMutation>;
+export type CheckTaskMutationOptions = Apollo.BaseMutationOptions<CheckTaskMutation, CheckTaskMutationVariables>;
 export const DeleteManyTodosDocument = gql`
     mutation deleteManyTodos($ids: [Int!]) {
   deleteManyTodo(where: {id: {in: $ids}}) {

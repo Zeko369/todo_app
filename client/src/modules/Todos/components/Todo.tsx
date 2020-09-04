@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -16,7 +16,6 @@ import {
   TagIcon,
   TagLabel,
   Checkbox,
-  BoxProps,
 } from '@chakra-ui/core';
 
 import useToggle from '../../../hooks/useToggle';
@@ -29,36 +28,35 @@ import {
   useRemoveTagFromTodoMutation,
   useTagsQuery,
   useAddTagToTodoMutation,
+  useCheckTaskMutation,
+  useCheckAllTasksMutation,
+  useCheckTodoMutation,
 } from '../../../generated/graphql';
 import Input from '../../../components/Input';
 import { useForm } from 'react-hook-form';
 import useMediaQuery from '../../../hooks/useMedia';
+import { TODO_QUERY } from '../graphql/queries';
+import { apolloOptions } from '../pages';
+
+type PickLists = Pick<ListDB, 'id' | 'title'>[];
+type PickList = Pick<ListDB, 'id'>;
+type PickTodo = Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>;
+type PickTag = Pick<TagDB, 'id' | 'text' | 'color'>;
+type PickTask = Pick<TaskDB, 'id' | 'title' | 'checkedAt'>;
 
 interface TodoProps {
   mass: boolean;
   massSelect: boolean;
   massClick: (id: number) => void;
-  lists: Pick<ListDB, 'id' | 'title'>[];
+  lists: PickLists;
   listsLoading: boolean;
-  todo: Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'> & {
-    list?: Pick<ListDB, 'id'> | null;
-  } & {
-    tags?: Pick<TagDB, 'id' | 'text' | 'color'>[] | null;
-  } & {
-    tasks: Pick<TaskDB, 'id' | 'title' | 'checkedAt'>[];
-  };
+  todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & { tasks: PickTask[] };
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
   hideButtons: boolean;
   compact: boolean;
 }
-
-const stopPropag = (callback: () => void) => (e: React.MouseEvent | React.ChangeEvent) => {
-  e.stopPropagation();
-
-  callback();
-};
 
 const Todo: React.FC<TodoProps> = (props) => {
   const { todo, check, remove, saveList, lists, listsLoading, mass, massSelect, massClick } = props;
@@ -67,7 +65,10 @@ const Todo: React.FC<TodoProps> = (props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
 
+  const [checkTodo] = useCheckTodoMutation(apolloOptions);
   const [removeTagFromTodo] = useRemoveTagFromTodoMutation();
+  const [checkAllTasks] = useCheckAllTasksMutation();
+  const [checkTask] = useCheckTaskMutation();
 
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
   const [showButtons, toggleButtons] = useToggle();
@@ -88,7 +89,13 @@ const Todo: React.FC<TodoProps> = (props) => {
 
   const onCheck = () => {
     setLoading(true);
-    check(id).finally(() => setLoading(false));
+    checkTodo({ variables: { id } })
+      .then(({ data }) =>
+        data?.checkTodo?.checked
+          ? checkAllTasks({ variables: { todoId: id, checkedAt: new Date() } })
+          : {}
+      )
+      .finally(() => setLoading(false));
   };
 
   const onDelete = () => {
@@ -107,6 +114,13 @@ const Todo: React.FC<TodoProps> = (props) => {
 
   const onMass = () => {
     massClick(id);
+  };
+
+  const toggleTask = (task: PickTask) => async () => {
+    await checkTask({
+      variables: { id: task.id },
+      refetchQueries: [{ query: TODO_QUERY, variables: { id: todo.id } }],
+    });
   };
 
   const isMobile = useMediaQuery('(max-width: 576px)');
@@ -205,8 +219,9 @@ const Todo: React.FC<TodoProps> = (props) => {
               <Heading size="sm">Tasks: </Heading>
               {tasks.map((task) => (
                 <Checkbox
-                  isChecked={task.checkedAt}
-                  onChange={stopPropag(() => console.log('here'))}
+                  key={task.id}
+                  isChecked={Boolean(task.checkedAt)}
+                  onChange={toggleTask(task)}
                   children={task.title}
                 />
               ))}

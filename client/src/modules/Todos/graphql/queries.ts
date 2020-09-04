@@ -25,6 +25,47 @@ export const TODOS_QUERY = gql`
   }
 `;
 
+export const checkAllTasks = gql`
+  mutation checkAllTasks($todoId: Int, $checkedAt: DateTime) {
+    updateManyTask(where: { todoId: { equals: $todoId } }, data: { checkedAt: $checkedAt }) {
+      count
+    }
+  }
+`;
+
+export const TASK_QUERY = gql`
+  query TASK($id: Int!) {
+    task(where: { id: $id }) {
+      id
+      title
+      checkedAt
+    }
+  }
+`;
+
+export const TODO_QUERY = gql`
+  query TODO($id: Int!) {
+    todo(where: { id: $id }) {
+      id
+      tasks {
+        id
+        title
+        checkedAt
+      }
+    }
+  }
+`;
+
+export const checkTask = gql`
+  mutation checkTask($id: Int!) {
+    checkTask(id: $id) {
+      id
+      checkedAt
+      __typename
+    }
+  }
+`;
+
 export const deleteManyTodos = gql`
   mutation deleteManyTodos($ids: [Int!]) {
     deleteManyTodo(where: { id: { in: $ids } }) {

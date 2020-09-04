@@ -30,7 +30,7 @@ import {
 import { TODOS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
 
-const apolloOptions = {
+export const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
 };
 
@@ -49,14 +49,12 @@ export const HomePage: NextPage = () => {
   const [compact, toggleCompact] = useSaveToggle('compact');
   const [hideButtons, toggleButtons] = useSaveToggle('buttons');
 
-  const [checkTodo] = useCheckTodoMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
   const [deleteManyTodos] = useDeleteManyTodosMutation(apolloOptions);
   const [updateTodo] = useUpdateTodoMutation(apolloOptions);
   const [removeTodoFromList] = useRemoveTodoFromListMutation(apolloOptions);
   const [addTodosToList] = useAddTodosToListMutation(apolloOptions);
 
-  const check = (id: number): Promise<any> => checkTodo({ variables: { id } });
   const saveList = async (id: number, listId: number) => {
     if (listId === -1) {
       return removeTodoFromList({ variables: { id } });
@@ -224,7 +222,6 @@ export const HomePage: NextPage = () => {
                 key={todo.id}
                 todo={todo}
                 saveList={saveList}
-                check={check}
                 remove={remove}
                 listsLoading={Boolean(lLoading || lError || !data)}
                 lists={lData?.lists || []}
