@@ -26,6 +26,7 @@ import {
   useCheckTaskMutation,
   useCheckTodoMutation,
   useUpdateTaskMutation,
+  useDeleteTaskMutation,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
@@ -77,10 +78,19 @@ const Todo: React.FC<TodoProps> = (props) => {
   const [removeTagFromTodo] = useRemoveTagFromTodoMutation();
   const [checkTask] = useCheckTaskMutation();
   const [updateTask] = useUpdateTaskMutation();
+  const [deleteTask] = useDeleteTaskMutation({
+    refetchQueries: [{ query: TODO_QUERY, variables: { id: todo.id } }],
+  });
 
   const editTask = (task: { id: number; title: string }) => () => {
     setTaskTitle(task.title);
     setEditingTask(task.id);
+  };
+
+  const runDelete = (id: number) => () => {
+    if (confirm('are you sure')) {
+      deleteTask({ variables: { id } });
+    }
   };
 
   const onSubmitUpdateTask = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -253,7 +263,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                     </form>
                   </Flex>
                 ) : (
-                  <Flex alignItems="center">
+                  <Stack isInline spacing={2}>
                     <Checkbox
                       key={task.id}
                       isChecked={Boolean(task.checkedAt)}
@@ -264,12 +274,19 @@ const Todo: React.FC<TodoProps> = (props) => {
                       aria-label="edit"
                       icon="edit"
                       size="xs"
-                      ml={2}
                       variantColor="green"
                       variant="ghost"
                       onClick={editTask(task)}
                     />
-                  </Flex>
+                    <IconButton
+                      aria-label="delete"
+                      icon="delete"
+                      size="xs"
+                      variantColor="red"
+                      variant="ghost"
+                      onClick={runDelete(task.id)}
+                    />
+                  </Stack>
                 )
               )}
               <AddNewTask todoId={todo.id} />
