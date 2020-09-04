@@ -18,6 +18,9 @@ use(
 
 schema.queryType({
   definition(t) {
+    t.crud.task();
+    t.crud.tasks();
+
     t.crud.todo();
     t.crud.todos({ ordering: true });
 
@@ -34,6 +37,12 @@ schema.mutationType({
     t.crud.createOneTag();
     t.crud.updateOneTag();
     t.crud.deleteOneTag();
+
+    t.crud.createOneTask();
+    t.crud.updateOneTask();
+    t.crud.updateManyTask();
+    t.crud.deleteOneTask();
+    t.crud.deleteManyTask();
 
     t.crud.createOneTodo();
     t.crud.updateOneTodo();
@@ -78,6 +87,18 @@ schema.objectType({
 });
 
 schema.objectType({
+  name: 'Task',
+  definition(t) {
+    t.model.id();
+    t.model.title();
+    t.model.todo();
+    t.model.checkedAt();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+schema.objectType({
   name: 'Todo',
   definition(t) {
     t.model.id();
@@ -85,6 +106,7 @@ schema.objectType({
     t.model.description();
     t.model.list();
     t.model.tags();
+    t.model.tasks({ filtering: true, ordering: true });
     t.model.checked();
     t.model.checkedAt();
     t.model.requires();
