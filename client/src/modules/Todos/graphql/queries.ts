@@ -8,7 +8,7 @@ export const TODOS_QUERY = gql`
       description
       checked
       createdAt
-      tags {
+      tags(orderBy: { id: desc }) {
         id
         text
         color
@@ -16,6 +16,19 @@ export const TODOS_QUERY = gql`
       list {
         id
       }
+      tasks(orderBy: { id: desc }) {
+        id
+        title
+        checkedAt
+      }
+    }
+  }
+`;
+
+export const deleteManyTodos = gql`
+  mutation deleteManyTodos($ids: [Int!]) {
+    deleteManyTodo(where: { id: { in: $ids } }) {
+      count
     }
   }
 `;

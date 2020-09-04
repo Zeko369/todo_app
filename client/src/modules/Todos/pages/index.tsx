@@ -24,7 +24,7 @@ import {
   useListsQuery,
   useUpdateTodoMutation,
   useRemoveTodoFromListMutation,
-  useDeleteManyTodoMutation,
+  useDeleteManyTodosMutation,
   useAddTodosToListMutation,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
@@ -51,7 +51,7 @@ export const HomePage: NextPage = () => {
 
   const [checkTodo] = useCheckTodoMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
-  const [deleteManyTodos] = useDeleteManyTodoMutation(apolloOptions);
+  const [deleteManyTodos] = useDeleteManyTodosMutation(apolloOptions);
   const [updateTodo] = useUpdateTodoMutation(apolloOptions);
   const [removeTodoFromList] = useRemoveTodoFromListMutation(apolloOptions);
   const [addTodosToList] = useAddTodosToListMutation(apolloOptions);

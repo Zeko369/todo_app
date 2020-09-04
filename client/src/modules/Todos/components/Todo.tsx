@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Flex,
@@ -15,6 +15,8 @@ import {
   ListItem,
   TagIcon,
   TagLabel,
+  Checkbox,
+  BoxProps,
 } from '@chakra-ui/core';
 
 import useToggle from '../../../hooks/useToggle';
@@ -23,6 +25,7 @@ import {
   Todo as TodoDB,
   List as ListDB,
   Tag as TagDB,
+  Task as TaskDB,
   useRemoveTagFromTodoMutation,
   useTagsQuery,
   useAddTagToTodoMutation,
@@ -41,6 +44,8 @@ interface TodoProps {
     list?: Pick<ListDB, 'id'> | null;
   } & {
     tags?: Pick<TagDB, 'id' | 'text' | 'color'>[] | null;
+  } & {
+    tasks: Pick<TaskDB, 'id' | 'title' | 'checkedAt'>[];
   };
   check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
@@ -49,9 +54,15 @@ interface TodoProps {
   compact: boolean;
 }
 
+const stopPropag = (callback: () => void) => (e: React.MouseEvent | React.ChangeEvent) => {
+  e.stopPropagation();
+
+  callback();
+};
+
 const Todo: React.FC<TodoProps> = (props) => {
   const { todo, check, remove, saveList, lists, listsLoading, mass, massSelect, massClick } = props;
-  const { id, title, description, checked, list, tags } = todo;
+  const { id, title, description, checked, list, tags, tasks } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
@@ -108,26 +119,45 @@ const Todo: React.FC<TodoProps> = (props) => {
       listsLoading={listsLoading}
     />
   ) : (
-    <Box p={4} shadow="md" borderWidth="1px" onClick={toggleCompact}>
+    <Box p={4} shadow="md" borderWidth="1px">
       <Flex justify="space-between" pos="relative">
-        <IconButton
-          icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
-          variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
-          aria-label="check"
-          mr={4}
-          isLoading={loading}
-          onClick={mass ? onMass : onCheck}
-        />
-        <Box w="100%">
+        <Stack>
+          <IconButton
+            icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
+            variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
+            aria-label="check"
+            mr={4}
+            isLoading={loading}
+            onClick={mass ? onMass : onCheck}
+          />
+          <IconButton
+            icon={!compact ? 'view' : 'view-off'}
+            variantColor={compact ? 'gray' : 'pink'}
+            aria-label={compact ? 'show' : 'hide'}
+            mr={4}
+            onClick={toggleCompact}
+          />
+        </Stack>
+        <Stack w="100%" spacing={3}>
           <Flex w="100%">
             <Stack w="100%">
               <Heading fontSize="xl" wordBreak="break-all">
-                {list?.id && `[${lists.find((l) => l.id === list.id)?.title}] `}
                 {title}
+                {tasks.length > 0 &&
+                  ` => [${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}]`}
               </Heading>
-              {!compact && <Text>{`[${id}] - ${new Date(todo.createdAt).toLocaleString()}`}</Text>}
-              {tags && (
-                <Box mt={2}>
+              {list?.id && (
+                <Heading size="sm">List: {lists.find((l) => l.id === list.id)?.title}</Heading>
+              )}
+              {!compact && (
+                <Box>
+                  <Text color="gray.400">{`[${id}] - ${new Date(
+                    todo.createdAt
+                  ).toLocaleString()}`}</Text>
+                </Box>
+              )}
+              {tags?.length && (
+                <Box>
                   {tags.map((tag) => (
                     <Tag key={tag.id} mr={2} mb={2} variantColor={tag.color || undefined}>
                       <Flex alignItems="center">
@@ -170,12 +200,25 @@ const Todo: React.FC<TodoProps> = (props) => {
               )}
             </RevIf>
           </Flex>
-          {!compact && description && (
-            <Text mt={4} wordBreak="break-all">
-              {description}
-            </Text>
+          {!compact && tasks && (
+            <Stack>
+              <Heading size="sm">Tasks: </Heading>
+              {tasks.map((task) => (
+                <Checkbox
+                  isChecked={task.checkedAt}
+                  onChange={stopPropag(() => console.log('here'))}
+                  children={task.title}
+                />
+              ))}
+            </Stack>
           )}
-        </Box>
+          {!compact && description && (
+            <Box>
+              <Heading size="sm">Description: </Heading>
+              <Text wordBreak="break-all">{description}</Text>
+            </Box>
+          )}
+        </Stack>
       </Flex>
       {!hideButtons && (
         <Stack spacing={3} mt={5}>
