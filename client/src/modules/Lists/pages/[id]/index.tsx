@@ -20,24 +20,15 @@ import {
   useCheckTodoMutation,
   Tag as TagDB,
   useCheckTaskMutation,
-  useCheckAllTasksMutation,
 } from '../../../../generated/graphql';
 import { getId } from '../../../../helpers/getId';
 import Nav from '../../../../components/Nav';
-import { TODO_QUERY } from '../../../Todos/graphql/queries';
 import useSaveToggle from '../../../../hooks/useSaveToggle';
 import { LinkButton } from '../../../../components/Link';
 import { LIST_QUERY } from '../../graphql/queries';
+import { useSelectTags } from '../../../../hooks/useSelectTags';
 
 type Tag = Pick<TagDB, 'id' | 'text' | 'color'>;
-
-const getTagIds = (tagIds: string | string[] | undefined): number[] => {
-  if (tagIds && !Array.isArray(tagIds)) {
-    return tagIds.split(',').map((id) => parseInt(id));
-  }
-
-  return [];
-};
 
 const refetch = (id: number) => ({
   refetchQueries: [{ query: LIST_QUERY, variables: { id } }],
@@ -46,7 +37,6 @@ const refetch = (id: number) => ({
 export const ListPage: NextPage = () => {
   const router = useRouter();
   const id = getId(router.query) || -1;
-  const tagIds: number[] = getTagIds(router.query.tags);
 
   const { loading, error, data } = useListQuery({ variables: { id } });
 
@@ -55,6 +45,8 @@ export const ListPage: NextPage = () => {
 
   const [showAll, toggleAll] = useSaveToggle('lists:all');
   const [showTasks, toggleTasks] = useSaveToggle('lists:tasks');
+
+  const [selectTag, tagIds] = useSelectTags({ href: '/lists/[id]', as: `/lists/${id}` });
 
   const toggleTask = (taskId: number) => async () => {
     await checkTask({ variables: { id: taskId } });
@@ -82,19 +74,6 @@ export const ListPage: NextPage = () => {
 
     return [];
   }, [loading, data, error]);
-
-  const selectTag = (tagId: number) => () => {
-    if (tagId === -1) {
-      return router.replace('/lists/[id]', `/lists/${id}`);
-    }
-
-    const newTags = (tagIds.includes(tagId)
-      ? tagIds.filter((a) => a !== tagId)
-      : [...tagIds, tagId]
-    ).join(',');
-
-    router.replace(`/lists/[id]?tags=${newTags}`, `/lists/${id}?tags=${newTags}`);
-  };
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
