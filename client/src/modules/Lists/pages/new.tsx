@@ -14,8 +14,12 @@ export const NewListPage: NextPage = () => {
   const [createList] = useCreateListMutation({ refetchQueries: [{ query: LISTS_QUERY }] });
 
   const onSubmit = async (data: IListData) => {
-    await createList({ variables: { ...data } });
-    router.push('/lists');
+    const { title } = data;
+
+    if (title) {
+      await createList({ variables: { title } });
+      router.push('/lists');
+    }
   };
 
   return (

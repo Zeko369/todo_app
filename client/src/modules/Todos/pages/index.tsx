@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { NextPage } from 'next';
 import {
   Stack,
@@ -46,7 +46,6 @@ export const HomePage: NextPage = () => {
   const { loading: lLoading, error: lError, data: lData } = useListsQuery();
   const { loading: tLoading, error: tError, data: tData } = useTagsQuery();
 
-  const [stats, setStats] = useState<string>('');
   const [selectedList, setSelectedList] = useState<number>(-1);
   const [selectedTag, setSelectedTag] = useState<number>(-1);
   const [massSelected, setMassSelected] = useState<Record<number, boolean>>({});
@@ -169,13 +168,11 @@ export const HomePage: NextPage = () => {
     }
   }, [showNew]);
 
-  const filteredData = new Array(...(data?.todos || [])).sort((t1, t2) =>
-    order ? t1.id - t2.id : t2.id - t1.id
+  const filteredData = useMemo(
+    () =>
+      new Array(...(data?.todos || [])).sort((t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id)),
+    [data]
   );
-
-  useEffect(() => {
-    setStats(`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`);
-  }, [filteredData]);
 
   if (loading || error) {
     return (
@@ -196,7 +193,7 @@ export const HomePage: NextPage = () => {
       </Nav>
       <Text mb={3}>
         <b>Done: </b>
-        {stats}
+        {`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`}
       </Text>
       <SimpleGrid columns={[1, null, 2]} spacingX="20px" spacingY="10px" mb="3">
         <Stack isInline>
