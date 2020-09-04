@@ -91,7 +91,7 @@ export type Task = {
   __typename?: 'Task';
   id: Scalars['Int'];
   title: Scalars['String'];
-  todo?: Maybe<Todo>;
+  todo: Todo;
   checkedAt?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -348,33 +348,11 @@ export type TaskWhereInput = {
   NOT?: Maybe<Array<TaskWhereInput>>;
   id?: Maybe<IntFilter>;
   todo?: Maybe<TodoWhereInput>;
-  todoId?: Maybe<IntNullableFilter>;
+  todoId?: Maybe<IntFilter>;
   title?: Maybe<StringFilter>;
   checkedAt?: Maybe<DateTimeNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
-};
-
-export type IntNullableFilter = {
-  equals?: Maybe<Scalars['Int']>;
-  in?: Maybe<Array<Scalars['Int']>>;
-  notIn?: Maybe<Array<Scalars['Int']>>;
-  lt?: Maybe<Scalars['Int']>;
-  lte?: Maybe<Scalars['Int']>;
-  gt?: Maybe<Scalars['Int']>;
-  gte?: Maybe<Scalars['Int']>;
-  not?: Maybe<NestedIntNullableFilter>;
-};
-
-export type NestedIntNullableFilter = {
-  equals?: Maybe<Scalars['Int']>;
-  in?: Maybe<Array<Scalars['Int']>>;
-  notIn?: Maybe<Array<Scalars['Int']>>;
-  lt?: Maybe<Scalars['Int']>;
-  lte?: Maybe<Scalars['Int']>;
-  gt?: Maybe<Scalars['Int']>;
-  gte?: Maybe<Scalars['Int']>;
-  not?: Maybe<NestedIntNullableFilter>;
 };
 
 export type DateTimeFilter = {
@@ -409,6 +387,28 @@ export type ListWhereInput = {
   archivedAt?: Maybe<DateTimeNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
+};
+
+export type IntNullableFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntNullableFilter>;
+};
+
+export type NestedIntNullableFilter = {
+  equals?: Maybe<Scalars['Int']>;
+  in?: Maybe<Array<Scalars['Int']>>;
+  notIn?: Maybe<Array<Scalars['Int']>>;
+  lt?: Maybe<Scalars['Int']>;
+  lte?: Maybe<Scalars['Int']>;
+  gt?: Maybe<Scalars['Int']>;
+  gte?: Maybe<Scalars['Int']>;
+  not?: Maybe<NestedIntNullableFilter>;
 };
 
 export type TagListRelationFilter = {
@@ -776,7 +776,7 @@ export type TaskScalarWhereInput = {
   OR?: Maybe<Array<TaskScalarWhereInput>>;
   NOT?: Maybe<Array<TaskScalarWhereInput>>;
   id?: Maybe<IntFilter>;
-  todoId?: Maybe<IntNullableFilter>;
+  todoId?: Maybe<IntFilter>;
   title?: Maybe<StringFilter>;
   checkedAt?: Maybe<DateTimeNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
@@ -981,7 +981,7 @@ export type TaskCreateInput = {
   checkedAt?: Maybe<Scalars['DateTime']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-  todo?: Maybe<TodoCreateOneWithoutTasksInput>;
+  todo: TodoCreateOneWithoutTasksInput;
 };
 
 export type TodoCreateOneWithoutTasksInput = {
@@ -1007,14 +1007,12 @@ export type TaskUpdateInput = {
   checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
   createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  todo?: Maybe<TodoUpdateOneWithoutTasksInput>;
+  todo?: Maybe<TodoUpdateOneRequiredWithoutTasksInput>;
 };
 
-export type TodoUpdateOneWithoutTasksInput = {
+export type TodoUpdateOneRequiredWithoutTasksInput = {
   create?: Maybe<TodoCreateWithoutTasksInput>;
   connect?: Maybe<TodoWhereUniqueInput>;
-  disconnect?: Maybe<Scalars['Boolean']>;
-  delete?: Maybe<Scalars['Boolean']>;
   update?: Maybe<TodoUpdateWithoutTasksDataInput>;
   upsert?: Maybe<TodoUpsertWithoutTasksInput>;
 };
@@ -1493,6 +1491,20 @@ export type UpdateTodoMutation = (
   & { updateOneTodo?: Maybe<(
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'description'>
+  )> }
+);
+
+export type UpdateTaskMutationVariables = Exact<{
+  id: Scalars['Int'];
+  title?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateTaskMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTask?: Maybe<(
+    { __typename?: 'Task' }
+    & Pick<Task, 'id' | 'title'>
   )> }
 );
 
@@ -2345,6 +2357,40 @@ export function useUpdateTodoMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateTodoMutationHookResult = ReturnType<typeof useUpdateTodoMutation>;
 export type UpdateTodoMutationResult = Apollo.MutationResult<UpdateTodoMutation>;
 export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<UpdateTodoMutation, UpdateTodoMutationVariables>;
+export const UpdateTaskDocument = gql`
+    mutation updateTask($id: Int!, $title: String) {
+  updateOneTask(where: {id: $id}, data: {title: {set: $title}}) {
+    id
+    title
+  }
+}
+    `;
+export type UpdateTaskMutationFn = Apollo.MutationFunction<UpdateTaskMutation, UpdateTaskMutationVariables>;
+
+/**
+ * __useUpdateTaskMutation__
+ *
+ * To run a mutation, you first call `useUpdateTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTaskMutation, { data, loading, error }] = useUpdateTaskMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateTaskMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTaskMutation, UpdateTaskMutationVariables>) {
+        return Apollo.useMutation<UpdateTaskMutation, UpdateTaskMutationVariables>(UpdateTaskDocument, baseOptions);
+      }
+export type UpdateTaskMutationHookResult = ReturnType<typeof useUpdateTaskMutation>;
+export type UpdateTaskMutationResult = Apollo.MutationResult<UpdateTaskMutation>;
+export type UpdateTaskMutationOptions = Apollo.BaseMutationOptions<UpdateTaskMutation, UpdateTaskMutationVariables>;
 export const RemoveTodoFromListDocument = gql`
     mutation removeTodoFromList($id: Int!) {
   updateOneTodo(where: {id: $id}, data: {list: {disconnect: true}}) {

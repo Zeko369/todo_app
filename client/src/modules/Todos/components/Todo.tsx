@@ -12,6 +12,7 @@ import {
   TagCloseButton,
   TagLabel,
   Checkbox,
+  Input,
 } from '@chakra-ui/core';
 
 import useToggle from '../../../hooks/useToggle';
@@ -24,6 +25,7 @@ import {
   useRemoveTagFromTodoMutation,
   useCheckTaskMutation,
   useCheckTodoMutation,
+  useUpdateTaskMutation,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
@@ -68,10 +70,24 @@ const Todo: React.FC<TodoProps> = (props) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
+  const [editingTask, setEditingTask] = useState<number>(-1);
+  const [taskTitle, setTaskTitle] = useState<string>('');
 
   const [checkTodo] = useCheckTodoMutation(apolloOptions);
   const [removeTagFromTodo] = useRemoveTagFromTodoMutation();
   const [checkTask] = useCheckTaskMutation();
+  const [updateTask] = useUpdateTaskMutation();
+
+  const editTask = (task: { id: number; title: string }) => () => {
+    setTaskTitle(task.title);
+    setEditingTask(task.id);
+  };
+
+  const onSubmitUpdateTask = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await updateTask({ variables: { id: editingTask, title: taskTitle } });
+    setEditingTask(-1);
+  };
 
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
   const [showButtons, toggleButtons] = useToggle();
@@ -209,16 +225,53 @@ const Todo: React.FC<TodoProps> = (props) => {
             </RevIf>
           </Flex>
           {!compact && tasks && (
-            <Stack>
+            <Stack spacing={2}>
               <Heading size="sm">Tasks: </Heading>
-              {tasks.map((task) => (
-                <Checkbox
-                  key={task.id}
-                  isChecked={Boolean(task.checkedAt)}
-                  onChange={toggleTask(task)}
-                  children={task.title}
-                />
-              ))}
+              {tasks.map((task) =>
+                editingTask === task.id ? (
+                  <Flex alignItems="center">
+                    <Checkbox
+                      key={task.id}
+                      isChecked={Boolean(task.checkedAt)}
+                      onChange={toggleTask(task)}
+                    />
+
+                    <form onSubmit={onSubmitUpdateTask}>
+                      <Stack isInline ml="2">
+                        <Input
+                          isRequired
+                          name="title"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setTaskTitle(e.target.value)
+                          }
+                          value={taskTitle}
+                        />
+                        <Button type="submit" variantColor="blue">
+                          Save
+                        </Button>
+                      </Stack>
+                    </form>
+                  </Flex>
+                ) : (
+                  <Flex alignItems="center">
+                    <Checkbox
+                      key={task.id}
+                      isChecked={Boolean(task.checkedAt)}
+                      onChange={toggleTask(task)}
+                      children={task.title}
+                    />
+                    <IconButton
+                      aria-label="edit"
+                      icon="edit"
+                      size="xs"
+                      ml={2}
+                      variantColor="green"
+                      variant="ghost"
+                      onClick={editTask(task)}
+                    />
+                  </Flex>
+                )
+              )}
               <AddNewTask todoId={todo.id} />
             </Stack>
           )}

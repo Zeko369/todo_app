@@ -167,6 +167,15 @@ export const updateTodo = gql`
   }
 `;
 
+export const updateTask = gql`
+  mutation updateTask($id: Int!, $title: String) {
+    updateOneTask(where: { id: $id }, data: { title: { set: $title } }) {
+      id
+      title
+    }
+  }
+`;
+
 export const removeTodoFromList = gql`
   mutation removeTodoFromList($id: Int!) {
     updateOneTodo(where: { id: $id }, data: { list: { disconnect: true } }) {
