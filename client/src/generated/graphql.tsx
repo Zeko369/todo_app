@@ -685,11 +685,23 @@ export type TodoCreateWithoutRequiresInput = {
 };
 
 export type TagUpdateInput = {
-  text?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  text?: Maybe<StringFieldUpdateOperationsInput>;
+  color?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   todos?: Maybe<TodoUpdateManyWithoutTagsInput>;
+};
+
+export type StringFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['String']>;
+};
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['String']>;
+};
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['DateTime']>;
 };
 
 export type TodoUpdateManyWithoutTagsInput = {
@@ -710,16 +722,24 @@ export type TodoUpdateWithWhereUniqueWithoutTagsInput = {
 };
 
 export type TodoUpdateWithoutTagsDataInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
+};
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['Boolean']>;
+};
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Maybe<Scalars['DateTime']>;
 };
 
 export type TaskUpdateManyWithoutTodoInput = {
@@ -740,10 +760,10 @@ export type TaskUpdateWithWhereUniqueWithoutTodoInput = {
 };
 
 export type TaskUpdateWithoutTodoDataInput = {
-  title?: Maybe<Scalars['String']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type TaskUpdateManyWithWhereNestedInput = {
@@ -764,10 +784,10 @@ export type TaskScalarWhereInput = {
 };
 
 export type TaskUpdateManyDataInput = {
-  title?: Maybe<Scalars['String']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type TaskUpsertWithWhereUniqueWithoutTodoInput = {
@@ -786,10 +806,10 @@ export type ListUpdateOneWithoutTodosInput = {
 };
 
 export type ListUpdateWithoutTodosDataInput = {
-  title?: Maybe<Scalars['String']>;
-  archivedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  archivedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type ListUpsertWithoutTodosInput = {
@@ -815,12 +835,12 @@ export type TodoUpdateWithWhereUniqueWithoutRequiredByInput = {
 };
 
 export type TodoUpdateWithoutRequiredByDataInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
@@ -845,10 +865,10 @@ export type TagUpdateWithWhereUniqueWithoutTodosInput = {
 };
 
 export type TagUpdateWithoutTodosDataInput = {
-  text?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  text?: Maybe<StringFieldUpdateOperationsInput>;
+  color?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type TagUpdateManyWithWhereNestedInput = {
@@ -868,10 +888,10 @@ export type TagScalarWhereInput = {
 };
 
 export type TagUpdateManyDataInput = {
-  text?: Maybe<Scalars['String']>;
-  color?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  text?: Maybe<StringFieldUpdateOperationsInput>;
+  color?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type TagUpsertWithWhereUniqueWithoutTodosInput = {
@@ -900,12 +920,12 @@ export type TodoScalarWhereInput = {
 };
 
 export type TodoUpdateManyDataInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type TodoUpsertWithWhereUniqueWithoutRequiredByInput = {
@@ -932,12 +952,12 @@ export type TodoUpdateWithWhereUniqueWithoutRequiresInput = {
 };
 
 export type TodoUpdateWithoutRequiresDataInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
@@ -983,10 +1003,10 @@ export type TodoCreateWithoutTasksInput = {
 };
 
 export type TaskUpdateInput = {
-  title?: Maybe<Scalars['String']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   todo?: Maybe<TodoUpdateOneWithoutTasksInput>;
 };
 
@@ -1000,12 +1020,12 @@ export type TodoUpdateOneWithoutTasksInput = {
 };
 
 export type TodoUpdateWithoutTasksDataInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
@@ -1018,10 +1038,10 @@ export type TodoUpsertWithoutTasksInput = {
 };
 
 export type TaskUpdateManyMutationInput = {
-  title?: Maybe<Scalars['String']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type BatchPayload = {
@@ -1044,12 +1064,12 @@ export type TodoCreateInput = {
 };
 
 export type TodoUpdateInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
@@ -1058,12 +1078,12 @@ export type TodoUpdateInput = {
 };
 
 export type TodoUpdateManyMutationInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type ListCreateInput = {
@@ -1093,10 +1113,10 @@ export type TodoCreateWithoutListInput = {
 };
 
 export type ListUpdateInput = {
-  title?: Maybe<Scalars['String']>;
-  archivedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  archivedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   todos?: Maybe<TodoUpdateManyWithoutListInput>;
 };
 
@@ -1118,12 +1138,12 @@ export type TodoUpdateWithWhereUniqueWithoutListInput = {
 };
 
 export type TodoUpdateWithoutListDataInput = {
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
@@ -1138,7 +1158,7 @@ export type TodoUpsertWithWhereUniqueWithoutListInput = {
 
 
 export type CreateListMutationVariables = Exact<{
-  title?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
 }>;
 
 
@@ -1531,7 +1551,7 @@ export type AddTagToTodosMutation = (
 
 
 export const CreateListDocument = gql`
-    mutation createList($title: String) {
+    mutation createList($title: String!) {
   createOneList(data: {title: $title}) {
     id
     title
@@ -1565,7 +1585,7 @@ export type CreateListMutationResult = Apollo.MutationResult<CreateListMutation>
 export type CreateListMutationOptions = Apollo.BaseMutationOptions<CreateListMutation, CreateListMutationVariables>;
 export const UpdateListDocument = gql`
     mutation updateList($id: Int!, $title: String) {
-  updateOneList(where: {id: $id}, data: {title: $title}) {
+  updateOneList(where: {id: $id}, data: {title: {set: $title}}) {
     id
     title
   }
@@ -1720,7 +1740,7 @@ export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
 export type CreateTagMutationOptions = Apollo.BaseMutationOptions<CreateTagMutation, CreateTagMutationVariables>;
 export const UpdateTagDocument = gql`
     mutation updateTag($id: Int!, $text: String, $color: String) {
-  updateOneTag(where: {id: $id}, data: {text: $text, color: $color}) {
+  updateOneTag(where: {id: $id}, data: {text: {set: $text}, color: {set: $color}}) {
     id
     text
   }
@@ -1907,7 +1927,7 @@ export type AddTaskMutationResult = Apollo.MutationResult<AddTaskMutation>;
 export type AddTaskMutationOptions = Apollo.BaseMutationOptions<AddTaskMutation, AddTaskMutationVariables>;
 export const CheckAllTasksDocument = gql`
     mutation checkAllTasks($todoId: Int, $checkedAt: DateTime) {
-  updateManyTask(where: {todoId: {equals: $todoId}}, data: {checkedAt: $checkedAt}) {
+  updateManyTask(where: {todoId: {equals: $todoId}}, data: {checkedAt: {set: $checkedAt}}) {
     count
   }
 }
@@ -2290,7 +2310,7 @@ export type CreateTodoWithListMutationResult = Apollo.MutationResult<CreateTodoW
 export type CreateTodoWithListMutationOptions = Apollo.BaseMutationOptions<CreateTodoWithListMutation, CreateTodoWithListMutationVariables>;
 export const UpdateTodoDocument = gql`
     mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
-  updateOneTodo(where: {id: $id}, data: {title: $title, description: $description, list: {connect: {id: $listId}}}) {
+  updateOneTodo(where: {id: $id}, data: {title: {set: $title}, description: {set: $description}, list: {connect: {id: $listId}}}) {
     id
     title
     description

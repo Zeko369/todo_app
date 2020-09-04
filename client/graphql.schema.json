@@ -5340,8 +5340,8 @@
             "name": "text",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5350,8 +5350,8 @@
             "name": "color",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5360,8 +5360,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5370,8 +5370,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5382,6 +5382,69 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "TodoUpdateManyWithoutTagsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "StringFieldUpdateOperationsInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "set",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "NullableStringFieldUpdateOperationsInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "set",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "DateTimeFieldUpdateOperationsInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "set",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
               "ofType": null
             },
             "defaultValue": null
@@ -5613,8 +5676,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5623,8 +5686,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5633,8 +5696,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5643,8 +5706,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5653,8 +5716,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5663,8 +5726,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5705,6 +5768,48 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "TodoUpdateManyWithoutRequiresInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "BoolFieldUpdateOperationsInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "set",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "NullableDateTimeFieldUpdateOperationsInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "set",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "DateTime",
               "ofType": null
             },
             "defaultValue": null
@@ -5936,8 +6041,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5946,8 +6051,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5956,8 +6061,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -5966,8 +6071,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6151,8 +6256,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6161,8 +6266,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6171,8 +6276,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6181,8 +6286,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6326,8 +6431,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6336,8 +6441,8 @@
             "name": "archivedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6346,8 +6451,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6356,8 +6461,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6628,8 +6733,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6638,8 +6743,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6648,8 +6753,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6658,8 +6763,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6668,8 +6773,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6678,8 +6783,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6951,8 +7056,8 @@
             "name": "text",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6961,8 +7066,8 @@
             "name": "color",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6971,8 +7076,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -6981,8 +7086,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7156,8 +7261,8 @@
             "name": "text",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7166,8 +7271,8 @@
             "name": "color",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7176,8 +7281,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7186,8 +7291,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7444,8 +7549,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7454,8 +7559,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7464,8 +7569,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7474,8 +7579,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7484,8 +7589,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7494,8 +7599,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7780,8 +7885,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7790,8 +7895,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7800,8 +7905,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7810,8 +7915,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7820,8 +7925,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -7830,8 +7935,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8204,8 +8309,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8214,8 +8319,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8224,8 +8329,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8234,8 +8339,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8336,8 +8441,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8346,8 +8451,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8356,8 +8461,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8366,8 +8471,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8376,8 +8481,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8386,8 +8491,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8486,8 +8591,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "StringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8496,8 +8601,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8506,8 +8611,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8516,8 +8621,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8685,8 +8790,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8695,8 +8800,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8705,8 +8810,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8715,8 +8820,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8725,8 +8830,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8735,8 +8840,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8806,8 +8911,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8816,8 +8921,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8826,8 +8931,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8836,8 +8941,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8846,8 +8951,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -8856,8 +8961,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9096,8 +9201,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9106,8 +9211,8 @@
             "name": "archivedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9116,8 +9221,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9126,8 +9231,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9369,8 +9474,8 @@
             "name": "title",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9379,8 +9484,8 @@
             "name": "description",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableStringFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9389,8 +9494,8 @@
             "name": "checked",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9399,8 +9504,8 @@
             "name": "checkedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "NullableDateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9409,8 +9514,8 @@
             "name": "createdAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null
@@ -9419,8 +9524,8 @@
             "name": "updatedAt",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "DateTime",
+              "kind": "INPUT_OBJECT",
+              "name": "DateTimeFieldUpdateOperationsInput",
               "ofType": null
             },
             "defaultValue": null

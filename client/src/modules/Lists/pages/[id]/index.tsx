@@ -39,6 +39,10 @@ const getTagIds = (tagIds: string | string[] | undefined): number[] => {
   return [];
 };
 
+const refetch = (id: number) => ({
+  refetchQueries: [{ query: LIST_QUERY, variables: { id } }],
+});
+
 export const ListPage: NextPage = () => {
   const router = useRouter();
   const id = getId(router.query) || -1;
@@ -46,31 +50,18 @@ export const ListPage: NextPage = () => {
 
   const { loading, error, data } = useListQuery({ variables: { id } });
 
-  const [checkAllTasks] = useCheckAllTasksMutation();
-  const [checkTask] = useCheckTaskMutation();
-  const [checkTodo] = useCheckTodoMutation({
-    refetchQueries: [{ query: LIST_QUERY, variables: { id } }],
-  });
-
-  const toggleTask = (taskId: number, todoId: number) => async () => {
-    await checkTask({
-      variables: { id: taskId },
-      refetchQueries: [{ query: TODO_QUERY, variables: { id: todoId } }],
-    });
-  };
+  const [checkTask] = useCheckTaskMutation(refetch(id));
+  const [checkTodo] = useCheckTodoMutation(refetch(id));
 
   const [showAll, toggleAll] = useSaveToggle('lists:all');
   const [showTasks, toggleTasks] = useSaveToggle('lists:tasks');
 
+  const toggleTask = (taskId: number) => async () => {
+    await checkTask({ variables: { id: taskId } });
+  };
+
   const check = (id: number) => async () => {
-    await checkTodo({ variables: { id } }).then(({ data }) =>
-      data?.checkTodo?.checked
-        ? checkAllTasks({
-            variables: { todoId: id, checkedAt: new Date() },
-            refetchQueries: [{ query: TODO_QUERY, variables: { id } }],
-          })
-        : {}
-    );
+    await checkTodo({ variables: { id } });
   };
 
   const tags = useMemo(() => {
@@ -127,7 +118,7 @@ export const ListPage: NextPage = () => {
             {data.list.todos.length}
           </Heading>
           {tags.length > 0 && (
-            <Box mb={5}>
+            <Box>
               <Heading size="md" mb={2}>
                 Filter by tag:
               </Heading>
@@ -155,7 +146,7 @@ export const ListPage: NextPage = () => {
               </Stack>
             </Box>
           )}
-          <Stack>
+          <Stack mt={3}>
             {data.list?.todos
               .filter((todo) => showAll || !todo.checked)
               .map((todo) => (
@@ -164,9 +155,11 @@ export const ListPage: NextPage = () => {
                     <Checkbox isChecked={todo.checked} onChange={check(todo.id)}>
                       <Heading size="sm">{todo.title}</Heading>
                     </Checkbox>
-                    <Heading size="xs" color="grey.600">
-                      {todo.tasks.filter((task) => task.checkedAt).length} / {todo.tasks.length}
-                    </Heading>
+                    {todo.tasks.length > 0 && (
+                      <Heading size="xs" color="gray.600">
+                        {todo.tasks.filter((task) => task.checkedAt).length} / {todo.tasks.length}
+                      </Heading>
+                    )}
                     {todo.tags.map((tag) => (
                       <Tag
                         key={tag.id}
@@ -186,7 +179,7 @@ export const ListPage: NextPage = () => {
                         <Checkbox
                           key={task.id}
                           isChecked={Boolean(task.checkedAt)}
-                          onChange={toggleTask(task.id, todo.id)}
+                          onChange={toggleTask(task.id)}
                         >
                           <Text textDecoration={task.checkedAt ? 'line-through' : ''}>
                             {task.title}

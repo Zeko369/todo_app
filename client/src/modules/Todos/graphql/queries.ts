@@ -36,7 +36,10 @@ export const addTask = gql`
 
 export const checkAllTasks = gql`
   mutation checkAllTasks($todoId: Int, $checkedAt: DateTime) {
-    updateManyTask(where: { todoId: { equals: $todoId } }, data: { checkedAt: $checkedAt }) {
+    updateManyTask(
+      where: { todoId: { equals: $todoId } }
+      data: { checkedAt: { set: $checkedAt } }
+    ) {
       count
     }
   }
@@ -151,7 +154,11 @@ export const updateTodo = gql`
   mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
     updateOneTodo(
       where: { id: $id }
-      data: { title: $title, description: $description, list: { connect: { id: $listId } } }
+      data: {
+        title: { set: $title }
+        description: { set: $description }
+        list: { connect: { id: $listId } }
+      }
     ) {
       id
       title

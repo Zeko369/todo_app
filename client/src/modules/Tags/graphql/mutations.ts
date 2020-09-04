@@ -11,7 +11,7 @@ export const createTag = gql`
 
 export const updateTag = gql`
   mutation updateTag($id: Int!, $text: String, $color: String) {
-    updateOneTag(where: { id: $id }, data: { text: $text, color: $color }) {
+    updateOneTag(where: { id: $id }, data: { text: { set: $text }, color: { set: $color } }) {
       id
       text
     }

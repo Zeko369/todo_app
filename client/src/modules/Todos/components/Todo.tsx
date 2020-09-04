@@ -86,16 +86,7 @@ const Todo: React.FC<TodoProps> = (props) => {
 
   const onDelete = loader(() => remove(id));
   const onSaveList = loader(() => saveList(id, selected));
-  const onCheck = loader(() =>
-    checkTodo({ variables: { id } }).then(({ data }) =>
-      data?.checkTodo?.checked
-        ? checkAllTasks({
-            variables: { todoId: id, checkedAt: new Date() },
-            refetchQueries: [{ query: TODO_QUERY, variables: { id } }],
-          })
-        : {}
-    )
-  );
+  const onCheck = loader(() => checkTodo({ variables: { id } }));
 
   const removeTag = (tagId: number) => async () => {
     await removeTagFromTodo({ variables: { tagId, id } });
