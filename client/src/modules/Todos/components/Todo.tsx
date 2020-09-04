@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Flex,
@@ -10,10 +10,6 @@ import {
   Button,
   Tag,
   TagCloseButton,
-  Spinner,
-  List,
-  ListItem,
-  TagIcon,
   TagLabel,
   Checkbox,
 } from '@chakra-ui/core';
@@ -26,17 +22,16 @@ import {
   Tag as TagDB,
   Task as TaskDB,
   useRemoveTagFromTodoMutation,
-  useTagsQuery,
-  useAddTagToTodoMutation,
   useCheckTaskMutation,
   useCheckAllTasksMutation,
   useCheckTodoMutation,
 } from '../../../generated/graphql';
-import Input from '../../../components/Input';
-import { useForm } from 'react-hook-form';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
 import { apolloOptions } from '../pages';
+import { TagAdder } from './TagAdder';
+import { RevIf } from '../../../components/RevIf';
+import { loadingWrapper } from '../lib/loadingWrapper';
 
 type PickLists = Pick<ListDB, 'id' | 'title'>[];
 type PickList = Pick<ListDB, 'id'>;
@@ -51,7 +46,6 @@ interface TodoProps {
   lists: PickLists;
   listsLoading: boolean;
   todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & { tasks: PickTask[] };
-  check: (id: number) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
   hideButtons: boolean;
@@ -59,7 +53,7 @@ interface TodoProps {
 }
 
 const Todo: React.FC<TodoProps> = (props) => {
-  const { todo, check, remove, saveList, lists, listsLoading, mass, massSelect, massClick } = props;
+  const { todo, remove, saveList, lists, listsLoading, mass, massSelect, massClick } = props;
   const { id, title, description, checked, list, tags, tasks } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -87,26 +81,17 @@ const Todo: React.FC<TodoProps> = (props) => {
     setSelected(parseInt(e.target.value));
   };
 
-  const onCheck = () => {
-    setLoading(true);
-    checkTodo({ variables: { id } })
-      .then(({ data }) =>
-        data?.checkTodo?.checked
-          ? checkAllTasks({ variables: { todoId: id, checkedAt: new Date() } })
-          : {}
-      )
-      .finally(() => setLoading(false));
-  };
+  const loader = useCallback(loadingWrapper(setLoading), [setLoading]);
 
-  const onDelete = () => {
-    setLoading(true);
-    remove(id).finally(() => setLoading(false));
-  };
-
-  const onSaveList = () => {
-    setLoading(true);
-    saveList(id, selected).finally(() => setLoading(false));
-  };
+  const onDelete = loader(() => remove(id));
+  const onSaveList = loader(() => saveList(id, selected));
+  const onCheck = loader(() =>
+    checkTodo({ variables: { id } }).then(({ data }) =>
+      data?.checkTodo?.checked
+        ? checkAllTasks({ variables: { todoId: id, checkedAt: new Date() } })
+        : {}
+    )
+  );
 
   const removeTag = (tagId: number) => async () => {
     await removeTagFromTodo({ variables: { tagId, id } });
@@ -253,7 +238,7 @@ const Todo: React.FC<TodoProps> = (props) => {
             )}
           </Stack>
           <Box>
-            <FormThingy tags={tags?.map((t) => t.id) || []} id={id} />
+            <TagAdder tags={tags?.map((t) => t.id) || []} id={id} />
           </Box>
         </Stack>
       )}
@@ -261,85 +246,4 @@ const Todo: React.FC<TodoProps> = (props) => {
   );
 };
 
-const FormThingy: React.FC<{ tags: number[]; id: number }> = ({ tags, id }) => {
-  const { loading, error, data } = useTagsQuery();
-  const [addTagToTodo] = useAddTagToTodoMutation();
-
-  const { register, handleSubmit, watch, setValue } = useForm<{ text: string }>({
-    defaultValues: { text: '' },
-  });
-
-  const words = watch('text');
-  const items = (data?.tags || [])
-    .filter((t) => !tags.includes(t.id))
-    .filter((tag) => words.split(' ').some((word) => tag.text.includes(word)));
-
-  const addTag = (tagId: number) => async () => await addTagToTodo({ variables: { id, tagId } });
-
-  const onSubmit = async () => {
-    if (items.length === 1) {
-      await addTag(items[0].id)();
-      setValue('');
-    }
-  };
-
-  return (
-    <Stack>
-      <Box>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack isInline spacing={3} alignItems="flex-end">
-            <Box w="100%">
-              <Input
-                name="text"
-                placeholder="Start typing..."
-                label="Search for tag"
-                w="100%"
-                ref={register({ required: true })}
-                isRequired
-              />
-            </Box>
-            <Button type="submit" isDisabled={items.length !== 1}>
-              Add tag
-            </Button>
-          </Stack>
-        </form>
-      </Box>
-      {loading ? (
-        <Spinner />
-      ) : error || !data ? (
-        <Heading size="xl">Error...</Heading>
-      ) : (
-        <List styleType="dot">
-          {items.map((tag) => (
-            <ListItem key={tag.id} mb={1}>
-              <Tag variantColor={tag.color || undefined}>
-                <TagIcon cursor="pointer" onClick={addTag(tag.id)} icon="add" size="12px" />
-                <TagLabel>{tag.text}</TagLabel>
-              </Tag>
-            </ListItem>
-          ))}
-        </List>
-      )}
-    </Stack>
-  );
-};
-
 export default Todo;
-
-const RevIf: React.FC<{ cond: boolean; one: React.ReactNode }> = ({ children, cond, one }) => {
-  if (cond) {
-    return (
-      <Stack spacing={3} isInline={!cond}>
-        {one}
-        {children}
-      </Stack>
-    );
-  }
-
-  return (
-    <Stack spacing={3} isInline={!cond}>
-      {children}
-      {one}
-    </Stack>
-  );
-};
