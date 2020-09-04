@@ -32,6 +32,7 @@ import { apolloOptions } from '../pages';
 import { TagAdder } from './TagAdder';
 import { RevIf } from '../../../components/RevIf';
 import { loadingWrapper } from '../lib/loadingWrapper';
+import { AddNewTask } from './AddNewTask';
 
 type PickLists = Pick<ListDB, 'id' | 'title'>[];
 type PickList = Pick<ListDB, 'id'>;
@@ -210,6 +211,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                   children={task.title}
                 />
               ))}
+              <AddNewTask todoId={todo.id} />
             </Stack>
           )}
           {!compact && description && (

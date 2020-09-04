@@ -16,11 +16,20 @@ export const TODOS_QUERY = gql`
       list {
         id
       }
-      tasks(orderBy: { id: desc }) {
+      tasks(orderBy: { id: asc }) {
         id
         title
         checkedAt
       }
+    }
+  }
+`;
+
+export const addTask = gql`
+  mutation addTask($todoId: Int!, $title: String!) {
+    createOneTask(data: { todo: { connect: { id: $todoId } }, title: $title }) {
+      id
+      title
     }
   }
 `;
