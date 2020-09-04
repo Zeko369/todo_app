@@ -20,6 +20,7 @@ import { getId } from '../../../../helpers/getId';
 import Nav from '../../../../components/Nav';
 import { TODOS_QUERY } from '../../../Todos/graphql/queries';
 import useSaveToggle from '../../../../hooks/useSaveToggle';
+import { LinkButton } from '../../../../components/Link';
 
 type Tag = Pick<TagDB, 'id' | 'text' | 'color'>;
 
@@ -85,6 +86,9 @@ export const ListPage: NextPage = () => {
       <Stack spacing={3} isInline>
         <Heading>List: {data?.list?.title}</Heading>
         <Button onClick={toggleAll}>{!showAll ? 'Only todo' : 'All'}</Button>
+        <LinkButton href="/lists/[id]/edit" as={`/lists/${id}/edit`} variantColor="green">
+          Edit
+        </LinkButton>
       </Stack>
       {loading ? (
         <Spinner />
@@ -92,33 +96,35 @@ export const ListPage: NextPage = () => {
         <Heading size="xl">Error :(</Heading>
       ) : (
         <>
-          <Box mb={5}>
-            <Heading size="md" mb={2}>
-              Filter by tag:
-            </Heading>
-            <Stack isInline spacing={2}>
-              {tags.map((tag) => (
-                <Tag
-                  key={tag.id}
-                  size="sm"
-                  variantColor={tag.color || 'blue'}
-                  variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
-                  as="button"
-                  onClick={selectTag(tag.id)}
-                >
+          {tags.length > 0 && (
+            <Box mb={5}>
+              <Heading size="md" mb={2}>
+                Filter by tag:
+              </Heading>
+              <Stack isInline spacing={2}>
+                {tags.map((tag) => (
+                  <Tag
+                    key={tag.id}
+                    size="sm"
+                    variantColor={tag.color || 'blue'}
+                    variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
+                    as="button"
+                    onClick={selectTag(tag.id)}
+                  >
+                    <Flex alignItems="center">
+                      <TagLabel>{tag.text}</TagLabel>
+                    </Flex>
+                  </Tag>
+                ))}
+                <Tag size="sm" variantColor="blue" as="button" onClick={selectTag(-1)}>
                   <Flex alignItems="center">
-                    <TagLabel>{tag.text}</TagLabel>
+                    <TagLabel>NONE</TagLabel>
+                    <TagIcon icon="close" size="12px" />
                   </Flex>
                 </Tag>
-              ))}
-              <Tag size="sm" variantColor="blue" as="button" onClick={selectTag(-1)}>
-                <Flex alignItems="center">
-                  <TagLabel>NONE</TagLabel>
-                  <TagIcon icon="close" size="12px" />
-                </Flex>
-              </Tag>
-            </Stack>
-          </Box>
+              </Stack>
+            </Box>
+          )}
           <Stack>
             {data.list?.todos
               .filter((todo) => showAll || !todo.checked)
