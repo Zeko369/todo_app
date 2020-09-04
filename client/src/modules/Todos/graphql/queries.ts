@@ -183,3 +183,14 @@ export const addTodosToList = gql`
     }
   }
 `;
+
+export const addTagToTodos = gql`
+  mutation addTagToTodos($id: Int!, $todos: [TodoWhereUniqueInput!]) {
+    updateOneTag(where: { id: $id }, data: { todos: { connect: $todos } }) {
+      id
+      todos {
+        id
+      }
+    }
+  }
+`;

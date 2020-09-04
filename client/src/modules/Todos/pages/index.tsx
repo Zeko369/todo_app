@@ -19,13 +19,14 @@ import TodoForm from '../components/TodoForm';
 import useKeyPress from '../../../hooks/useKeyPress';
 import {
   useTodosQuery,
-  useCheckTodoMutation,
   useDeleteTodoMutation,
   useListsQuery,
   useUpdateTodoMutation,
   useRemoveTodoFromListMutation,
   useDeleteManyTodosMutation,
   useAddTodosToListMutation,
+  useTagsQuery,
+  useAddTagToTodosMutation,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
@@ -37,9 +38,11 @@ export const apolloOptions = {
 export const HomePage: NextPage = () => {
   const { loading, error, data } = useTodosQuery({ pollInterval: 2000 });
   const { loading: lLoading, error: lError, data: lData } = useListsQuery();
+  const { loading: tLoading, error: tError, data: tData } = useTagsQuery();
 
   const [stats, setStats] = useState<string>('');
   const [selectedList, setSelectedList] = useState<number>(-1);
+  const [selectedTag, setSelectedTag] = useState<number>(-1);
   const [massSelected, setMassSelected] = useState<Record<number, boolean>>({});
 
   const [order, toggleOrder] = useSaveToggle('order');
@@ -49,6 +52,7 @@ export const HomePage: NextPage = () => {
   const [compact, toggleCompact] = useSaveToggle('compact');
   const [hideButtons, toggleButtons] = useSaveToggle('buttons');
 
+  const [addTagToTodos] = useAddTagToTodosMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
   const [deleteManyTodos] = useDeleteManyTodosMutation(apolloOptions);
   const [updateTodo] = useUpdateTodoMutation(apolloOptions);
@@ -106,6 +110,16 @@ export const HomePage: NextPage = () => {
 
     await addTodosToList({
       variables: { listId: selectedList, todos: selected.map((id) => ({ id })) },
+    });
+  };
+
+  const bulkTag = async () => {
+    if (selectedTag === -1) {
+      return alert(`Can't do that yet`);
+    }
+
+    await addTagToTodos({
+      variables: { id: selectedTag, todos: selected.map((id) => ({ id })) },
     });
   };
 
@@ -171,13 +185,37 @@ export const HomePage: NextPage = () => {
       {mass && (
         <Stack spacing={2} mb={3}>
           <Box>Selected: {numberOfSelected}</Box>
-          <SimpleGrid columns={[2, null, 4]} spacingX="20px" spacingY="10px">
-            <Button onClick={selectAll} variantColor="yellow">
-              Select all
-            </Button>
+          <Button onClick={selectAll} variantColor="yellow">
+            Select all
+          </Button>
+          <SimpleGrid columns={[2, null, 6]} spacingX="20px" spacingY="10px">
             <Button onClick={bulkDelete} variantColor="red" isDisabled={numberOfSelected === 0}>
               Bulk delete
             </Button>
+            <Button variantColor="blue" isDisabled={true}>
+              Bulk check
+            </Button>
+            <Button onClick={bulkTag} variantColor="pink" isDisabled={numberOfSelected === 0}>
+              Bulk tag
+            </Button>
+            {tLoading ? (
+              <Spinner />
+            ) : tError || !tData ? (
+              <Heading size="xl">Something went wrong</Heading>
+            ) : (
+              <Select
+                isDisabled={numberOfSelected === 0}
+                value={selectedTag}
+                onChange={(e) => setSelectedTag(parseInt(e.target.value))}
+              >
+                <option value={-1}></option>
+                {tData?.tags.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.text}
+                  </option>
+                ))}
+              </Select>
+            )}
             <Button
               onClick={bulkChangeList}
               variantColor="green"
@@ -191,6 +229,7 @@ export const HomePage: NextPage = () => {
               <Heading size="xl">Something went wrong</Heading>
             ) : (
               <Select
+                isDisabled={numberOfSelected === 0}
                 value={selectedList}
                 onChange={(e) => setSelectedList(parseInt(e.target.value))}
               >
