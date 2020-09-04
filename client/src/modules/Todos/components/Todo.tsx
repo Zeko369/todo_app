@@ -234,7 +234,7 @@ const Todo: React.FC<TodoProps> = (props) => {
         <Stack spacing={3} mt={5}>
           <Stack isInline spacing={3}>
             <Select value={selected} onChange={changeList}>
-              <option value={-1}></option>
+              <option value="-1">Select list...</option>
               {lists.map((list) => (
                 <option key={list.id} value={list.id}>
                   {list.title}
