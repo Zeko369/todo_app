@@ -23,7 +23,6 @@ import {
   Task as TaskDB,
   useRemoveTagFromTodoMutation,
   useCheckTaskMutation,
-  useCheckAllTasksMutation,
   useCheckTodoMutation,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
@@ -49,12 +48,22 @@ interface TodoProps {
   todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & { tasks: PickTask[] };
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
-  hideButtons: boolean;
+  selectedTags: number[];
   compact: boolean;
 }
 
 const Todo: React.FC<TodoProps> = (props) => {
-  const { todo, remove, saveList, lists, listsLoading, mass, massSelect, massClick } = props;
+  const {
+    todo,
+    remove,
+    saveList,
+    lists,
+    listsLoading,
+    mass,
+    massSelect,
+    massClick,
+    selectedTags,
+  } = props;
   const { id, title, description, checked, list, tags, tasks } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -62,14 +71,13 @@ const Todo: React.FC<TodoProps> = (props) => {
 
   const [checkTodo] = useCheckTodoMutation(apolloOptions);
   const [removeTagFromTodo] = useRemoveTagFromTodoMutation();
-  const [checkAllTasks] = useCheckAllTasksMutation();
   const [checkTask] = useCheckTaskMutation();
 
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
   const [showButtons, toggleButtons] = useToggle();
   const [localCompact, toggleCompact] = useToggle();
 
-  const hideButtons = !(showButtons || !props.hideButtons);
+  const hideButtons = !(showButtons || !true);
   const compact = !(localCompact || !props.compact);
 
   useEffect(() => {
@@ -136,9 +144,9 @@ const Todo: React.FC<TodoProps> = (props) => {
           <Flex w="100%">
             <Stack w="100%">
               <Heading fontSize="xl" wordBreak="break-all">
-                {title}
                 {tasks.length > 0 &&
-                  ` => [${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}]`}
+                  `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}
+                {title}
               </Heading>
               {list?.id && (
                 <Heading size="sm">List: {lists.find((l) => l.id === list.id)?.title}</Heading>
@@ -153,7 +161,13 @@ const Todo: React.FC<TodoProps> = (props) => {
               {tags?.length && (
                 <Box>
                   {tags.map((tag) => (
-                    <Tag key={tag.id} mr={2} mb={2} variantColor={tag.color || undefined}>
+                    <Tag
+                      key={tag.id}
+                      mr={2}
+                      mb={2}
+                      variantColor={tag.color || undefined}
+                      variant={selectedTags.includes(tag.id) ? 'solid' : 'subtle'}
+                    >
                       <Flex alignItems="center">
                         <TagLabel>{tag.text}</TagLabel>
                         {!hideButtons && <TagCloseButton ml="1" onClick={removeTag(tag.id)} />}

@@ -10,9 +10,14 @@ import {
   Select,
   Spinner,
   SimpleGrid,
+  IconButton,
+  Tag,
+  Flex,
+  TagLabel,
+  TagIcon,
 } from '@chakra-ui/core';
 
-import useSaveToggle from '../../../hooks/useSaveToggle';
+import useSaveToggle, { useSaveCycle } from '../../../hooks/useSaveToggle';
 import Todo from '../components/Todo';
 import useToggle from '../../../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
@@ -27,9 +32,12 @@ import {
   useAddTodosToListMutation,
   useTagsQuery,
   useAddTagToTodosMutation,
+  TodosQueryResult,
+  TodosQueryHookResult,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
+import { useSelectTags } from '../../../hooks/useSelectTags';
 
 export const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
@@ -44,13 +52,14 @@ export const HomePage: NextPage = () => {
   const [selectedList, setSelectedList] = useState<number>(-1);
   const [selectedTag, setSelectedTag] = useState<number>(-1);
   const [massSelected, setMassSelected] = useState<Record<number, boolean>>({});
+  const [onlyList, setOnlyList] = useState<number>(-1);
 
   const [order, toggleOrder] = useSaveToggle('order');
   const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
   const [showNew, , setNew] = useSaveToggle('show:new');
   const [mass, toggleMass] = useToggle(false);
   const [compact, toggleCompact] = useSaveToggle('compact');
-  const [hideButtons, toggleButtons] = useSaveToggle('buttons');
+  const [tagsCycle, toggleTagsCycle] = useSaveCycle('show:tags:cycle', 0, 3);
 
   const [addTagToTodos] = useAddTagToTodosMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
@@ -58,6 +67,8 @@ export const HomePage: NextPage = () => {
   const [updateTodo] = useUpdateTodoMutation(apolloOptions);
   const [removeTodoFromList] = useRemoveTodoFromListMutation(apolloOptions);
   const [addTodosToList] = useAddTodosToListMutation(apolloOptions);
+
+  const [selectTag, tagIds] = useSelectTags({ href: '/', as: `/` });
 
   const saveList = async (id: number, listId: number) => {
     if (listId === -1) {
@@ -74,6 +85,10 @@ export const HomePage: NextPage = () => {
 
   const massClick = (id: number) => {
     setMassSelected((current) => ({ ...current, [id]: !current[id] }));
+  };
+
+  const onChangeList = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOnlyList(parseInt(e.target.value));
   };
 
   const selected = Object.keys(massSelected)
@@ -175,13 +190,58 @@ export const HomePage: NextPage = () => {
         <b>Done: </b>
         {stats}
       </Text>
-      <Stack isInline mb={3}>
-        <Button onClick={toggleOrder}>{order ? 'ASC' : 'DESC'}</Button>
-        <Button onClick={toggleOnlyTodo}>{onlyTodo ? 'Only Todo' : 'All'}</Button>
-        <Button onClick={toggleMass}>{mass ? '-mass' : '+mass'}</Button>
-        <Button onClick={toggleButtons}>{hideButtons ? '+ALL btn' : '-ALL btn'}</Button>
-        <Button onClick={toggleCompact}>{compact ? '-' : '+'}</Button>
-      </Stack>
+      <SimpleGrid columns={[1, null, 2]} spacingX="20px" spacingY="10px" mb="3">
+        <Stack isInline>
+          <Button onClick={toggleOrder} variantColor="cyan">
+            {order ? 'ASC' : 'DESC'}
+          </Button>
+          <Button onClick={toggleOnlyTodo} variantColor={onlyTodo ? 'green' : undefined}>
+            {onlyTodo ? 'Only Todo' : 'All'}
+          </Button>
+          <Button
+            onClick={toggleMass}
+            leftIcon={mass ? 'view' : 'view-off'}
+            variantColor={mass ? 'yellow' : undefined}
+          >
+            mass
+          </Button>
+          <Button
+            onClick={toggleTagsCycle}
+            leftIcon={tagsCycle === 0 ? 'view-off' : tagsCycle === 1 ? 'view' : 'lock'}
+            variantColor={tagsCycle > 0 ? 'purple' : undefined}
+          >
+            tags
+          </Button>
+          <IconButton
+            onClick={toggleCompact}
+            aria-label={compact ? 'Compact' : 'Wide'}
+            variantColor={!compact ? 'pink' : undefined}
+            icon={!compact ? 'view' : 'view-off'}
+          />
+        </Stack>
+        <Stack isInline isReversed>
+          <Button onClick={() => setOnlyList(-1)}>All list</Button>
+          <Button onClick={() => setOnlyList(-2)}>No list</Button>
+
+          <Box>
+            {lLoading ? (
+              <Spinner />
+            ) : lError || !lData ? (
+              <Heading size="xl">Something went wrong</Heading>
+            ) : (
+              <Select onChange={onChangeList} value={onlyList}>
+                <option value={-1}>ALL LISTS</option>
+                <option value={-2}>NO LISTS</option>
+                {lData?.lists.map((list) => (
+                  <option key={list.id} value={list.id}>
+                    {list.title}
+                  </option>
+                ))}
+              </Select>
+            )}
+          </Box>
+        </Stack>
+      </SimpleGrid>
       {mass && (
         <Stack spacing={2} mb={3}>
           <Box>Selected: {numberOfSelected}</Box>
@@ -244,6 +304,53 @@ export const HomePage: NextPage = () => {
           </SimpleGrid>
         </Stack>
       )}
+      {tagsCycle > 0 && (
+        <Box mb={3}>
+          <Heading size="md" mb={2}>
+            Tags:{' '}
+          </Heading>
+          {tLoading ? (
+            <Spinner />
+          ) : tError || !tData ? (
+            <Heading size="xl">Something went wrong</Heading>
+          ) : (
+            <Stack isInline spacing={2}>
+              {tData.tags.map((tag) => (
+                <Tag
+                  key={tag.id}
+                  size="sm"
+                  variantColor={tag.color || 'blue'}
+                  variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
+                  as="button"
+                  onClick={selectTag(tag.id)}
+                >
+                  <Flex alignItems="center">
+                    <TagLabel>{tag.text}</TagLabel>
+                  </Flex>
+                </Tag>
+              ))}
+
+              <Tag
+                size="sm"
+                variantColor="gray"
+                as="button"
+                variant={tagIds.includes(-2) ? 'solid' : 'subtle'}
+                onClick={selectTag(-2)}
+              >
+                <Flex alignItems="center">
+                  <TagLabel>NONE</TagLabel>
+                </Flex>
+              </Tag>
+              <Tag size="sm" variantColor="blue" as="button" onClick={selectTag(-1)}>
+                <Flex alignItems="center">
+                  <TagLabel>CLEAR</TagLabel>
+                  <TagIcon icon="close" size="12px" />
+                </Flex>
+              </Tag>
+            </Stack>
+          )}
+        </Box>
+      )}
       <Collapse isOpen={showNew}>
         <TodoForm
           close={toggleNew}
@@ -256,19 +363,35 @@ export const HomePage: NextPage = () => {
         <Stack spacing={4} shouldWrapChildren>
           {filteredData
             .filter((todo) => (onlyTodo ? !todo.checked : true))
+            .filter((todo) => {
+              if (tagIds.length > 0) {
+                if (tagIds[0] === -2) {
+                  return todo.tags.length === 0;
+                }
+
+                return tagIds[tagsCycle === 2 ? 'every' : 'some']((tid: number) =>
+                  todo.tags.map((tag) => tag.id).includes(tid)
+                );
+              }
+
+              return true;
+            })
+            .filter((todo) =>
+              onlyList === -1 ? true : todo.list ? todo.list.id === onlyList : onlyList === -2
+            )
             .map((todo) => (
               <Todo
                 key={todo.id}
                 todo={todo}
                 saveList={saveList}
                 remove={remove}
+                selectedTags={tagIds}
                 listsLoading={Boolean(lLoading || lError || !data)}
                 lists={lData?.lists || []}
                 mass={mass}
                 compact={compact}
                 massSelect={massSelected[todo.id]}
                 massClick={massClick}
-                hideButtons={hideButtons}
               />
             ))}
         </Stack>
