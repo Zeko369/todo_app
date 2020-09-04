@@ -105,7 +105,7 @@ schema.objectType({
     t.model.title();
     t.model.description();
     t.model.list();
-    t.model.tags();
+    t.model.tags({ filtering: true, ordering: true });
     t.model.tasks({ filtering: true, ordering: true });
     t.model.checked();
     t.model.checkedAt();

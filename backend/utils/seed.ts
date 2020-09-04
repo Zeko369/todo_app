@@ -29,6 +29,13 @@ import { lorem, date } from 'faker';
   const ids: number[] = [];
   let firstId: number = 1;
 
+  const tasks = () => {
+    return Array.from(new Array(Math.ceil(Math.random() * 7) + 1), () => ({
+      title: lorem.words(3),
+      checkedAt: Math.random() > 0.5 ? new Date() : null,
+    }));
+  };
+
   for (let i = 0; i < 10; i++) {
     const checked = Math.random() > 0.5;
     const todo = await db.todo.create({
@@ -39,6 +46,9 @@ import { lorem, date } from 'faker';
         checkedAt: checked ? date.past() : null,
         list: { connect: { id: random(lists) } },
         tags: { connect: { id: random(tags) } },
+        tasks: {
+          create: tasks(),
+        },
       },
     });
 

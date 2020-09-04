@@ -8,6 +8,9 @@
     "db:generate": "yarn prisma migrate save --experimental",
     "db:migrate": "yarn prisma migrate up --experimental",
     "db:seed": "ts-node utils/seed.ts",
+    "db:drop": "dropdb todo_development",
+    "db:create": "createdb todo_development",
+    "db:reset": "yarn db:drop && yarn db:create && yarn db:migrate && yarn db:seed",
     "build": "nexus build",
     "start": "node dist/index.js"
   },
