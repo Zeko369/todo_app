@@ -185,14 +185,14 @@ export const HomePage: NextPage = () => {
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
       <Nav>
-        <Button onClick={toggleNew} variantColor="blue">
+        <Text>
+          <b>Done: </b>
+          {`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`}
+        </Text>
+        <Button onClick={toggleNew} variantColor="blue" ml="2">
           {showNew ? '-new' : '+new'}
         </Button>
       </Nav>
-      <Text mb={3}>
-        <b>Done: </b>
-        {`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`}
-      </Text>
       <SimpleGrid columns={[1, null, 2]} spacingX="20px" spacingY="10px" mb="3">
         <Stack isInline>
           <Button onClick={toggleOrder} variantColor="cyan">
@@ -366,7 +366,7 @@ export const HomePage: NextPage = () => {
         <TodoForm close={toggleNew} ref={newRef} listsQuery={listsQuery} tagsQuery={tagsQuery} />
       </Collapse>
       {filteredData.length > 0 ? (
-        <Stack spacing={4} shouldWrapChildren>
+        <Stack spacing={4} shouldWrapChildren mt={10}>
           {filteredData
             .filter((todo) => (onlyTodo ? !todo.checked : true))
             .filter((todo) => {
