@@ -15,6 +15,7 @@ export const TODOS_QUERY = gql`
       }
       list {
         id
+        title
       }
       tasks(orderBy: { id: asc }) {
         id
@@ -145,6 +146,7 @@ export const createTodoWithList = gql`
       description
       list {
         id
+        title
       }
     }
   }
@@ -213,6 +215,17 @@ export const addTagToTodos = gql`
     updateOneTag(where: { id: $id }, data: { todos: { connect: $todos } }) {
       id
       todos {
+        id
+      }
+    }
+  }
+`;
+
+export const addTagsToTodo = gql`
+  mutation addTagsToTodo($id: Int!, $tags: [TagWhereUniqueInput!]) {
+    updateOneTodo(where: { id: $id }, data: { tags: { connect: $tags } }) {
+      id
+      tags {
         id
       }
     }

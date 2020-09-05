@@ -41,10 +41,17 @@ export const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
 };
 
+function sortFunc<T extends { id: number }>(order: boolean): (t1: T, t2: T) => number {
+  return (t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id);
+}
+
 export const HomePage: NextPage = () => {
   const { loading, error, data } = useTodosQuery({ pollInterval: 2000 });
-  const { loading: lLoading, error: lError, data: lData } = useListsQuery();
-  const { loading: tLoading, error: tError, data: tData } = useTagsQuery();
+  const listsQuery = useListsQuery();
+  const tagsQuery = useTagsQuery();
+
+  const { loading: lLoading, error: lError, data: lData } = listsQuery;
+  const { loading: tLoading, error: tError, data: tData } = tagsQuery;
 
   const [selectedList, setSelectedList] = useState<number>(-1);
   const [selectedTag, setSelectedTag] = useState<number>(-1);
@@ -77,6 +84,7 @@ export const HomePage: NextPage = () => {
         return setCycle(1);
     }
   };
+
   const saveList = async (id: number, listId: number) => {
     if (listId === -1) {
       return removeTodoFromList({ variables: { id } });
@@ -84,6 +92,7 @@ export const HomePage: NextPage = () => {
 
     return updateTodo({ variables: { id, listId } });
   };
+
   const remove = async (id: number) => {
     if (confirm('Are you sure?')) {
       deleteTodo({ variables: { id } });
@@ -160,19 +169,8 @@ export const HomePage: NextPage = () => {
     }, 1);
   }, []);
 
-  const toggleNew = useCallback(() => {
-    if (showNew) {
-      setNew(false);
-    } else {
-      openNew();
-    }
-  }, [showNew]);
-
-  const filteredData = useMemo(
-    () =>
-      new Array(...(data?.todos || [])).sort((t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id)),
-    [data]
-  );
+  const toggleNew = useCallback(() => (showNew ? setNew(false) : openNew()), [showNew]);
+  const filteredData = useMemo(() => [...(data?.todos || [])].sort(sortFunc(order)), [data, order]);
 
   if (loading || error) {
     return (
@@ -365,12 +363,7 @@ export const HomePage: NextPage = () => {
         </Box>
       )}
       <Collapse isOpen={showNew}>
-        <TodoForm
-          close={toggleNew}
-          ref={newRef}
-          listsLoading={Boolean(lLoading || lError)}
-          lists={lData?.lists || []}
-        />
+        <TodoForm close={toggleNew} ref={newRef} listsQuery={listsQuery} tagsQuery={tagsQuery} />
       </Collapse>
       {filteredData.length > 0 ? (
         <Stack spacing={4} shouldWrapChildren>
@@ -399,8 +392,8 @@ export const HomePage: NextPage = () => {
                 saveList={saveList}
                 remove={remove}
                 selectedTags={tagIds}
-                listsLoading={Boolean(lLoading || lError || !data)}
-                lists={lData?.lists || []}
+                listsQuery={listsQuery}
+                tagsQuery={tagsQuery}
                 mass={mass}
                 compact={compact}
                 massSelect={massSelected[todo.id]}

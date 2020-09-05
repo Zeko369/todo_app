@@ -13,6 +13,7 @@ import {
   TagLabel,
   Checkbox,
   Input,
+  Spinner,
 } from '@chakra-ui/core';
 
 import useToggle from '../../../hooks/useToggle';
@@ -27,6 +28,8 @@ import {
   useCheckTodoMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
+  ListsQuery,
+  TagsQuery,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
@@ -35,9 +38,9 @@ import { TagAdder } from './TagAdder';
 import { RevIf } from '../../../components/RevIf';
 import { loadingWrapper } from '../lib/loadingWrapper';
 import { AddNewTask } from './AddNewTask';
+import { QueryResult } from '@apollo/client';
 
-type PickLists = Pick<ListDB, 'id' | 'title'>[];
-type PickList = Pick<ListDB, 'id'>;
+type PickList = Pick<ListDB, 'id' | 'title'>;
 type PickTodo = Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>;
 type PickTag = Pick<TagDB, 'id' | 'text' | 'color'>;
 type PickTask = Pick<TaskDB, 'id' | 'title' | 'checkedAt'>;
@@ -46,13 +49,13 @@ interface TodoProps {
   mass: boolean;
   massSelect: boolean;
   massClick: (id: number) => void;
-  lists: PickLists;
-  listsLoading: boolean;
   todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & { tasks: PickTask[] };
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
   selectedTags: number[];
   compact: boolean;
+  listsQuery: QueryResult<ListsQuery, {}>;
+  tagsQuery: QueryResult<TagsQuery, {}>;
 }
 
 const Todo: React.FC<TodoProps> = (props) => {
@@ -60,8 +63,8 @@ const Todo: React.FC<TodoProps> = (props) => {
     todo,
     remove,
     saveList,
-    lists,
-    listsLoading,
+    tagsQuery,
+    listsQuery,
     mass,
     massSelect,
     massClick,
@@ -143,8 +146,8 @@ const Todo: React.FC<TodoProps> = (props) => {
     <TodoForm
       todo={todo}
       close={() => setUpdate(false)}
-      lists={lists}
-      listsLoading={listsLoading}
+      listsQuery={listsQuery}
+      tagsQuery={tagsQuery}
     />
   ) : (
     <Box p={4} shadow="md" borderWidth="1px">
@@ -174,9 +177,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                   `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}
                 {title}
               </Heading>
-              {list?.id && (
-                <Heading size="sm">List: {lists.find((l) => l.id === list.id)?.title}</Heading>
-              )}
+              {list?.id && <Heading size="sm">List: {todo.list?.title}</Heading>}
               {!compact && (
                 <Box>
                   <Text color="gray.400">{`[${id}] - ${new Date(
@@ -303,18 +304,34 @@ const Todo: React.FC<TodoProps> = (props) => {
       {!hideButtons && (
         <Stack spacing={3} mt={5}>
           <Stack isInline spacing={3}>
-            <Select value={selected} onChange={changeList}>
-              <option value="-1">Select list...</option>
-              {lists.map((list) => (
-                <option key={list.id} value={list.id}>
-                  {list.title}
-                </option>
-              ))}
-            </Select>
-            {todo.list?.id !== selected && (
-              <Button variantColor="blue" onClick={onSaveList}>
-                Save
-              </Button>
+            {listsQuery.loading ? (
+              <Spinner />
+            ) : listsQuery.error || !listsQuery.data ? (
+              <Heading size="xl">Error :(</Heading>
+            ) : (
+              <Stack isInline>
+                <Select value={selected} onChange={changeList}>
+                  {listsQuery.data.lists.map((list) => (
+                    <option key={list.id} value={list.id}>
+                      {list.title}
+                    </option>
+                  ))}
+                  <option value="-1">Select list...</option>
+                </Select>
+                <Button onClick={() => setSelected(-1)} variantColor="blue">
+                  None
+                </Button>
+                <Button
+                  onClick={() => setSelected(listsQuery?.data?.lists[0]?.id || -1)}
+                  variantColor="orange"
+                >
+                  First
+                </Button>
+
+                <Button variantColor="blue" onClick={onSaveList}>
+                  Save
+                </Button>
+              </Stack>
             )}
           </Stack>
           <Box>

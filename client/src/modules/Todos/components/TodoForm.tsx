@@ -10,6 +10,9 @@ import {
   Textarea,
   Select,
   Spinner,
+  Tag,
+  TagIcon,
+  TagLabel,
 } from '@chakra-ui/core';
 
 import Input from '../../../components/Input';
@@ -19,13 +22,17 @@ import {
   Todo as TodoDB,
   List as ListDB,
   useCreateTodoWithListMutation,
+  TagsQuery,
+  ListsQuery,
+  useAddTagsToTodoMutation,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
+import { QueryResult } from '@apollo/client';
 
 interface Props {
   todo?: Pick<TodoDB, 'id' | 'title' | 'description'> & { list?: Pick<ListDB, 'id'> | null };
-  lists: Pick<ListDB, 'id' | 'title'>[];
-  listsLoading: boolean;
+  listsQuery: QueryResult<ListsQuery, {}>;
+  tagsQuery: QueryResult<TagsQuery, {}>;
   close?: () => void;
 }
 
@@ -38,18 +45,26 @@ interface FormData {
 const refetch = { refetchQueries: [{ query: TODOS_QUERY }] };
 
 const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { todo, close, lists, listsLoading } = props;
+  const { todo, close, listsQuery, tagsQuery } = props;
+
+  const { loading: lLoading, error: lError, data: lData } = listsQuery;
+  const { loading: tLoading, error: tError, data: tData } = tagsQuery;
+
+  const first = lLoading || lError || !lData ? -1 : lData.lists[0]?.id || -1;
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [selected, setSelected] = useState<number[]>([]);
+
   const { register, handleSubmit, reset, getValues, setValue } = useForm<FormData>({
     defaultValues: {
       title: todo?.title || '',
       description: todo?.description,
-      list: lists ? String(lists[0]?.id || -1) : String(todo?.list?.id || -1),
+      list: String(todo?.list?.id || first),
     },
   });
 
   const [createTodoWithList] = useCreateTodoWithListMutation(refetch);
+  const [addTagsToTodo] = useAddTagsToTodoMutation(refetch);
   const [createTodo] = useCreateTodoMutation(refetch);
   const [updateTodo] = useUpdateTodoMutation(refetch);
 
@@ -68,17 +83,29 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
       if (todo) {
         await updateTodo({ variables: { id: todo.id, ...attrs } });
       } else {
+        let id: number = -1;
+
         if (attrs.listId) {
-          await createTodoWithList({ variables: attrs });
+          const { data } = await createTodoWithList({ variables: attrs });
+          if (data) {
+            id = data.createOneTodo.id;
+          }
         } else {
-          await createTodo({ variables: attrs });
+          const { data } = await createTodo({ variables: attrs });
+          if (data) {
+            id = data.createOneTodo.id;
+          }
+        }
+
+        if (selected && id !== -1) {
+          await addTagsToTodo({ variables: { id, tags: selected.map((id) => ({ id })) } });
         }
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
-      reset();
+      reset({ list: data.list || '-1' });
     }
   };
 
@@ -117,12 +144,14 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
             placeholder="Description"
             defaultValue={todo?.description || undefined}
           />
-          {listsLoading ? (
+          {lLoading ? (
             <Spinner />
+          ) : lError || !lData ? (
+            <Heading size="xl">Error :(</Heading>
           ) : (
             <Stack isInline>
               <Select name="list" ref={register}>
-                {lists.map((list) => (
+                {lData.lists.map((list) => (
                   <option key={list.id} value={list.id}>
                     {list.title}
                   </option>
@@ -132,13 +161,37 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
               <Button onClick={() => setValue('list', '-1')} variantColor="blue">
                 None
               </Button>
-              <Button
-                onClick={() => setValue('list', String((lists && lists[0].id) || -1))}
-                variantColor="orange"
-              >
+              <Button onClick={() => setValue('list', String(first))} variantColor="orange">
                 First
               </Button>
             </Stack>
+          )}
+
+          {tLoading ? (
+            <Spinner />
+          ) : tError || !tData ? (
+            <Heading size="xl">Error...</Heading>
+          ) : (
+            <Box>
+              {tData.tags.map((tag) => (
+                <Box d="inline-block" mr={2} mb={2}>
+                  <Tag
+                    key={tag.id}
+                    variant={selected.includes(tag.id) ? 'solid' : 'subtle'}
+                    variantColor={tag.color || undefined}
+                    cursor="pointer"
+                    onClick={() =>
+                      setSelected((curr) =>
+                        curr.includes(tag.id) ? curr.filter((a) => a !== tag.id) : [...curr, tag.id]
+                      )
+                    }
+                  >
+                    <TagIcon icon="add" size="12px" />
+                    <TagLabel>{tag.text}</TagLabel>
+                  </Tag>
+                </Box>
+              ))}
+            </Box>
           )}
 
           <Stack isInline justify="flex-end">

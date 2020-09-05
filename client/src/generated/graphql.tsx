@@ -1291,7 +1291,7 @@ export type TodosQuery = (
       & Pick<Tag, 'id' | 'text' | 'color'>
     )>, list?: Maybe<(
       { __typename?: 'List' }
-      & Pick<List, 'id'>
+      & Pick<List, 'id' | 'title'>
     )>, tasks: Array<(
       { __typename?: 'Task' }
       & Pick<Task, 'id' | 'title' | 'checkedAt'>
@@ -1473,7 +1473,7 @@ export type CreateTodoWithListMutation = (
     & Pick<Todo, 'id' | 'title' | 'description'>
     & { list?: Maybe<(
       { __typename?: 'List' }
-      & Pick<List, 'id'>
+      & Pick<List, 'id' | 'title'>
     )> }
   ) }
 );
@@ -1570,6 +1570,24 @@ export type AddTagToTodosMutation = (
     & { todos: Array<(
       { __typename?: 'Todo' }
       & Pick<Todo, 'id'>
+    )> }
+  )> }
+);
+
+export type AddTagsToTodoMutationVariables = Exact<{
+  id: Scalars['Int'];
+  tags?: Maybe<Array<TagWhereUniqueInput>>;
+}>;
+
+
+export type AddTagsToTodoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTodo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id'>
+    & { tags: Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'id'>
     )> }
   )> }
 );
@@ -1882,6 +1900,7 @@ export const TodosDocument = gql`
     }
     list {
       id
+      title
     }
     tasks(orderBy: {id: asc}) {
       id
@@ -2302,6 +2321,7 @@ export const CreateTodoWithListDocument = gql`
     description
     list {
       id
+      title
     }
   }
 }
@@ -2545,6 +2565,42 @@ export function useAddTagToTodosMutation(baseOptions?: Apollo.MutationHookOption
 export type AddTagToTodosMutationHookResult = ReturnType<typeof useAddTagToTodosMutation>;
 export type AddTagToTodosMutationResult = Apollo.MutationResult<AddTagToTodosMutation>;
 export type AddTagToTodosMutationOptions = Apollo.BaseMutationOptions<AddTagToTodosMutation, AddTagToTodosMutationVariables>;
+export const AddTagsToTodoDocument = gql`
+    mutation addTagsToTodo($id: Int!, $tags: [TagWhereUniqueInput!]) {
+  updateOneTodo(where: {id: $id}, data: {tags: {connect: $tags}}) {
+    id
+    tags {
+      id
+    }
+  }
+}
+    `;
+export type AddTagsToTodoMutationFn = Apollo.MutationFunction<AddTagsToTodoMutation, AddTagsToTodoMutationVariables>;
+
+/**
+ * __useAddTagsToTodoMutation__
+ *
+ * To run a mutation, you first call `useAddTagsToTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTagsToTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTagsToTodoMutation, { data, loading, error }] = useAddTagsToTodoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      tags: // value for 'tags'
+ *   },
+ * });
+ */
+export function useAddTagsToTodoMutation(baseOptions?: Apollo.MutationHookOptions<AddTagsToTodoMutation, AddTagsToTodoMutationVariables>) {
+        return Apollo.useMutation<AddTagsToTodoMutation, AddTagsToTodoMutationVariables>(AddTagsToTodoDocument, baseOptions);
+      }
+export type AddTagsToTodoMutationHookResult = ReturnType<typeof useAddTagsToTodoMutation>;
+export type AddTagsToTodoMutationResult = Apollo.MutationResult<AddTagsToTodoMutation>;
+export type AddTagsToTodoMutationOptions = Apollo.BaseMutationOptions<AddTagsToTodoMutation, AddTagsToTodoMutationVariables>;
 
       export interface IntrospectionResultData {
         __schema: {
