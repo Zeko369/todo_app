@@ -66,8 +66,8 @@ export const TagAdder: React.FC<{ tags: number[]; id: number }> = ({ tags, id })
         <List styleType="dot">
           {items.map((tag) => (
             <ListItem key={tag.id} mb={1}>
-              <Tag variantColor={tag.color || undefined}>
-                <TagIcon cursor="pointer" onClick={addTag(tag.id)} icon="add" size="12px" />
+              <Tag variantColor={tag.color || undefined} onClick={addTag(tag.id)} cursor="pointer">
+                <TagIcon icon="add" size="12px" />
                 <TagLabel>{tag.text}</TagLabel>
               </Tag>
             </ListItem>
