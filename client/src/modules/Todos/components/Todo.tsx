@@ -202,6 +202,12 @@ const Todo: React.FC<TodoProps> = (props) => {
                   ))}
                 </Box>
               )}
+              {description && (
+                <Box>
+                  <Heading size="sm">Description: </Heading>
+                  <Text wordBreak="break-all">{description}</Text>
+                </Box>
+              )}
             </Stack>
             <RevIf
               cond={isMobile || false}
@@ -291,12 +297,6 @@ const Todo: React.FC<TodoProps> = (props) => {
               )}
               <AddNewTask todoId={todo.id} />
             </Stack>
-          )}
-          {!compact && description && (
-            <Box>
-              <Heading size="sm">Description: </Heading>
-              <Text wordBreak="break-all">{description}</Text>
-            </Box>
           )}
         </Stack>
       </Flex>
