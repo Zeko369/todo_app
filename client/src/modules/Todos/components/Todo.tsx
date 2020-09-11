@@ -206,7 +206,9 @@ const Todo: React.FC<TodoProps> = (props) => {
               {description && (
                 <Box>
                   <Heading size="sm">Description: </Heading>
-                  <Text wordBreak="break-all">{description}</Text>
+                  <Text wordBreak="break-all" whiteSpace="pre-wrap">
+                    {description}
+                  </Text>
                 </Box>
               )}
             </Stack>
