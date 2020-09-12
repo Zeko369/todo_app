@@ -36,6 +36,15 @@ export const addTask = gql`
   }
 `;
 
+export const updatePinTodo = gql`
+  mutation updatePinTodo($id: Int!, $pinned: Boolean) {
+    updateOneTodo(where: { id: $id }, data: { pinned: { set: $pinned } }) {
+      id
+      pinned
+    }
+  }
+`;
+
 export const checkAllTasks = gql`
   mutation checkAllTasks($todoId: Int, $checkedAt: DateTime) {
     updateManyTask(

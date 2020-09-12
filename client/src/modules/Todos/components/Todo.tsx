@@ -31,6 +31,7 @@ import {
   useDeleteTaskMutation,
   ListsQuery,
   TagsQuery,
+  useUpdatePinTodoMutation,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
@@ -59,6 +60,10 @@ interface TodoProps {
   tagsQuery: QueryResult<TagsQuery, {}>;
 }
 
+const refetchTodo = (id: number) => ({
+  refetchQueries: [{ query: TODO_QUERY, variables: { id } }],
+});
+
 const Todo: React.FC<TodoProps> = (props) => {
   const {
     todo,
@@ -82,9 +87,8 @@ const Todo: React.FC<TodoProps> = (props) => {
   const [removeTagFromTodo] = useRemoveTagFromTodoMutation();
   const [checkTask] = useCheckTaskMutation();
   const [updateTask] = useUpdateTaskMutation();
-  const [deleteTask] = useDeleteTaskMutation({
-    refetchQueries: [{ query: TODO_QUERY, variables: { id: todo.id } }],
-  });
+  const [updatePinTodo] = useUpdatePinTodoMutation(refetchTodo(todo.id));
+  const [deleteTask] = useDeleteTaskMutation(refetchTodo(todo.id));
 
   const editTask = (task: { id: number; title: string }) => () => {
     setTaskTitle(task.title);
@@ -125,6 +129,7 @@ const Todo: React.FC<TodoProps> = (props) => {
   const onDelete = loader(() => remove(id));
   const onSaveList = loader(() => saveList(id, selected));
   const onCheck = loader(() => checkTodo({ variables: { id } }));
+  const onLock = loader(() => updatePinTodo({ variables: { id, pinned: !pinned } }));
 
   const removeTag = (tagId: number) => async () => {
     await removeTagFromTodo({ variables: { tagId, id } });
@@ -242,6 +247,13 @@ const Todo: React.FC<TodoProps> = (props) => {
                     aria-label="Update"
                     isLoading={loading}
                     onClick={toggleUpdate}
+                  />
+                  <IconButton
+                    icon={pinned ? 'unlock' : 'lock'}
+                    variantColor="orange"
+                    aria-label={pinned ? 'Unlock' : 'Lock'}
+                    isLoading={loading}
+                    onClick={onLock}
                   />
                 </Stack>
               )}

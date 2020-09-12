@@ -1331,6 +1331,20 @@ export type AddTaskMutation = (
   ) }
 );
 
+export type UpdatePinTodoMutationVariables = Exact<{
+  id: Scalars['Int'];
+  pinned?: Maybe<Scalars['Boolean']>;
+}>;
+
+
+export type UpdatePinTodoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTodo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'pinned'>
+  )> }
+);
+
 export type CheckAllTasksMutationVariables = Exact<{
   todoId?: Maybe<Scalars['Int']>;
   checkedAt?: Maybe<Scalars['DateTime']>;
@@ -1988,6 +2002,40 @@ export function useAddTaskMutation(baseOptions?: Apollo.MutationHookOptions<AddT
 export type AddTaskMutationHookResult = ReturnType<typeof useAddTaskMutation>;
 export type AddTaskMutationResult = Apollo.MutationResult<AddTaskMutation>;
 export type AddTaskMutationOptions = Apollo.BaseMutationOptions<AddTaskMutation, AddTaskMutationVariables>;
+export const UpdatePinTodoDocument = gql`
+    mutation updatePinTodo($id: Int!, $pinned: Boolean) {
+  updateOneTodo(where: {id: $id}, data: {pinned: {set: $pinned}}) {
+    id
+    pinned
+  }
+}
+    `;
+export type UpdatePinTodoMutationFn = Apollo.MutationFunction<UpdatePinTodoMutation, UpdatePinTodoMutationVariables>;
+
+/**
+ * __useUpdatePinTodoMutation__
+ *
+ * To run a mutation, you first call `useUpdatePinTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePinTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePinTodoMutation, { data, loading, error }] = useUpdatePinTodoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      pinned: // value for 'pinned'
+ *   },
+ * });
+ */
+export function useUpdatePinTodoMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePinTodoMutation, UpdatePinTodoMutationVariables>) {
+        return Apollo.useMutation<UpdatePinTodoMutation, UpdatePinTodoMutationVariables>(UpdatePinTodoDocument, baseOptions);
+      }
+export type UpdatePinTodoMutationHookResult = ReturnType<typeof useUpdatePinTodoMutation>;
+export type UpdatePinTodoMutationResult = Apollo.MutationResult<UpdatePinTodoMutation>;
+export type UpdatePinTodoMutationOptions = Apollo.BaseMutationOptions<UpdatePinTodoMutation, UpdatePinTodoMutationVariables>;
 export const CheckAllTasksDocument = gql`
     mutation checkAllTasks($todoId: Int, $checkedAt: DateTime) {
   updateManyTask(where: {todoId: {equals: $todoId}}, data: {checkedAt: {set: $checkedAt}}) {
