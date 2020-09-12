@@ -147,6 +147,7 @@ schema.objectType({
   name: 'Todo',
   definition(t) {
     t.model.id();
+    t.model.pinned();
     t.model.title();
     t.model.description();
     t.model.list();
