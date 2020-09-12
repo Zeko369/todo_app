@@ -93,8 +93,7 @@ export const ListPage: NextPage = () => {
       ) : (
         <>
           <Heading size="lg">
-            Todos: {data.list.todos.filter((todo) => todo.checked).length} /{' '}
-            {data.list.todos.length}
+            Done: {data.list.todos.filter((todo) => todo.checked).length} / {data.list.todos.length}
           </Heading>
           {tags.length > 0 && (
             <Box>
