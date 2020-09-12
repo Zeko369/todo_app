@@ -200,7 +200,7 @@ export const HomePage: NextPage = () => {
       <Nav>
         <Text>
           <b>Done: </b>
-          {`${filteredData.filter((a) => !a.checked).length} / ${filteredData.length}`}
+          {`${filteredData.filter((a) => a.checked).length} / ${filteredData.length}`}
         </Text>
         <Button onClick={toggleNew} variantColor="blue" ml="2">
           {showNew ? '-new' : '+new'}
