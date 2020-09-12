@@ -2,9 +2,10 @@ import { gql } from '@apollo/client';
 
 export const TODOS_QUERY = gql`
   query TODOS {
-    todos(orderBy: { id: desc }) {
+    todos(orderBy: [{ pinned: desc }, { id: desc }]) {
       id
       title
+      pinned
       description
       checked
       createdAt
@@ -13,14 +14,14 @@ export const TODOS_QUERY = gql`
         text
         color
       }
-      list {
-        id
-        title
-      }
       tasks(orderBy: { id: asc }) {
         id
         title
         checkedAt
+      }
+      list {
+        id
+        title
       }
     }
   }

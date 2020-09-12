@@ -100,6 +100,7 @@ export type Task = {
 export type Todo = {
   __typename?: 'Todo';
   id: Scalars['Int'];
+  pinned: Scalars['Boolean'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   list?: Maybe<List>;
@@ -170,6 +171,7 @@ export type ListTodosArgs = {
 
 export type TodoOrderByInput = {
   id?: Maybe<SortOrder>;
+  pinned?: Maybe<SortOrder>;
   title?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
   checked?: Maybe<SortOrder>;
@@ -290,6 +292,7 @@ export type TodoWhereInput = {
   OR?: Maybe<Array<TodoWhereInput>>;
   NOT?: Maybe<Array<TodoWhereInput>>;
   id?: Maybe<IntFilter>;
+  pinned?: Maybe<BoolFilter>;
   title?: Maybe<StringNullableFilter>;
   description?: Maybe<StringNullableFilter>;
   checked?: Maybe<BoolFilter>;
@@ -600,6 +603,7 @@ export type TodoCreateManyWithoutTagsInput = {
 };
 
 export type TodoCreateWithoutTagsInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -642,6 +646,7 @@ export type TodoCreateManyWithoutRequiredByInput = {
 };
 
 export type TodoCreateWithoutRequiredByInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -672,6 +677,7 @@ export type TodoCreateManyWithoutRequiresInput = {
 };
 
 export type TodoCreateWithoutRequiresInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -722,6 +728,7 @@ export type TodoUpdateWithWhereUniqueWithoutTagsInput = {
 };
 
 export type TodoUpdateWithoutTagsDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -835,6 +842,7 @@ export type TodoUpdateWithWhereUniqueWithoutRequiredByInput = {
 };
 
 export type TodoUpdateWithoutRequiredByDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -910,6 +918,7 @@ export type TodoScalarWhereInput = {
   OR?: Maybe<Array<TodoScalarWhereInput>>;
   NOT?: Maybe<Array<TodoScalarWhereInput>>;
   id?: Maybe<IntFilter>;
+  pinned?: Maybe<BoolFilter>;
   title?: Maybe<StringNullableFilter>;
   description?: Maybe<StringNullableFilter>;
   checked?: Maybe<BoolFilter>;
@@ -920,6 +929,7 @@ export type TodoScalarWhereInput = {
 };
 
 export type TodoUpdateManyDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -952,6 +962,7 @@ export type TodoUpdateWithWhereUniqueWithoutRequiresInput = {
 };
 
 export type TodoUpdateWithoutRequiresDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -990,6 +1001,7 @@ export type TodoCreateOneWithoutTasksInput = {
 };
 
 export type TodoCreateWithoutTasksInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -1018,6 +1030,7 @@ export type TodoUpdateOneRequiredWithoutTasksInput = {
 };
 
 export type TodoUpdateWithoutTasksDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -1048,6 +1061,7 @@ export type BatchPayload = {
 };
 
 export type TodoCreateInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -1062,6 +1076,7 @@ export type TodoCreateInput = {
 };
 
 export type TodoUpdateInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -1076,6 +1091,7 @@ export type TodoUpdateInput = {
 };
 
 export type TodoUpdateManyMutationInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -1098,6 +1114,7 @@ export type TodoCreateManyWithoutListInput = {
 };
 
 export type TodoCreateWithoutListInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   checked?: Maybe<Scalars['Boolean']>;
@@ -1136,6 +1153,7 @@ export type TodoUpdateWithWhereUniqueWithoutListInput = {
 };
 
 export type TodoUpdateWithoutListDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
   checked?: Maybe<BoolFieldUpdateOperationsInput>;
@@ -1285,16 +1303,16 @@ export type TodosQuery = (
   { __typename?: 'Query' }
   & { todos: Array<(
     { __typename?: 'Todo' }
-    & Pick<Todo, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>
+    & Pick<Todo, 'id' | 'title' | 'pinned' | 'description' | 'checked' | 'createdAt'>
     & { tags: Array<(
       { __typename?: 'Tag' }
       & Pick<Tag, 'id' | 'text' | 'color'>
-    )>, list?: Maybe<(
-      { __typename?: 'List' }
-      & Pick<List, 'id' | 'title'>
     )>, tasks: Array<(
       { __typename?: 'Task' }
       & Pick<Task, 'id' | 'title' | 'checkedAt'>
+    )>, list?: Maybe<(
+      { __typename?: 'List' }
+      & Pick<List, 'id' | 'title'>
     )> }
   )> }
 );
@@ -1887,9 +1905,10 @@ export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
 export const TodosDocument = gql`
     query TODOS {
-  todos(orderBy: {id: desc}) {
+  todos(orderBy: [{pinned: desc}, {id: desc}]) {
     id
     title
+    pinned
     description
     checked
     createdAt
@@ -1898,14 +1917,14 @@ export const TodosDocument = gql`
       text
       color
     }
-    list {
-      id
-      title
-    }
     tasks(orderBy: {id: asc}) {
       id
       title
       checkedAt
+    }
+    list {
+      id
+      title
     }
   }
 }

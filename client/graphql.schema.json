@@ -618,6 +618,22 @@
             "deprecationReason": null
           },
           {
+            "name": "pinned",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "title",
             "description": null,
             "args": [],
@@ -1219,6 +1235,16 @@
         "inputFields": [
           {
             "name": "id",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "SortOrder",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "pinned",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -2350,6 +2376,16 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "IntFilter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFilter",
               "ofType": null
             },
             "defaultValue": null
@@ -4628,6 +4664,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -4970,6 +5016,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -5229,6 +5285,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,
@@ -5676,6 +5742,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,
@@ -6734,6 +6810,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -7469,6 +7555,16 @@
             "defaultValue": null
           },
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFilter",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -7549,6 +7645,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,
@@ -7886,6 +7992,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -8203,6 +8319,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -8425,6 +8551,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,
@@ -8654,6 +8790,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -8775,6 +8921,16 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "title",
             "description": null,
             "type": {
@@ -8895,6 +9051,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,
@@ -9074,6 +9240,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,
@@ -9458,6 +9634,16 @@
         "description": null,
         "fields": null,
         "inputFields": [
+          {
+            "name": "pinned",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "BoolFieldUpdateOperationsInput",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
           {
             "name": "title",
             "description": null,

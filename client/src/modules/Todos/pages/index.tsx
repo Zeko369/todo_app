@@ -41,8 +41,21 @@ export const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
 };
 
-function sortFunc<T extends { id: number }>(order: boolean): (t1: T, t2: T) => number {
-  return (t1, t2) => (order ? t1.id - t2.id : t2.id - t1.id);
+type BaseTodo = { id: number; pinned: boolean };
+function sortFunc<T extends BaseTodo>(order: boolean): (t1: T, t2: T) => number {
+  return (t1, t2) => {
+    const normalOrder = (o: boolean) => (o ? t1.id - t2.id : t2.id - t1.id);
+
+    const pinned = [t1.pinned, t2.pinned].filter(Boolean);
+
+    if (pinned.length === 2) {
+      return normalOrder(false);
+    } else if (pinned.length === 1) {
+      return t1.pinned ? -1 : t2.pinned ? 1 : 0;
+    }
+
+    return normalOrder(order);
+  };
 }
 
 export const HomePage: NextPage = () => {

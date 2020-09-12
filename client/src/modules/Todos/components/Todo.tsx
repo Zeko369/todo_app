@@ -14,6 +14,7 @@ import {
   Checkbox,
   Input,
   Spinner,
+  Icon,
 } from '@chakra-ui/core';
 
 import useToggle from '../../../hooks/useToggle';
@@ -41,7 +42,7 @@ import { AddNewTask } from './AddNewTask';
 import { QueryResult } from '@apollo/client';
 
 type PickList = Pick<ListDB, 'id' | 'title'>;
-type PickTodo = Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'createdAt'>;
+type PickTodo = Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'pinned' | 'createdAt'>;
 type PickTag = Pick<TagDB, 'id' | 'text' | 'color'>;
 type PickTask = Pick<TaskDB, 'id' | 'title' | 'checkedAt'>;
 
@@ -70,7 +71,7 @@ const Todo: React.FC<TodoProps> = (props) => {
     massClick,
     selectedTags,
   } = props;
-  const { id, title, description, checked, list, tags, tasks } = todo;
+  const { id, title, description, checked, list, tags, tasks, pinned } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
@@ -172,7 +173,8 @@ const Todo: React.FC<TodoProps> = (props) => {
         <Stack w="100%" spacing={3}>
           <Flex w="100%">
             <Stack w="100%">
-              <Heading fontSize="xl" wordBreak="break-all">
+              <Heading fontSize="xl" wordBreak="break-all" alignItems="center" display="flex">
+                {pinned && <Icon aria-label="pinned" name="lock" color="orange.500" mr="2" />}
                 {tasks.length > 0 &&
                   `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}
                 {title}
@@ -215,12 +217,14 @@ const Todo: React.FC<TodoProps> = (props) => {
             <RevIf
               cond={isMobile || false}
               one={
-                <IconButton
-                  aria-label="show controls"
-                  icon="settings"
-                  onClick={toggleButtons}
-                  variantColor={!showButtons ? 'gray' : 'blue'}
-                />
+                <Stack spacing={3} isInline={!isMobile}>
+                  <IconButton
+                    aria-label="show controls"
+                    icon="settings"
+                    onClick={toggleButtons}
+                    variantColor={!showButtons ? 'gray' : 'blue'}
+                  />
+                </Stack>
               }
             >
               {!hideButtons && (
