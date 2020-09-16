@@ -10,7 +10,7 @@ yarn
 
 cd backend
 yarn
-yarn db:migrate
+yarn db:up
 yarn build
 
 cd ../client
