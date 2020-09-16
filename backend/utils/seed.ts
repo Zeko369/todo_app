@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, TaskCreateArgs } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import { lorem, date } from 'faker';
 
@@ -23,13 +23,16 @@ import { random, randomMany, repeat } from './helpers';
   );
 
   const lists = await Promise.all(
-    repeat(3, () => db.list.create({ data: { title: lorem.words(3) } }))
+    repeat(3, () =>
+      db.list.create({ data: { title: lorem.words(3), user: { connect: { id: admin.id } } } })
+    )
   );
 
   const genTasks = () => {
     return Array.from(new Array(Math.ceil(Math.random() * 7) + 1), () => ({
       title: lorem.words(3),
       checkedAt: Math.random() > 0.5 ? new Date() : null,
+      user: { connect: { id: admin.id } },
     }));
   };
 
@@ -47,6 +50,7 @@ import { random, randomMany, repeat } from './helpers';
           tasks: {
             create: genTasks(),
           },
+          user: { connect: { id: admin.id } },
         },
       });
     })
