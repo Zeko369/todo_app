@@ -12,7 +12,7 @@ import { random, randomMany, repeat } from './helpers';
   const admin = await db.user.create({
     data: { email: 'foo@bar.com', password, username: 'foo', role: 'ADMIN' },
   });
-  await db.user.create({
+  const user = await db.user.create({
     data: { email: 'bar@bar.com', password, username: 'bar', role: 'USER' },
   });
 
@@ -57,6 +57,23 @@ import { random, randomMany, repeat } from './helpers';
   );
 
   const [todo, ...rest] = todos;
+
+  await Promise.all(
+    [todo, ...randomMany(rest, 0.3)].map((todo) =>
+      db.todo.update({
+        where: { id: todo.id },
+        data: {
+          comments: {
+            create: repeat(Math.ceil(Math.random() * 3 + 1), () => ({
+              title: lorem.words(Math.random() * 4 + 2),
+              content: lorem.paragraph(),
+              user: { connect: { id: (Math.random() > 0.5 ? admin : user).id } },
+            })),
+          },
+        },
+      })
+    )
+  );
 
   await db.todo.update({
     where: { id: todo.id },
