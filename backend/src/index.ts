@@ -85,10 +85,10 @@ schema.mutationType({
       resolve: async (_, { email, password }, ctx) => {
         const user = await ctx.db.user.findOne({ where: { email } });
 
-        if (!user) throw new Error(`No user found for email: ${email}`);
+        if (!user) throw new Error(`WRONG_EMAIL`);
 
         const passwordValid = await compare(password, user.password);
-        if (!passwordValid) throw new Error('Invalid password');
+        if (!passwordValid) throw new Error('WRONG_PASSWORD');
 
         return {
           token: sign({ userId: user.id }, APP_SECRET),

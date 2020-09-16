@@ -76,7 +76,7 @@ export const HomePage: NextPage = () => {
   const [showNew, , setNew] = useSaveToggle('show:new');
   const [mass, toggleMass] = useToggle(false);
   const [compact, toggleCompact] = useSaveToggle('compact');
-  const [tagsCycle, , setCycle] = useSaveCycle('show:tags:cycle', 0, 3);
+  const [tagsCycle, , setCycle] = useSaveCycle('show:tags:cycle', 1, 3);
 
   const [addTagToTodos] = useAddTagToTodosMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
