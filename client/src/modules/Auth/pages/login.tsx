@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Input from '../../../components/Input';
 import { Card } from '../components/Card';
 import { useLoginMutation } from '../../../generated/graphql';
+import Link from '../../../components/Link';
 
 interface FormData {
   email: string;
@@ -71,7 +72,8 @@ export const LoginPage: NextPage = () => {
             error={errors.password?.message}
             isRequired
           />
-          <Button type="submit" mt="10" variantColor="blue" isLoading={formState.isSubmitting}>
+          <Link href="/auth/register">Register</Link>
+          <Button type="submit" variantColor="blue" isLoading={formState.isSubmitting}>
             Login
           </Button>
         </Stack>

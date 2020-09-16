@@ -9,7 +9,7 @@ export const Card: React.FC = ({ children }) => {
         top="30vh"
         left="50%"
         w="80%"
-        maxW="300px"
+        maxW="350px"
         transform="translate(-50%, max(-50%, -20vh))"
         borderWidth="1px"
         rounded="lg"

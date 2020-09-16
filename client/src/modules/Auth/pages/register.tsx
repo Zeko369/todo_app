@@ -6,9 +6,11 @@ import { useRouter } from 'next/router';
 
 import Input from '../../../components/Input';
 import { Card } from '../components/Card';
-import { useLoginMutation } from '../../../generated/graphql';
+import { useRegisterMutation } from '../../../generated/graphql';
+import Link from '../../../components/Link';
 
 interface FormData {
+  username: string;
   email: string;
   password: string;
 }
@@ -18,29 +20,28 @@ export const RegisterPage: NextPage = () => {
   const [otherError, setOtherError] = useState<boolean>(false);
 
   const { register, handleSubmit, formState, errors, setError, clearErrors } = useForm<FormData>();
-  const [login] = useLoginMutation();
+  const [registerUser] = useRegisterMutation();
 
   const onSubmit = async (data: FormData) => {
     try {
       clearErrors();
       otherError && setOtherError(false);
 
-      const response = await login({ variables: { ...data } });
-      const token = response.data?.login?.token;
+      const response = await registerUser({ variables: { ...data } });
+      const token = response.data?.register?.token;
 
       if (token) {
         localStorage.setItem('token', token);
         // router.push('/');
       }
     } catch (err) {
-      console.log('here');
-
       switch (err.message) {
         case 'WRONG_EMAIL':
           return setError('email', { message: "Can't find user with this email" });
         case 'WRONG_PASSWORD':
           return setError('password', { message: 'Wrong password' });
         default:
+          console.error(err.message);
           return setOtherError(true);
       }
     }
@@ -50,7 +51,7 @@ export const RegisterPage: NextPage = () => {
     <Card>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing="3">
-          <Heading size="lg">Login</Heading>
+          <Heading size="lg">Register</Heading>
 
           {otherError && (
             <Heading size="md" color="red.400">
@@ -59,11 +60,17 @@ export const RegisterPage: NextPage = () => {
           )}
 
           <Input
+            name="username"
+            ref={register({ required: true })}
+            error={errors.username?.message}
+            isRequired
+            outerProps={{ mt: '3' }}
+          />
+          <Input
             name="email"
             ref={register({ required: true })}
             error={errors.email?.message}
             isRequired
-            outerProps={{ mt: '3' }}
           />
           <Input
             name="password"
@@ -71,8 +78,9 @@ export const RegisterPage: NextPage = () => {
             error={errors.password?.message}
             isRequired
           />
-          <Button type="submit" mt="10" variantColor="blue" isLoading={formState.isSubmitting}>
-            Login
+          <Link href="/auth/login">Login</Link>
+          <Button type="submit" variantColor="blue" isLoading={formState.isSubmitting}>
+            Register
           </Button>
         </Stack>
       </form>
