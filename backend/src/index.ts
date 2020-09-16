@@ -21,6 +21,15 @@ use(
   })
 );
 
+// function getUserId(token: any | null | undefined) {
+//   const userId = token.userId;
+//   if (!userId) {
+//     throw new Error('Not Authorized!');
+//   }
+
+//   return userId;
+// }
+
 schema.queryType({
   definition(t) {
     t.crud.task();
@@ -37,6 +46,23 @@ schema.queryType({
 
     t.crud.tag();
     t.crud.tags({ ordering: true });
+
+    // t.field('me', {
+    //   type: 'User',
+    //   nullable: true,
+    //   resolve: (parent, args, ctx) => {
+    //     const userId = getUserId(ctx.token);
+    //     if (!userId) {
+    //       throw new Error('Invalid userId');
+    //     }
+
+    //     return ctx.db.user.findOne({
+    //       where: {
+    //         id: parseInt(userId),
+    //       },
+    //     });
+    //   },
+    // });
   },
 });
 
