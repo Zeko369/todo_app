@@ -1,13 +1,18 @@
 import { schema, use, settings } from 'nexus';
-import { intArg } from '@nexus/schema';
 import { prisma } from 'nexus-plugin-prisma';
+import { auth } from 'nexus-plugin-jwt-auth';
 
 import cors from 'cors';
 import { server } from 'nexus';
+import { compare, hash } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 server.express.use(cors());
 settings.change({ server: { port: parseInt(process.env.PORT || '') || 4000 } });
 
+const APP_SECRET = 'FOO123';
+
+use(auth({ appSecret: APP_SECRET }));
 use(
   prisma({
     migrations: true,
@@ -35,8 +40,57 @@ schema.queryType({
   },
 });
 
+schema.objectType({
+  name: 'AuthPayload',
+  definition(t) {
+    t.string('token');
+    t.field('user', { type: 'User' });
+  },
+});
+
 schema.mutationType({
   definition(t) {
+    t.field('login', {
+      type: 'AuthPayload',
+      args: {
+        email: schema.stringArg({ nullable: false }),
+        password: schema.stringArg({ nullable: false }),
+      },
+      resolve: async (_, { email, password }, ctx) => {
+        const user = await ctx.db.user.findOne({ where: { email } });
+
+        if (!user) throw new Error(`No user found for email: ${email}`);
+
+        const passwordValid = await compare(password, user.password);
+        if (!passwordValid) throw new Error('Invalid password');
+
+        return {
+          token: sign({ userId: user.id }, APP_SECRET),
+          user,
+        };
+      },
+    });
+
+    t.field('register', {
+      type: 'AuthPayload',
+      args: {
+        username: schema.stringArg({ nullable: false }),
+        email: schema.stringArg({ nullable: false }),
+        password: schema.stringArg({ nullable: false }),
+      },
+      resolve: async (_, { username, email, password }, ctx) => {
+        const hashedPassword = await hash(password, 10);
+        const user = await ctx.db.user.create({
+          data: { username, email, password: hashedPassword },
+        });
+
+        return {
+          token: sign({ userId: user.id }, APP_SECRET),
+          user,
+        };
+      },
+    });
+
     t.crud.createOneTag();
     t.crud.updateOneTag();
     t.crud.deleteOneTag();
@@ -49,7 +103,7 @@ schema.mutationType({
 
     t.field('checkTask', {
       type: 'Task',
-      args: { id: intArg({ required: true }) },
+      args: { id: schema.intArg({ required: true }) },
       resolve: async (_, args, ctx) => {
         const { id } = args;
 
@@ -88,7 +142,7 @@ schema.mutationType({
 
     t.field('checkTodo', {
       type: 'Todo',
-      args: { id: intArg({ required: true }) },
+      args: { id: schema.intArg({ required: true }) },
       resolve: async (_, args, ctx) => {
         const { id } = args;
 
