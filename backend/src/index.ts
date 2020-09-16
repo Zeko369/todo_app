@@ -47,6 +47,9 @@ schema.queryType({
     t.crud.tag();
     t.crud.tags({ ordering: true });
 
+    t.crud.comment();
+    t.crud.comments({ ordering: true });
+
     // t.field('me', {
     //   type: 'User',
     //   nullable: true,
@@ -226,6 +229,19 @@ schema.objectType({
     t.model.text();
     t.model.color();
     t.model.todos();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+schema.objectType({
+  name: 'Comment',
+  definition(t) {
+    t.model.id();
+    t.model.title();
+    t.model.content();
+    t.model.user();
+    t.model.todo();
     t.model.createdAt();
     t.model.updatedAt();
   },
