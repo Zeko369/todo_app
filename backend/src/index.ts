@@ -21,11 +21,14 @@ schema.queryType({
     t.crud.task();
     t.crud.tasks();
 
+    t.crud.user();
+    t.crud.users({ ordering: true, filtering: true });
+
     t.crud.todo();
     t.crud.todos({ ordering: true });
 
     t.crud.list();
-    t.crud.lists({ filtering: true, ordering: true });
+    t.crud.lists({ ordering: true, filtering: true });
 
     t.crud.tag();
     t.crud.tags({ ordering: true });
@@ -47,7 +50,7 @@ schema.mutationType({
     t.field('checkTask', {
       type: 'Task',
       args: { id: intArg({ required: true }) },
-      resolve: async (parent, args, ctx) => {
+      resolve: async (_, args, ctx) => {
         const { id } = args;
 
         const task = await ctx.db.task.findOne({ where: { id } });
@@ -86,7 +89,7 @@ schema.mutationType({
     t.field('checkTodo', {
       type: 'Todo',
       args: { id: intArg({ required: true }) },
-      resolve: async (parent, args, ctx) => {
+      resolve: async (_, args, ctx) => {
         const { id } = args;
 
         const todo = await ctx.db.todo.findOne({ where: { id }, include: { tasks: true } });
@@ -116,6 +119,23 @@ schema.mutationType({
     t.crud.createOneList();
     t.crud.updateOneList();
     t.crud.deleteOneList();
+  },
+});
+
+schema.objectType({
+  name: 'User',
+  definition(t) {
+    t.model.id();
+    t.model.username();
+    t.model.email();
+    t.model.password();
+    t.model.role();
+    t.model.tags();
+    t.model.todos();
+    t.model.tasks();
+    t.model.lists();
+    t.model.createdAt();
+    t.model.updatedAt();
   },
 });
 
@@ -151,8 +171,8 @@ schema.objectType({
     t.model.title();
     t.model.description();
     t.model.list();
-    t.model.tags({ filtering: true, ordering: true });
-    t.model.tasks({ filtering: true, ordering: true });
+    t.model.tags({ ordering: true, filtering: true });
+    t.model.tasks({ ordering: true, filtering: true });
     t.model.checked();
     t.model.checkedAt();
     t.model.requires();
