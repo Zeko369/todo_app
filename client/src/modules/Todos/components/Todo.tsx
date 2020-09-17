@@ -20,19 +20,12 @@ import {
 import useToggle from '../../../hooks/useToggle';
 import TodoForm from './TodoForm';
 import {
-  Todo as TodoDB,
-  List as ListDB,
-  Tag as TagDB,
-  Task as TaskDB,
   useRemoveTagFromTodoMutation,
   useCheckTaskMutation,
   useCheckTodoMutation,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
-  ListsQuery,
-  TagsQuery,
   useUpdatePinTodoMutation,
-  Comment as CommentDB,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
@@ -41,30 +34,10 @@ import { TagAdder } from './TagAdder';
 import { RevIf } from '../../../components/RevIf';
 import { loadingWrapper } from '../lib/loadingWrapper';
 import { AddNewTask } from './AddNewTask';
-import { QueryResult } from '@apollo/client';
+import { TodoProps, Task as PickTask } from '../ts/todo';
+import { Comments } from './Comments';
 
-type PickList = Pick<ListDB, 'id' | 'title'>;
-type PickTodo = Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'pinned' | 'createdAt'>;
-type PickTag = Pick<TagDB, 'id' | 'text' | 'color'>;
-type PickTask = Pick<TaskDB, 'id' | 'title' | 'checkedAt'>;
-type PickComment = Pick<CommentDB, 'id' | 'title' | 'content'>;
-
-interface TodoProps {
-  mass: boolean;
-  massSelect: boolean;
-  massClick: (id: number) => void;
-  todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & {
-    tasks: PickTask[];
-  } & { comments: PickComment[] };
-  remove: (id: number) => Promise<unknown>;
-  saveList: (id: number, listId: number) => Promise<unknown>;
-  selectedTags: number[];
-  compact: boolean;
-  listsQuery: QueryResult<ListsQuery, {}>;
-  tagsQuery: QueryResult<TagsQuery, {}>;
-}
-
-const refetchTodo = (id: number) => ({
+export const refetchTodo = (id: number) => ({
   refetchQueries: [{ query: TODO_QUERY, variables: { id } }],
 });
 
@@ -114,6 +87,7 @@ const Todo: React.FC<TodoProps> = (props) => {
   const [showUpdate, toggleUpdate, setUpdate] = useToggle();
   const [showButtons, toggleButtons] = useToggle();
   const [localCompact, toggleCompact] = useToggle();
+  const [localComments, toggleComments] = useToggle();
 
   const hideButtons = !(showButtons || !true);
   const compact = !(localCompact || !props.compact);
@@ -234,6 +208,13 @@ const Todo: React.FC<TodoProps> = (props) => {
                     onClick={toggleButtons}
                     variantColor={!showButtons ? 'gray' : 'blue'}
                   />
+                  <IconButton
+                    icon="chat"
+                    variantColor={!localComments ? 'gray' : 'orange'}
+                    aria-label={localComments ? 'show' : 'hide'}
+                    mr={4}
+                    onClick={toggleComments}
+                  />
                 </Stack>
               }
             >
@@ -264,6 +245,7 @@ const Todo: React.FC<TodoProps> = (props) => {
               )}
             </RevIf>
           </Flex>
+          {localComments && <Comments comments={comments} todoId={id} />}
           {!compact && tasks && (
             <Stack spacing={2}>
               <Heading size="sm">Tasks: </Heading>

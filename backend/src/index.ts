@@ -120,6 +120,10 @@ schema.mutationType({
       },
     });
 
+    t.crud.createOneComment();
+    t.crud.updateOneComment();
+    t.crud.deleteOneComment();
+
     t.crud.createOneTag();
     t.crud.updateOneTag();
     t.crud.deleteOneTag();

@@ -671,6 +671,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<AuthPayload>;
   register?: Maybe<AuthPayload>;
+  createOneComment: Comment;
+  updateOneComment?: Maybe<Comment>;
+  deleteOneComment?: Maybe<Comment>;
   createOneTag: Tag;
   updateOneTag?: Maybe<Tag>;
   deleteOneTag?: Maybe<Tag>;
@@ -702,6 +705,22 @@ export type MutationRegisterArgs = {
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationCreateOneCommentArgs = {
+  data: CommentCreateInput;
+};
+
+
+export type MutationUpdateOneCommentArgs = {
+  data: CommentUpdateInput;
+  where: CommentWhereUniqueInput;
+};
+
+
+export type MutationDeleteOneCommentArgs = {
+  where: CommentWhereUniqueInput;
 };
 
 
@@ -806,21 +825,39 @@ export type AuthPayload = {
   user?: Maybe<User>;
 };
 
-export type TagCreateInput = {
-  text: Scalars['String'];
-  color?: Maybe<Scalars['String']>;
+export type CommentCreateInput = {
+  title: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-  todos?: Maybe<TodoCreateManyWithoutTagsInput>;
-  user?: Maybe<UserCreateOneWithoutTagsInput>;
+  user: UserCreateOneWithoutCommentsInput;
+  todo: TodoCreateOneWithoutCommentsInput;
 };
 
-export type TodoCreateManyWithoutTagsInput = {
-  create?: Maybe<Array<TodoCreateWithoutTagsInput>>;
+export type UserCreateOneWithoutCommentsInput = {
+  create?: Maybe<UserCreateWithoutCommentsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+};
+
+export type UserCreateWithoutCommentsInput = {
+  username: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  role?: Maybe<Role>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  todos?: Maybe<TodoCreateManyWithoutUserInput>;
+  tasks?: Maybe<TaskCreateManyWithoutUserInput>;
+  lists?: Maybe<ListCreateManyWithoutUserInput>;
+  tags?: Maybe<TagCreateManyWithoutUserInput>;
+};
+
+export type TodoCreateManyWithoutUserInput = {
+  create?: Maybe<Array<TodoCreateWithoutUserInput>>;
   connect?: Maybe<Array<TodoWhereUniqueInput>>;
 };
 
-export type TodoCreateWithoutTagsInput = {
+export type TodoCreateWithoutUserInput = {
   pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -833,7 +870,7 @@ export type TodoCreateWithoutTagsInput = {
   comments?: Maybe<CommentCreateManyWithoutTodoInput>;
   requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
-  user?: Maybe<UserCreateOneWithoutTodosInput>;
+  tags?: Maybe<TagCreateManyWithoutTodosInput>;
 };
 
 export type TaskCreateManyWithoutTodoInput = {
@@ -867,12 +904,59 @@ export type UserCreateWithoutTasksInput = {
   comments?: Maybe<CommentCreateManyWithoutUserInput>;
 };
 
-export type TodoCreateManyWithoutUserInput = {
-  create?: Maybe<Array<TodoCreateWithoutUserInput>>;
+export type ListCreateManyWithoutUserInput = {
+  create?: Maybe<Array<ListCreateWithoutUserInput>>;
+  connect?: Maybe<Array<ListWhereUniqueInput>>;
+};
+
+export type ListCreateWithoutUserInput = {
+  title?: Maybe<Scalars['String']>;
+  archivedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  todos?: Maybe<TodoCreateManyWithoutListInput>;
+};
+
+export type TodoCreateManyWithoutListInput = {
+  create?: Maybe<Array<TodoCreateWithoutListInput>>;
   connect?: Maybe<Array<TodoWhereUniqueInput>>;
 };
 
-export type TodoCreateWithoutUserInput = {
+export type TodoCreateWithoutListInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  checked?: Maybe<Scalars['Boolean']>;
+  checkedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  tasks?: Maybe<TaskCreateManyWithoutTodoInput>;
+  comments?: Maybe<CommentCreateManyWithoutTodoInput>;
+  requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
+  tags?: Maybe<TagCreateManyWithoutTodosInput>;
+  user?: Maybe<UserCreateOneWithoutTodosInput>;
+};
+
+export type CommentCreateManyWithoutTodoInput = {
+  create?: Maybe<Array<CommentCreateWithoutTodoInput>>;
+  connect?: Maybe<Array<CommentWhereUniqueInput>>;
+};
+
+export type CommentCreateWithoutTodoInput = {
+  title: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user: UserCreateOneWithoutCommentsInput;
+};
+
+export type TodoCreateManyWithoutRequiredByInput = {
+  create?: Maybe<Array<TodoCreateWithoutRequiredByInput>>;
+  connect?: Maybe<Array<TodoWhereUniqueInput>>;
+};
+
+export type TodoCreateWithoutRequiredByInput = {
   pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -884,8 +968,8 @@ export type TodoCreateWithoutUserInput = {
   list?: Maybe<ListCreateOneWithoutTodosInput>;
   comments?: Maybe<CommentCreateManyWithoutTodoInput>;
   requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
-  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
   tags?: Maybe<TagCreateManyWithoutTodosInput>;
+  user?: Maybe<UserCreateOneWithoutTodosInput>;
 };
 
 export type ListCreateOneWithoutTodosInput = {
@@ -953,77 +1037,12 @@ export type TodoCreateWithoutTasksInput = {
   user?: Maybe<UserCreateOneWithoutTodosInput>;
 };
 
-export type CommentCreateManyWithoutTodoInput = {
-  create?: Maybe<Array<CommentCreateWithoutTodoInput>>;
-  connect?: Maybe<Array<CommentWhereUniqueInput>>;
-};
-
-export type CommentCreateWithoutTodoInput = {
-  title: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  user: UserCreateOneWithoutCommentsInput;
-};
-
-export type UserCreateOneWithoutCommentsInput = {
-  create?: Maybe<UserCreateWithoutCommentsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-};
-
-export type UserCreateWithoutCommentsInput = {
-  username: Scalars['String'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  role?: Maybe<Role>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  todos?: Maybe<TodoCreateManyWithoutUserInput>;
-  tasks?: Maybe<TaskCreateManyWithoutUserInput>;
-  lists?: Maybe<ListCreateManyWithoutUserInput>;
-  tags?: Maybe<TagCreateManyWithoutUserInput>;
-};
-
-export type ListCreateManyWithoutUserInput = {
-  create?: Maybe<Array<ListCreateWithoutUserInput>>;
-  connect?: Maybe<Array<ListWhereUniqueInput>>;
-};
-
-export type ListCreateWithoutUserInput = {
-  title?: Maybe<Scalars['String']>;
-  archivedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  todos?: Maybe<TodoCreateManyWithoutListInput>;
-};
-
-export type TodoCreateManyWithoutListInput = {
-  create?: Maybe<Array<TodoCreateWithoutListInput>>;
+export type TodoCreateManyWithoutRequiresInput = {
+  create?: Maybe<Array<TodoCreateWithoutRequiresInput>>;
   connect?: Maybe<Array<TodoWhereUniqueInput>>;
 };
 
-export type TodoCreateWithoutListInput = {
-  pinned?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  tasks?: Maybe<TaskCreateManyWithoutTodoInput>;
-  comments?: Maybe<CommentCreateManyWithoutTodoInput>;
-  requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
-  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
-  tags?: Maybe<TagCreateManyWithoutTodosInput>;
-  user?: Maybe<UserCreateOneWithoutTodosInput>;
-};
-
-export type TodoCreateManyWithoutRequiredByInput = {
-  create?: Maybe<Array<TodoCreateWithoutRequiredByInput>>;
-  connect?: Maybe<Array<TodoWhereUniqueInput>>;
-};
-
-export type TodoCreateWithoutRequiredByInput = {
+export type TodoCreateWithoutRequiresInput = {
   pinned?: Maybe<Scalars['Boolean']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
@@ -1034,7 +1053,7 @@ export type TodoCreateWithoutRequiredByInput = {
   tasks?: Maybe<TaskCreateManyWithoutTodoInput>;
   list?: Maybe<ListCreateOneWithoutTodosInput>;
   comments?: Maybe<CommentCreateManyWithoutTodoInput>;
-  requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
   tags?: Maybe<TagCreateManyWithoutTodosInput>;
   user?: Maybe<UserCreateOneWithoutTodosInput>;
 };
@@ -1104,27 +1123,6 @@ export type TodoCreateWithoutCommentsInput = {
   user?: Maybe<UserCreateOneWithoutTodosInput>;
 };
 
-export type TodoCreateManyWithoutRequiresInput = {
-  create?: Maybe<Array<TodoCreateWithoutRequiresInput>>;
-  connect?: Maybe<Array<TodoWhereUniqueInput>>;
-};
-
-export type TodoCreateWithoutRequiresInput = {
-  pinned?: Maybe<Scalars['Boolean']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  checked?: Maybe<Scalars['Boolean']>;
-  checkedAt?: Maybe<Scalars['DateTime']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  tasks?: Maybe<TaskCreateManyWithoutTodoInput>;
-  list?: Maybe<ListCreateOneWithoutTodosInput>;
-  comments?: Maybe<CommentCreateManyWithoutTodoInput>;
-  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
-  tags?: Maybe<TagCreateManyWithoutTodosInput>;
-  user?: Maybe<UserCreateOneWithoutTodosInput>;
-};
-
 export type UserCreateOneWithoutTodosInput = {
   create?: Maybe<UserCreateWithoutTodosInput>;
   connect?: Maybe<UserWhereUniqueInput>;
@@ -1156,13 +1154,34 @@ export type TagCreateWithoutUserInput = {
   todos?: Maybe<TodoCreateManyWithoutTagsInput>;
 };
 
-export type TagUpdateInput = {
-  text?: Maybe<StringFieldUpdateOperationsInput>;
-  color?: Maybe<NullableStringFieldUpdateOperationsInput>;
+export type TodoCreateManyWithoutTagsInput = {
+  create?: Maybe<Array<TodoCreateWithoutTagsInput>>;
+  connect?: Maybe<Array<TodoWhereUniqueInput>>;
+};
+
+export type TodoCreateWithoutTagsInput = {
+  pinned?: Maybe<Scalars['Boolean']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  checked?: Maybe<Scalars['Boolean']>;
+  checkedAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  tasks?: Maybe<TaskCreateManyWithoutTodoInput>;
+  list?: Maybe<ListCreateOneWithoutTodosInput>;
+  comments?: Maybe<CommentCreateManyWithoutTodoInput>;
+  requires?: Maybe<TodoCreateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoCreateManyWithoutRequiresInput>;
+  user?: Maybe<UserCreateOneWithoutTodosInput>;
+};
+
+export type CommentUpdateInput = {
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  todos?: Maybe<TodoUpdateManyWithoutTagsInput>;
-  user?: Maybe<UserUpdateOneWithoutTagsInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
+  todo?: Maybe<TodoUpdateOneRequiredWithoutCommentsInput>;
 };
 
 export type StringFieldUpdateOperationsInput = {
@@ -1177,24 +1196,44 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Maybe<Scalars['DateTime']>;
 };
 
-export type TodoUpdateManyWithoutTagsInput = {
-  create?: Maybe<Array<TodoCreateWithoutTagsInput>>;
+export type UserUpdateOneRequiredWithoutCommentsInput = {
+  create?: Maybe<UserCreateWithoutCommentsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+  update?: Maybe<UserUpdateWithoutCommentsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutCommentsInput>;
+};
+
+export type UserUpdateWithoutCommentsDataInput = {
+  username?: Maybe<StringFieldUpdateOperationsInput>;
+  email?: Maybe<StringFieldUpdateOperationsInput>;
+  password?: Maybe<StringFieldUpdateOperationsInput>;
+  role?: Maybe<Role>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  todos?: Maybe<TodoUpdateManyWithoutUserInput>;
+  tasks?: Maybe<TaskUpdateManyWithoutUserInput>;
+  lists?: Maybe<ListUpdateManyWithoutUserInput>;
+  tags?: Maybe<TagUpdateManyWithoutUserInput>;
+};
+
+export type TodoUpdateManyWithoutUserInput = {
+  create?: Maybe<Array<TodoCreateWithoutUserInput>>;
   connect?: Maybe<Array<TodoWhereUniqueInput>>;
   set?: Maybe<Array<TodoWhereUniqueInput>>;
   disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
   delete?: Maybe<Array<TodoWhereUniqueInput>>;
-  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutTagsInput>>;
+  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutUserInput>>;
   updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
   deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
-  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutTagsInput>>;
+  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutUserInput>>;
 };
 
-export type TodoUpdateWithWhereUniqueWithoutTagsInput = {
+export type TodoUpdateWithWhereUniqueWithoutUserInput = {
   where: TodoWhereUniqueInput;
-  data: TodoUpdateWithoutTagsDataInput;
+  data: TodoUpdateWithoutUserDataInput;
 };
 
-export type TodoUpdateWithoutTagsDataInput = {
+export type TodoUpdateWithoutUserDataInput = {
   pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
@@ -1207,7 +1246,7 @@ export type TodoUpdateWithoutTagsDataInput = {
   comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
   requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
-  user?: Maybe<UserUpdateOneWithoutTodosInput>;
+  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
 };
 
 export type BoolFieldUpdateOperationsInput = {
@@ -1265,24 +1304,138 @@ export type UserUpdateWithoutTasksDataInput = {
   comments?: Maybe<CommentUpdateManyWithoutUserInput>;
 };
 
-export type TodoUpdateManyWithoutUserInput = {
-  create?: Maybe<Array<TodoCreateWithoutUserInput>>;
+export type ListUpdateManyWithoutUserInput = {
+  create?: Maybe<Array<ListCreateWithoutUserInput>>;
+  connect?: Maybe<Array<ListWhereUniqueInput>>;
+  set?: Maybe<Array<ListWhereUniqueInput>>;
+  disconnect?: Maybe<Array<ListWhereUniqueInput>>;
+  delete?: Maybe<Array<ListWhereUniqueInput>>;
+  update?: Maybe<Array<ListUpdateWithWhereUniqueWithoutUserInput>>;
+  updateMany?: Maybe<Array<ListUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<ListScalarWhereInput>>;
+  upsert?: Maybe<Array<ListUpsertWithWhereUniqueWithoutUserInput>>;
+};
+
+export type ListUpdateWithWhereUniqueWithoutUserInput = {
+  where: ListWhereUniqueInput;
+  data: ListUpdateWithoutUserDataInput;
+};
+
+export type ListUpdateWithoutUserDataInput = {
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  archivedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  todos?: Maybe<TodoUpdateManyWithoutListInput>;
+};
+
+export type TodoUpdateManyWithoutListInput = {
+  create?: Maybe<Array<TodoCreateWithoutListInput>>;
   connect?: Maybe<Array<TodoWhereUniqueInput>>;
   set?: Maybe<Array<TodoWhereUniqueInput>>;
   disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
   delete?: Maybe<Array<TodoWhereUniqueInput>>;
-  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutUserInput>>;
+  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutListInput>>;
   updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
   deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
-  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutUserInput>>;
+  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutListInput>>;
 };
 
-export type TodoUpdateWithWhereUniqueWithoutUserInput = {
+export type TodoUpdateWithWhereUniqueWithoutListInput = {
   where: TodoWhereUniqueInput;
-  data: TodoUpdateWithoutUserDataInput;
+  data: TodoUpdateWithoutListDataInput;
 };
 
-export type TodoUpdateWithoutUserDataInput = {
+export type TodoUpdateWithoutListDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
+  comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
+  requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
+  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
+  user?: Maybe<UserUpdateOneWithoutTodosInput>;
+};
+
+export type CommentUpdateManyWithoutTodoInput = {
+  create?: Maybe<Array<CommentCreateWithoutTodoInput>>;
+  connect?: Maybe<Array<CommentWhereUniqueInput>>;
+  set?: Maybe<Array<CommentWhereUniqueInput>>;
+  disconnect?: Maybe<Array<CommentWhereUniqueInput>>;
+  delete?: Maybe<Array<CommentWhereUniqueInput>>;
+  update?: Maybe<Array<CommentUpdateWithWhereUniqueWithoutTodoInput>>;
+  updateMany?: Maybe<Array<CommentUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<CommentScalarWhereInput>>;
+  upsert?: Maybe<Array<CommentUpsertWithWhereUniqueWithoutTodoInput>>;
+};
+
+export type CommentUpdateWithWhereUniqueWithoutTodoInput = {
+  where: CommentWhereUniqueInput;
+  data: CommentUpdateWithoutTodoDataInput;
+};
+
+export type CommentUpdateWithoutTodoDataInput = {
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
+};
+
+export type CommentUpdateManyWithWhereNestedInput = {
+  where: CommentScalarWhereInput;
+  data: CommentUpdateManyDataInput;
+};
+
+export type CommentScalarWhereInput = {
+  AND?: Maybe<Array<CommentScalarWhereInput>>;
+  OR?: Maybe<Array<CommentScalarWhereInput>>;
+  NOT?: Maybe<Array<CommentScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  title?: Maybe<StringFilter>;
+  content?: Maybe<StringNullableFilter>;
+  userId?: Maybe<IntFilter>;
+  todoId?: Maybe<IntFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
+};
+
+export type CommentUpdateManyDataInput = {
+  title?: Maybe<StringFieldUpdateOperationsInput>;
+  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type CommentUpsertWithWhereUniqueWithoutTodoInput = {
+  where: CommentWhereUniqueInput;
+  update: CommentUpdateWithoutTodoDataInput;
+  create: CommentCreateWithoutTodoInput;
+};
+
+export type TodoUpdateManyWithoutRequiredByInput = {
+  create?: Maybe<Array<TodoCreateWithoutRequiredByInput>>;
+  connect?: Maybe<Array<TodoWhereUniqueInput>>;
+  set?: Maybe<Array<TodoWhereUniqueInput>>;
+  disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
+  delete?: Maybe<Array<TodoWhereUniqueInput>>;
+  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutRequiredByInput>>;
+  updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
+  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutRequiredByInput>>;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutRequiredByInput = {
+  where: TodoWhereUniqueInput;
+  data: TodoUpdateWithoutRequiredByDataInput;
+};
+
+export type TodoUpdateWithoutRequiredByDataInput = {
   pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
@@ -1294,8 +1447,8 @@ export type TodoUpdateWithoutUserDataInput = {
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
   requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
-  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
   tags?: Maybe<TagUpdateManyWithoutTodosInput>;
+  user?: Maybe<UserUpdateOneWithoutTodosInput>;
 };
 
 export type ListUpdateOneWithoutTodosInput = {
@@ -1385,127 +1538,24 @@ export type TodoUpdateWithoutTasksDataInput = {
   user?: Maybe<UserUpdateOneWithoutTodosInput>;
 };
 
-export type CommentUpdateManyWithoutTodoInput = {
-  create?: Maybe<Array<CommentCreateWithoutTodoInput>>;
-  connect?: Maybe<Array<CommentWhereUniqueInput>>;
-  set?: Maybe<Array<CommentWhereUniqueInput>>;
-  disconnect?: Maybe<Array<CommentWhereUniqueInput>>;
-  delete?: Maybe<Array<CommentWhereUniqueInput>>;
-  update?: Maybe<Array<CommentUpdateWithWhereUniqueWithoutTodoInput>>;
-  updateMany?: Maybe<Array<CommentUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<CommentScalarWhereInput>>;
-  upsert?: Maybe<Array<CommentUpsertWithWhereUniqueWithoutTodoInput>>;
-};
-
-export type CommentUpdateWithWhereUniqueWithoutTodoInput = {
-  where: CommentWhereUniqueInput;
-  data: CommentUpdateWithoutTodoDataInput;
-};
-
-export type CommentUpdateWithoutTodoDataInput = {
-  title?: Maybe<StringFieldUpdateOperationsInput>;
-  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-};
-
-export type UserUpdateOneRequiredWithoutCommentsInput = {
-  create?: Maybe<UserCreateWithoutCommentsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-  update?: Maybe<UserUpdateWithoutCommentsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutCommentsInput>;
-};
-
-export type UserUpdateWithoutCommentsDataInput = {
-  username?: Maybe<StringFieldUpdateOperationsInput>;
-  email?: Maybe<StringFieldUpdateOperationsInput>;
-  password?: Maybe<StringFieldUpdateOperationsInput>;
-  role?: Maybe<Role>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  todos?: Maybe<TodoUpdateManyWithoutUserInput>;
-  tasks?: Maybe<TaskUpdateManyWithoutUserInput>;
-  lists?: Maybe<ListUpdateManyWithoutUserInput>;
-  tags?: Maybe<TagUpdateManyWithoutUserInput>;
-};
-
-export type ListUpdateManyWithoutUserInput = {
-  create?: Maybe<Array<ListCreateWithoutUserInput>>;
-  connect?: Maybe<Array<ListWhereUniqueInput>>;
-  set?: Maybe<Array<ListWhereUniqueInput>>;
-  disconnect?: Maybe<Array<ListWhereUniqueInput>>;
-  delete?: Maybe<Array<ListWhereUniqueInput>>;
-  update?: Maybe<Array<ListUpdateWithWhereUniqueWithoutUserInput>>;
-  updateMany?: Maybe<Array<ListUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<ListScalarWhereInput>>;
-  upsert?: Maybe<Array<ListUpsertWithWhereUniqueWithoutUserInput>>;
-};
-
-export type ListUpdateWithWhereUniqueWithoutUserInput = {
-  where: ListWhereUniqueInput;
-  data: ListUpdateWithoutUserDataInput;
-};
-
-export type ListUpdateWithoutUserDataInput = {
-  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  archivedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  todos?: Maybe<TodoUpdateManyWithoutListInput>;
-};
-
-export type TodoUpdateManyWithoutListInput = {
-  create?: Maybe<Array<TodoCreateWithoutListInput>>;
+export type TodoUpdateManyWithoutRequiresInput = {
+  create?: Maybe<Array<TodoCreateWithoutRequiresInput>>;
   connect?: Maybe<Array<TodoWhereUniqueInput>>;
   set?: Maybe<Array<TodoWhereUniqueInput>>;
   disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
   delete?: Maybe<Array<TodoWhereUniqueInput>>;
-  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutListInput>>;
+  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutRequiresInput>>;
   updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
   deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
-  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutListInput>>;
+  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutRequiresInput>>;
 };
 
-export type TodoUpdateWithWhereUniqueWithoutListInput = {
+export type TodoUpdateWithWhereUniqueWithoutRequiresInput = {
   where: TodoWhereUniqueInput;
-  data: TodoUpdateWithoutListDataInput;
+  data: TodoUpdateWithoutRequiresDataInput;
 };
 
-export type TodoUpdateWithoutListDataInput = {
-  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
-  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  checked?: Maybe<BoolFieldUpdateOperationsInput>;
-  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
-  comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
-  requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
-  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
-  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
-  user?: Maybe<UserUpdateOneWithoutTodosInput>;
-};
-
-export type TodoUpdateManyWithoutRequiredByInput = {
-  create?: Maybe<Array<TodoCreateWithoutRequiredByInput>>;
-  connect?: Maybe<Array<TodoWhereUniqueInput>>;
-  set?: Maybe<Array<TodoWhereUniqueInput>>;
-  disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
-  delete?: Maybe<Array<TodoWhereUniqueInput>>;
-  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutRequiredByInput>>;
-  updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
-  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutRequiredByInput>>;
-};
-
-export type TodoUpdateWithWhereUniqueWithoutRequiredByInput = {
-  where: TodoWhereUniqueInput;
-  data: TodoUpdateWithoutRequiredByDataInput;
-};
-
-export type TodoUpdateWithoutRequiredByDataInput = {
+export type TodoUpdateWithoutRequiresDataInput = {
   pinned?: Maybe<BoolFieldUpdateOperationsInput>;
   title?: Maybe<NullableStringFieldUpdateOperationsInput>;
   description?: Maybe<NullableStringFieldUpdateOperationsInput>;
@@ -1516,7 +1566,7 @@ export type TodoUpdateWithoutRequiredByDataInput = {
   tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
   list?: Maybe<ListUpdateOneWithoutTodosInput>;
   comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
-  requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
   tags?: Maybe<TagUpdateManyWithoutTodosInput>;
   user?: Maybe<UserUpdateOneWithoutTodosInput>;
 };
@@ -1616,39 +1666,6 @@ export type TodoUpdateWithoutCommentsDataInput = {
   user?: Maybe<UserUpdateOneWithoutTodosInput>;
 };
 
-export type TodoUpdateManyWithoutRequiresInput = {
-  create?: Maybe<Array<TodoCreateWithoutRequiresInput>>;
-  connect?: Maybe<Array<TodoWhereUniqueInput>>;
-  set?: Maybe<Array<TodoWhereUniqueInput>>;
-  disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
-  delete?: Maybe<Array<TodoWhereUniqueInput>>;
-  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutRequiresInput>>;
-  updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
-  deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
-  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutRequiresInput>>;
-};
-
-export type TodoUpdateWithWhereUniqueWithoutRequiresInput = {
-  where: TodoWhereUniqueInput;
-  data: TodoUpdateWithoutRequiresDataInput;
-};
-
-export type TodoUpdateWithoutRequiresDataInput = {
-  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
-  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  checked?: Maybe<BoolFieldUpdateOperationsInput>;
-  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
-  list?: Maybe<ListUpdateOneWithoutTodosInput>;
-  comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
-  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
-  tags?: Maybe<TagUpdateManyWithoutTodosInput>;
-  user?: Maybe<UserUpdateOneWithoutTodosInput>;
-};
-
 export type UserUpdateOneWithoutTodosInput = {
   create?: Maybe<UserCreateWithoutTodosInput>;
   connect?: Maybe<UserWhereUniqueInput>;
@@ -1696,6 +1713,76 @@ export type TagUpdateWithoutUserDataInput = {
   todos?: Maybe<TodoUpdateManyWithoutTagsInput>;
 };
 
+export type TodoUpdateManyWithoutTagsInput = {
+  create?: Maybe<Array<TodoCreateWithoutTagsInput>>;
+  connect?: Maybe<Array<TodoWhereUniqueInput>>;
+  set?: Maybe<Array<TodoWhereUniqueInput>>;
+  disconnect?: Maybe<Array<TodoWhereUniqueInput>>;
+  delete?: Maybe<Array<TodoWhereUniqueInput>>;
+  update?: Maybe<Array<TodoUpdateWithWhereUniqueWithoutTagsInput>>;
+  updateMany?: Maybe<Array<TodoUpdateManyWithWhereNestedInput>>;
+  deleteMany?: Maybe<Array<TodoScalarWhereInput>>;
+  upsert?: Maybe<Array<TodoUpsertWithWhereUniqueWithoutTagsInput>>;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutTagsInput = {
+  where: TodoWhereUniqueInput;
+  data: TodoUpdateWithoutTagsDataInput;
+};
+
+export type TodoUpdateWithoutTagsDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  tasks?: Maybe<TaskUpdateManyWithoutTodoInput>;
+  list?: Maybe<ListUpdateOneWithoutTodosInput>;
+  comments?: Maybe<CommentUpdateManyWithoutTodoInput>;
+  requires?: Maybe<TodoUpdateManyWithoutRequiredByInput>;
+  requiredBy?: Maybe<TodoUpdateManyWithoutRequiresInput>;
+  user?: Maybe<UserUpdateOneWithoutTodosInput>;
+};
+
+export type TodoUpdateManyWithWhereNestedInput = {
+  where: TodoScalarWhereInput;
+  data: TodoUpdateManyDataInput;
+};
+
+export type TodoScalarWhereInput = {
+  AND?: Maybe<Array<TodoScalarWhereInput>>;
+  OR?: Maybe<Array<TodoScalarWhereInput>>;
+  NOT?: Maybe<Array<TodoScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  pinned?: Maybe<BoolFilter>;
+  title?: Maybe<StringNullableFilter>;
+  description?: Maybe<StringNullableFilter>;
+  checked?: Maybe<BoolFilter>;
+  checkedAt?: Maybe<DateTimeNullableFilter>;
+  listId?: Maybe<IntNullableFilter>;
+  userId?: Maybe<IntNullableFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
+};
+
+export type TodoUpdateManyDataInput = {
+  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  checked?: Maybe<BoolFieldUpdateOperationsInput>;
+  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutTagsInput = {
+  where: TodoWhereUniqueInput;
+  update: TodoUpdateWithoutTagsDataInput;
+  create: TodoCreateWithoutTagsInput;
+};
+
 export type TagUpdateManyWithWhereNestedInput = {
   where: TagScalarWhereInput;
   data: TagUpdateManyDataInput;
@@ -1731,71 +1818,9 @@ export type UserUpsertWithoutTodosInput = {
   create: UserCreateWithoutTodosInput;
 };
 
-export type TodoUpdateManyWithWhereNestedInput = {
-  where: TodoScalarWhereInput;
-  data: TodoUpdateManyDataInput;
-};
-
-export type TodoScalarWhereInput = {
-  AND?: Maybe<Array<TodoScalarWhereInput>>;
-  OR?: Maybe<Array<TodoScalarWhereInput>>;
-  NOT?: Maybe<Array<TodoScalarWhereInput>>;
-  id?: Maybe<IntFilter>;
-  pinned?: Maybe<BoolFilter>;
-  title?: Maybe<StringNullableFilter>;
-  description?: Maybe<StringNullableFilter>;
-  checked?: Maybe<BoolFilter>;
-  checkedAt?: Maybe<DateTimeNullableFilter>;
-  listId?: Maybe<IntNullableFilter>;
-  userId?: Maybe<IntNullableFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-};
-
-export type TodoUpdateManyDataInput = {
-  pinned?: Maybe<BoolFieldUpdateOperationsInput>;
-  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  description?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  checked?: Maybe<BoolFieldUpdateOperationsInput>;
-  checkedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-};
-
-export type TodoUpsertWithWhereUniqueWithoutRequiresInput = {
-  where: TodoWhereUniqueInput;
-  update: TodoUpdateWithoutRequiresDataInput;
-  create: TodoCreateWithoutRequiresInput;
-};
-
 export type TodoUpsertWithoutCommentsInput = {
   update: TodoUpdateWithoutCommentsDataInput;
   create: TodoCreateWithoutCommentsInput;
-};
-
-export type CommentUpdateManyWithWhereNestedInput = {
-  where: CommentScalarWhereInput;
-  data: CommentUpdateManyDataInput;
-};
-
-export type CommentScalarWhereInput = {
-  AND?: Maybe<Array<CommentScalarWhereInput>>;
-  OR?: Maybe<Array<CommentScalarWhereInput>>;
-  NOT?: Maybe<Array<CommentScalarWhereInput>>;
-  id?: Maybe<IntFilter>;
-  title?: Maybe<StringFilter>;
-  content?: Maybe<StringNullableFilter>;
-  userId?: Maybe<IntFilter>;
-  todoId?: Maybe<IntFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-};
-
-export type CommentUpdateManyDataInput = {
-  title?: Maybe<StringFieldUpdateOperationsInput>;
-  content?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type CommentUpsertWithWhereUniqueWithoutUserInput = {
@@ -1815,57 +1840,10 @@ export type TagUpsertWithWhereUniqueWithoutTodosInput = {
   create: TagCreateWithoutTodosInput;
 };
 
-export type TodoUpsertWithWhereUniqueWithoutRequiredByInput = {
+export type TodoUpsertWithWhereUniqueWithoutRequiresInput = {
   where: TodoWhereUniqueInput;
-  update: TodoUpdateWithoutRequiredByDataInput;
-  create: TodoCreateWithoutRequiredByInput;
-};
-
-export type TodoUpsertWithWhereUniqueWithoutListInput = {
-  where: TodoWhereUniqueInput;
-  update: TodoUpdateWithoutListDataInput;
-  create: TodoCreateWithoutListInput;
-};
-
-export type ListUpdateManyWithWhereNestedInput = {
-  where: ListScalarWhereInput;
-  data: ListUpdateManyDataInput;
-};
-
-export type ListScalarWhereInput = {
-  AND?: Maybe<Array<ListScalarWhereInput>>;
-  OR?: Maybe<Array<ListScalarWhereInput>>;
-  NOT?: Maybe<Array<ListScalarWhereInput>>;
-  id?: Maybe<IntFilter>;
-  title?: Maybe<StringNullableFilter>;
-  userId?: Maybe<IntNullableFilter>;
-  archivedAt?: Maybe<DateTimeNullableFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-};
-
-export type ListUpdateManyDataInput = {
-  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
-  archivedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
-  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
-};
-
-export type ListUpsertWithWhereUniqueWithoutUserInput = {
-  where: ListWhereUniqueInput;
-  update: ListUpdateWithoutUserDataInput;
-  create: ListCreateWithoutUserInput;
-};
-
-export type UserUpsertWithoutCommentsInput = {
-  update: UserUpdateWithoutCommentsDataInput;
-  create: UserCreateWithoutCommentsInput;
-};
-
-export type CommentUpsertWithWhereUniqueWithoutTodoInput = {
-  where: CommentWhereUniqueInput;
-  update: CommentUpdateWithoutTodoDataInput;
-  create: CommentCreateWithoutTodoInput;
+  update: TodoUpdateWithoutRequiresDataInput;
+  create: TodoCreateWithoutRequiresInput;
 };
 
 export type TodoUpsertWithoutTasksInput = {
@@ -1914,10 +1892,46 @@ export type ListUpsertWithoutTodosInput = {
   create: ListCreateWithoutTodosInput;
 };
 
-export type TodoUpsertWithWhereUniqueWithoutUserInput = {
+export type TodoUpsertWithWhereUniqueWithoutRequiredByInput = {
   where: TodoWhereUniqueInput;
-  update: TodoUpdateWithoutUserDataInput;
-  create: TodoCreateWithoutUserInput;
+  update: TodoUpdateWithoutRequiredByDataInput;
+  create: TodoCreateWithoutRequiredByInput;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutListInput = {
+  where: TodoWhereUniqueInput;
+  update: TodoUpdateWithoutListDataInput;
+  create: TodoCreateWithoutListInput;
+};
+
+export type ListUpdateManyWithWhereNestedInput = {
+  where: ListScalarWhereInput;
+  data: ListUpdateManyDataInput;
+};
+
+export type ListScalarWhereInput = {
+  AND?: Maybe<Array<ListScalarWhereInput>>;
+  OR?: Maybe<Array<ListScalarWhereInput>>;
+  NOT?: Maybe<Array<ListScalarWhereInput>>;
+  id?: Maybe<IntFilter>;
+  title?: Maybe<StringNullableFilter>;
+  userId?: Maybe<IntNullableFilter>;
+  archivedAt?: Maybe<DateTimeNullableFilter>;
+  createdAt?: Maybe<DateTimeFilter>;
+  updatedAt?: Maybe<DateTimeFilter>;
+};
+
+export type ListUpdateManyDataInput = {
+  title?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  archivedAt?: Maybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type ListUpsertWithWhereUniqueWithoutUserInput = {
+  where: ListWhereUniqueInput;
+  update: ListUpdateWithoutUserDataInput;
+  create: ListCreateWithoutUserInput;
 };
 
 export type UserUpsertWithoutTasksInput = {
@@ -1931,10 +1945,33 @@ export type TaskUpsertWithWhereUniqueWithoutTodoInput = {
   create: TaskCreateWithoutTodoInput;
 };
 
-export type TodoUpsertWithWhereUniqueWithoutTagsInput = {
+export type TodoUpsertWithWhereUniqueWithoutUserInput = {
   where: TodoWhereUniqueInput;
-  update: TodoUpdateWithoutTagsDataInput;
-  create: TodoCreateWithoutTagsInput;
+  update: TodoUpdateWithoutUserDataInput;
+  create: TodoCreateWithoutUserInput;
+};
+
+export type UserUpsertWithoutCommentsInput = {
+  update: UserUpdateWithoutCommentsDataInput;
+  create: UserCreateWithoutCommentsInput;
+};
+
+export type TagCreateInput = {
+  text: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  todos?: Maybe<TodoCreateManyWithoutTagsInput>;
+  user?: Maybe<UserCreateOneWithoutTagsInput>;
+};
+
+export type TagUpdateInput = {
+  text?: Maybe<StringFieldUpdateOperationsInput>;
+  color?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  todos?: Maybe<TodoUpdateManyWithoutTagsInput>;
+  user?: Maybe<UserUpdateOneWithoutTagsInput>;
 };
 
 export type TaskCreateInput = {
@@ -2200,7 +2237,11 @@ export type TodosQuery = (
     & Pick<Todo, 'id' | 'title' | 'pinned' | 'description' | 'checked' | 'createdAt' | 'commentsCount'>
     & { comments: Array<(
       { __typename?: 'Comment' }
-      & Pick<Comment, 'id' | 'title' | 'content'>
+      & Pick<Comment, 'id' | 'title' | 'content' | 'createdAt'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username'>
+      ) }
     )>, tags: Array<(
       { __typename?: 'Tag' }
       & Pick<Tag, 'id' | 'text' | 'color'>
@@ -2518,6 +2559,56 @@ export type AddTagsToTodoMutation = (
       { __typename?: 'Tag' }
       & Pick<Tag, 'id'>
     )> }
+  )> }
+);
+
+export type AddCommentMutationVariables = Exact<{
+  todoId: Scalars['Int'];
+  title: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
+}>;
+
+
+export type AddCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createOneComment: (
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'id' | 'title' | 'content'>
+    & { todo: (
+      { __typename?: 'Todo' }
+      & Pick<Todo, 'id'>
+    ), user: (
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    ) }
+  ) }
+);
+
+export type DeleteCommentMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteOneComment?: Maybe<(
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'id'>
+  )> }
+);
+
+export type UpdateCommentMutationVariables = Exact<{
+  id: Scalars['Int'];
+  title?: Maybe<Scalars['String']>;
+  content?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneComment?: Maybe<(
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'id' | 'title' | 'content'>
   )> }
 );
 
@@ -2903,6 +2994,11 @@ export const TodosDocument = gql`
       id
       title
       content
+      createdAt
+      user {
+        id
+        username
+      }
     }
     tags(orderBy: {id: desc}) {
       id
@@ -3646,6 +3742,116 @@ export function useAddTagsToTodoMutation(baseOptions?: Apollo.MutationHookOption
 export type AddTagsToTodoMutationHookResult = ReturnType<typeof useAddTagsToTodoMutation>;
 export type AddTagsToTodoMutationResult = Apollo.MutationResult<AddTagsToTodoMutation>;
 export type AddTagsToTodoMutationOptions = Apollo.BaseMutationOptions<AddTagsToTodoMutation, AddTagsToTodoMutationVariables>;
+export const AddCommentDocument = gql`
+    mutation addComment($todoId: Int!, $title: String!, $content: String) {
+  createOneComment(data: {title: $title, content: $content, user: {connect: {id: 1}}, todo: {connect: {id: $todoId}}}) {
+    id
+    title
+    content
+    todo {
+      id
+    }
+    user {
+      id
+    }
+  }
+}
+    `;
+export type AddCommentMutationFn = Apollo.MutationFunction<AddCommentMutation, AddCommentMutationVariables>;
+
+/**
+ * __useAddCommentMutation__
+ *
+ * To run a mutation, you first call `useAddCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCommentMutation, { data, loading, error }] = useAddCommentMutation({
+ *   variables: {
+ *      todoId: // value for 'todoId'
+ *      title: // value for 'title'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useAddCommentMutation(baseOptions?: Apollo.MutationHookOptions<AddCommentMutation, AddCommentMutationVariables>) {
+        return Apollo.useMutation<AddCommentMutation, AddCommentMutationVariables>(AddCommentDocument, baseOptions);
+      }
+export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutation>;
+export type AddCommentMutationResult = Apollo.MutationResult<AddCommentMutation>;
+export type AddCommentMutationOptions = Apollo.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
+export const DeleteCommentDocument = gql`
+    mutation deleteComment($id: Int!) {
+  deleteOneComment(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, baseOptions);
+      }
+export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export const UpdateCommentDocument = gql`
+    mutation updateComment($id: Int!, $title: String, $content: String) {
+  updateOneComment(where: {id: $id}, data: {title: {set: $title}, content: {set: $content}}) {
+    id
+    title
+    content
+  }
+}
+    `;
+export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutation, UpdateCommentMutationVariables>;
+
+/**
+ * __useUpdateCommentMutation__
+ *
+ * To run a mutation, you first call `useUpdateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      title: // value for 'title'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useUpdateCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommentMutation, UpdateCommentMutationVariables>) {
+        return Apollo.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument, baseOptions);
+      }
+export type UpdateCommentMutationHookResult = ReturnType<typeof useUpdateCommentMutation>;
+export type UpdateCommentMutationResult = Apollo.MutationResult<UpdateCommentMutation>;
+export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<UpdateCommentMutation, UpdateCommentMutationVariables>;
 
       export interface IntrospectionResultData {
         __schema: {

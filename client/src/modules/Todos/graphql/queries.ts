@@ -14,6 +14,11 @@ export const TODOS_QUERY = gql`
         id
         title
         content
+        createdAt
+        user {
+          id
+          username
+        }
       }
       tags(orderBy: { id: desc }) {
         id
@@ -244,6 +249,50 @@ export const addTagsToTodo = gql`
       tags {
         id
       }
+    }
+  }
+`;
+
+export const addComment = gql`
+  mutation addComment($todoId: Int!, $title: String!, $content: String) {
+    createOneComment(
+      data: {
+        title: $title
+        content: $content
+        user: { connect: { id: 1 } }
+        todo: { connect: { id: $todoId } }
+      }
+    ) {
+      id
+      title
+      content
+      todo {
+        id
+      }
+      user {
+        id
+      }
+    }
+  }
+`;
+
+export const deleteComment = gql`
+  mutation deleteComment($id: Int!) {
+    deleteOneComment(where: { id: $id }) {
+      id
+    }
+  }
+`;
+
+export const updateComment = gql`
+  mutation updateComment($id: Int!, $title: String, $content: String) {
+    updateOneComment(
+      where: { id: $id }
+      data: { title: { set: $title }, content: { set: $content } }
+    ) {
+      id
+      title
+      content
     }
   }
 `;
