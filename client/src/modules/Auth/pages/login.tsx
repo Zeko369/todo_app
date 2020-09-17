@@ -31,7 +31,7 @@ export const LoginPage: NextPage = () => {
 
       if (token) {
         localStorage.setItem('token', token);
-        // router.push('/');
+        router.push('/');
       }
     } catch (err) {
       console.log('here');

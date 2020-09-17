@@ -32,7 +32,7 @@ export const RegisterPage: NextPage = () => {
 
       if (token) {
         localStorage.setItem('token', token);
-        // router.push('/');
+        router.push('/');
       }
     } catch (err) {
       switch (err.message) {
