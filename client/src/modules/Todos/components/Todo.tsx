@@ -203,13 +203,22 @@ const Todo: React.FC<TodoProps> = (props) => {
               one={
                 <Stack spacing={3} isInline={!isMobile}>
                   <IconButton
-                    aria-label="show controls"
                     icon="settings"
+                    size="sm"
+                    aria-label="show controls"
                     onClick={toggleButtons}
                     variantColor={!showButtons ? 'gray' : 'blue'}
                   />
                   <IconButton
+                    icon="edit"
+                    size="sm"
+                    aria-label="Update"
+                    isLoading={loading}
+                    onClick={toggleUpdate}
+                  />
+                  <IconButton
                     icon="chat"
+                    size="sm"
                     variantColor={!localComments ? 'gray' : 'orange'}
                     aria-label={localComments ? 'show' : 'hide'}
                     mr={4}
@@ -222,20 +231,16 @@ const Todo: React.FC<TodoProps> = (props) => {
                 <Stack spacing={3} isInline={!isMobile}>
                   <IconButton
                     icon="delete"
+                    size="sm"
                     variantColor="red"
                     aria-label="Delete"
                     isLoading={loading}
                     onClick={onDelete}
                   />
-                  <IconButton
-                    icon="edit"
-                    variantColor="green"
-                    aria-label="Update"
-                    isLoading={loading}
-                    onClick={toggleUpdate}
-                  />
+
                   <IconButton
                     icon={pinned ? 'unlock' : 'lock'}
+                    size="sm"
                     variantColor="orange"
                     aria-label={pinned ? 'Unlock' : 'Lock'}
                     isLoading={loading}
