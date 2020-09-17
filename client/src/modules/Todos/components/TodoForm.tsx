@@ -174,9 +174,8 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
           ) : (
             <Box>
               {tData.tags.map((tag) => (
-                <Box d="inline-block" mr={2} mb={2}>
+                <Box key={tag.id} d="inline-block" mr={2} mb={2}>
                   <Tag
-                    key={tag.id}
                     variant={selected.includes(tag.id) ? 'solid' : 'subtle'}
                     variantColor={tag.color || undefined}
                     cursor="pointer"
