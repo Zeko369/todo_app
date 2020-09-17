@@ -158,9 +158,10 @@ const Todo: React.FC<TodoProps> = (props) => {
             <Stack w="100%">
               <Heading fontSize="xl" wordBreak="break-all" alignItems="center" display="flex">
                 {pinned && <Icon aria-label="pinned" name="lock" color="orange.500" mr="2" />}
-                {tasks.length > 0 &&
+                {tasks &&
+                  tasks.length > 0 &&
                   `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}
-                {comments.length > 0 && `{${comments.length} 💬 } `}
+                {comments && comments.length > 0 && `{${comments.length} 💬 } `}
                 {title}
               </Heading>
               {list?.id && <Heading size="sm">List: {todo.list?.title}</Heading>}
@@ -250,7 +251,7 @@ const Todo: React.FC<TodoProps> = (props) => {
               )}
             </RevIf>
           </Flex>
-          {localComments && <Comments comments={comments} todoId={id} />}
+          {localComments && comments && <Comments comments={comments} todoId={id} />}
           {!compact && tasks && (
             <Stack spacing={2}>
               <Heading size="sm">Tasks: </Heading>

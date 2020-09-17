@@ -22,7 +22,9 @@ export interface TodoProps {
   mass: boolean;
   massSelect: boolean;
   massClick: (id: number) => void;
-  todo: Todo & { list?: List } & { tags?: Tag[] } & { tasks: Task[] } & { comments: Comment[] };
+  todo: Todo & { list?: List | null } & { tags?: Tag[] | null } & { tasks: Task[] | null } & {
+    comments: Comment[] | null;
+  };
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
   selectedTags: number[];
