@@ -267,6 +267,11 @@ schema.objectType({
     t.model.title();
     t.model.description();
     t.model.list();
+    t.model.comments({ ordering: true, filtering: true });
+    t.field('commentsCount', {
+      type: 'Int',
+      resolve: (todo, _args, ctx) => ctx.db.comment.count({ where: { todoId: todo.id } }),
+    });
     t.model.tags({ ordering: true, filtering: true });
     t.model.tasks({ ordering: true, filtering: true });
     t.model.checked();
