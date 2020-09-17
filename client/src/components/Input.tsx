@@ -33,8 +33,6 @@ const resoleType = (name: string): string | undefined => {
 const Input: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
   const { name, isInvalid, isRequired, error, label, placeholder, outerProps, ...rest } = props;
 
-  console.log(error);
-
   return (
     <FormControl isInvalid={isInvalid || !!error} isRequired={isRequired} {...outerProps}>
       <FormLabel htmlFor={name}>{label || capitalize(name)}</FormLabel>

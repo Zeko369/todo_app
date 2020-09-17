@@ -9,6 +9,12 @@ export const TODOS_QUERY = gql`
       description
       checked
       createdAt
+      commentsCount
+      comments {
+        id
+        title
+        content
+      }
       tags(orderBy: { id: desc }) {
         id
         text

@@ -32,6 +32,7 @@ import {
   ListsQuery,
   TagsQuery,
   useUpdatePinTodoMutation,
+  Comment as CommentDB,
 } from '../../../generated/graphql';
 import useMediaQuery from '../../../hooks/useMedia';
 import { TODO_QUERY } from '../graphql/queries';
@@ -46,12 +47,15 @@ type PickList = Pick<ListDB, 'id' | 'title'>;
 type PickTodo = Pick<TodoDB, 'id' | 'title' | 'description' | 'checked' | 'pinned' | 'createdAt'>;
 type PickTag = Pick<TagDB, 'id' | 'text' | 'color'>;
 type PickTask = Pick<TaskDB, 'id' | 'title' | 'checkedAt'>;
+type PickComment = Pick<CommentDB, 'id' | 'title' | 'content'>;
 
 interface TodoProps {
   mass: boolean;
   massSelect: boolean;
   massClick: (id: number) => void;
-  todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & { tasks: PickTask[] };
+  todo: PickTodo & { list?: PickList | null } & { tags?: PickTag[] | null } & {
+    tasks: PickTask[];
+  } & { comments: PickComment[] };
   remove: (id: number) => Promise<unknown>;
   saveList: (id: number, listId: number) => Promise<unknown>;
   selectedTags: number[];
@@ -76,7 +80,7 @@ const Todo: React.FC<TodoProps> = (props) => {
     massClick,
     selectedTags,
   } = props;
-  const { id, title, description, checked, list, tags, tasks, pinned } = todo;
+  const { id, title, description, checked, list, tags, tasks, pinned, comments } = todo;
 
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<number>(list?.id || -1);
@@ -182,6 +186,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                 {pinned && <Icon aria-label="pinned" name="lock" color="orange.500" mr="2" />}
                 {tasks.length > 0 &&
                   `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}
+                {comments.length > 0 && `{${comments.length} 💬 } `}
                 {title}
               </Heading>
               {list?.id && <Heading size="sm">List: {todo.list?.title}</Heading>}
