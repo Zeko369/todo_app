@@ -1,15 +1,37 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Flex, Stack, Heading } from '@chakra-ui/core';
+import {
+  Flex,
+  Stack,
+  Heading,
+  Text,
+  Button,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+} from '@chakra-ui/core';
 import Link from 'next/link';
+import { useMeQuery } from '../generated/graphql';
 
 interface INavProps {}
 
 const Nav: React.FC<INavProps> = ({ children }) => {
+  const { loading, error, data } = useMeQuery();
   const router = useRouter();
+
+  const me = (!loading && !error && data?.me) || null;
 
   const lists = router.asPath.startsWith('/list');
   const tags = router.asPath.startsWith('/tags');
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    router.push('/auth/login');
+  };
 
   return (
     <Flex justify="space-between" align="center">
@@ -28,6 +50,31 @@ const Nav: React.FC<INavProps> = ({ children }) => {
           </Link>
         </Heading>
       </Stack>
+      {me && (
+        <Flex alignItems="center">
+          <Stack isInline>
+            <Text>Hello, </Text>
+            <Text fontWeight="bold">{me.username}</Text>
+            <Popover>
+              <PopoverTrigger>
+                <Button size="xs" variantColor="red" variant="ghost">
+                  Logout
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent zIndex={4}>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverHeader>Are you sure you want to logout?</PopoverHeader>
+                <PopoverBody display="flex" justifyContent="center">
+                  <Button variantColor="red" onClick={logout}>
+                    Log out
+                  </Button>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Stack>
+        </Flex>
+      )}
       <Stack isInline align="center">
         {children}
       </Stack>

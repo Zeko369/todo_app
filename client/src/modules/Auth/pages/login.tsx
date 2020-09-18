@@ -34,8 +34,6 @@ export const LoginPage: NextPage = () => {
         router.push('/');
       }
     } catch (err) {
-      console.log('here');
-
       switch (err.message) {
         case 'WRONG_EMAIL':
           return setError('email', { message: "Can't find user with this email" });
@@ -54,7 +52,7 @@ export const LoginPage: NextPage = () => {
           <Heading size="lg">Login</Heading>
 
           {otherError && (
-            <Heading size="md" color="red.400">
+            <Heading size="md" color="red.600">
               Error :(
             </Heading>
           )}
