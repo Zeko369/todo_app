@@ -136,12 +136,11 @@ const Todo: React.FC<TodoProps> = (props) => {
   ) : (
     <Box p={4} shadow="md" borderWidth="1px">
       <Flex justify="space-between" pos="relative">
-        <Stack>
+        <Stack mr="4">
           <IconButton
             icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
             variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
             aria-label="check"
-            mr={4}
             isLoading={loading}
             onClick={mass ? onMass : onCheck}
           />
@@ -149,7 +148,6 @@ const Todo: React.FC<TodoProps> = (props) => {
             icon={!compact ? 'view' : 'view-off'}
             variantColor={compact ? 'gray' : 'pink'}
             aria-label={compact ? 'show' : 'hide'}
-            mr={4}
             onClick={toggleCompact}
           />
         </Stack>
@@ -202,7 +200,7 @@ const Todo: React.FC<TodoProps> = (props) => {
             <RevIf
               cond={isMobile || false}
               one={
-                <Stack spacing={3} isInline={!isMobile}>
+                <Stack spacing={3} isInline={!isMobile} ml="4">
                   <IconButton
                     icon="settings"
                     size="sm"
@@ -222,14 +220,13 @@ const Todo: React.FC<TodoProps> = (props) => {
                     size="sm"
                     variantColor={!localComments ? 'gray' : 'orange'}
                     aria-label={localComments ? 'show' : 'hide'}
-                    mr={4}
                     onClick={toggleComments}
                   />
                 </Stack>
               }
             >
               {!hideButtons && (
-                <Stack spacing={3} isInline={!isMobile}>
+                <Stack spacing={3} isInline={!isMobile} ml="4">
                   <IconButton
                     icon="delete"
                     size="sm"
