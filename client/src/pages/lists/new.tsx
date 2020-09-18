@@ -1,2 +1,7 @@
 import { NewListPage } from '../../modules/Lists';
-export default NewListPage;
+import { AuthWrapper } from '../../modules/Auth/shared/AuthWrapper';
+export default () => (
+  <AuthWrapper>
+    <NewListPage />
+  </AuthWrapper>
+);

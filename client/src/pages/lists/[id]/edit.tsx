@@ -1,2 +1,7 @@
 import { EditListPage } from '../../../modules/Lists';
-export default EditListPage;
+import { AuthWrapper } from '../../../modules/Auth/shared/AuthWrapper';
+export default () => (
+  <AuthWrapper>
+    <EditListPage />
+  </AuthWrapper>
+);
