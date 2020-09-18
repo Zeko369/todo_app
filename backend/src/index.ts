@@ -21,14 +21,14 @@ use(
   })
 );
 
-// function getUserId(token: any | null | undefined) {
-//   const userId = token.userId;
-//   if (!userId) {
-//     throw new Error('Not Authorized!');
-//   }
+function getUserId(token: any | null | undefined): string {
+  const userId = token.userId;
+  if (!userId) {
+    throw new Error('INVALID_TOKEN');
+  }
 
-//   return userId;
-// }
+  return userId;
+}
 
 schema.queryType({
   definition(t) {
@@ -50,22 +50,23 @@ schema.queryType({
     t.crud.comment();
     t.crud.comments({ ordering: true });
 
-    // t.field('me', {
-    //   type: 'User',
-    //   nullable: true,
-    //   resolve: (parent, args, ctx) => {
-    //     const userId = getUserId(ctx.token);
-    //     if (!userId) {
-    //       throw new Error('Invalid userId');
-    //     }
+    t.field('me', {
+      type: 'User',
+      nullable: true,
+      resolve: (parent, args, ctx) => {
+        if (!ctx.token) {
+          throw new Error('TOKEN_MISSING');
+        }
 
-    //     return ctx.db.user.findOne({
-    //       where: {
-    //         id: parseInt(userId),
-    //       },
-    //     });
-    //   },
-    // });
+        const userId = getUserId(ctx.token);
+
+        return ctx.db.user.findOne({
+          where: {
+            id: parseInt(userId),
+          },
+        });
+      },
+    });
   },
 });
 
