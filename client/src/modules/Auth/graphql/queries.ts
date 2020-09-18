@@ -23,3 +23,12 @@ export const registerMutation = gql`
     }
   }
 `;
+
+export const ME = gql`
+  query ME {
+    me {
+      id
+      username
+    }
+  }
+`;
