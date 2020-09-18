@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import Input from '../../../components/Input';
-import { Card } from '../components/Card';
+import { AuthLayout } from '../components/AuthLayout';
 import { useLoginMutation } from '../../../generated/graphql';
 import Link from '../../../components/Link';
 
@@ -48,7 +48,7 @@ export const LoginPage: NextPage = () => {
   };
 
   return (
-    <Card>
+    <AuthLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing="3">
           <Heading size="lg">Login</Heading>
@@ -78,6 +78,6 @@ export const LoginPage: NextPage = () => {
           </Button>
         </Stack>
       </form>
-    </Card>
+    </AuthLayout>
   );
 };
