@@ -1,9 +1,9 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { Heading, List, Spinner, ListItem, Box } from '@chakra-ui/core';
+import { Link, LinkButton } from 'chakra-next-link';
 
 import { useListsQuery } from '../../../generated/graphql';
-import Link, { LinkButton } from '../../../components/Link';
 import Nav from '../../../components/Nav';
 
 export const ListsPage: NextPage = () => {

@@ -10,11 +10,11 @@ import {
   Text,
   IconButton,
 } from '@chakra-ui/core';
+import { useForm } from 'react-hook-form';
 
 import capitalize from '../../../helpers';
 import { Comment } from '../ts/todo';
 import useToggle from '../../../hooks/useToggle';
-import { useForm } from 'react-hook-form';
 import {
   useAddCommentMutation,
   useDeleteCommentMutation,

@@ -1,6 +1,7 @@
+import React from 'react';
 import { Heading, Spinner } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
-import React from 'react';
+
 import { useMeQuery } from '../../../generated/graphql';
 
 export const AuthWrapper: React.FC = ({ children }) => {

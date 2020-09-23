@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Button, Heading, Stack } from '@chakra-ui/core';
+import { Link } from 'chakra-next-link';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import Input from '../../../components/Input';
 import { useRegisterMutation } from '../../../generated/graphql';
-import Link from '../../../components/Link';
 import { AuthLayout } from '../components/AuthLayout';
 
 interface FormData {

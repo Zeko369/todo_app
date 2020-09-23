@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { LinkButton } from 'chakra-next-link';
 import { NextPage } from 'next';
 import {
   Heading,
@@ -24,7 +25,6 @@ import {
 import { getId } from '../../../../helpers/getId';
 import Nav from '../../../../components/Nav';
 import useSaveToggle from '../../../../hooks/useSaveToggle';
-import { LinkButton } from '../../../../components/Link';
 import { LIST_QUERY } from '../../graphql/queries';
 import { useSelectTags } from '../../../../hooks/useSelectTags';
 

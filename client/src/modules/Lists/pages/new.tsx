@@ -2,9 +2,9 @@ import React from 'react';
 import { NextPage } from 'next';
 import { Heading, Box } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
+import { Link } from 'chakra-next-link';
 
 import { useCreateListMutation } from '../../../generated/graphql';
-import Link from '../../../components/Link';
 import ListForm, { IListData } from '../components/ListForm';
 import { LISTS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
