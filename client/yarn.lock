@@ -2855,10 +2855,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-chakra-next-link@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/chakra-next-link/-/chakra-next-link-0.0.3.tgz#c4868c947d16f65b3012ff882bc21236cf8b0eb5"
-  integrity sha512-cKkGaF3MMwEFKQQTTxB5n4wyCzwxE+Gu33/Sx9QunsQCWNXa4ZXrFKKlCwFk+ZVKRLpoBuYlzVFUhdOEy0S6yg==
+chakra-next-link@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/chakra-next-link/-/chakra-next-link-0.0.4.tgz#83d6e12bbea2ba423388d883257241dff1c9cba6"
+  integrity sha512-FueEIllcX83xyG2q4a29nWjqrn+/bfL231wHWo3TddVwpbjoXNBzVp0QLe5YLk8FZtt4BnP1tzdCU4xryEJ7lg==
 
 chalk@4.0.0:
   version "4.0.0"
