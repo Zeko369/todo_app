@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import { Box, Heading, Spinner, Flex } from '@chakra-ui/core';
 import { LinkButton } from 'chakra-next-link';
 import hydrate from 'next-mdx-remote/hydrate';
+import styled from '@emotion/styled';
 import { getId } from '../../../helpers/getId';
 import { useNoteQuery } from '../../../generated/graphql';
 import Nav from '../../../components/Nav';
 import { AuthWrapper } from '../../Auth/shared/AuthWrapper';
 import { components } from '../../../components/md';
-import styled from '@emotion/styled';
 
 const PostContentWrapper = styled(Box)`
   & > :not(.remark-code-title) {

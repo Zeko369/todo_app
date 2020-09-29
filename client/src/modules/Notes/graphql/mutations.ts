@@ -9,3 +9,16 @@ export const createNote = gql`
     }
   }
 `;
+
+export const updateNote = gql`
+  mutation updateNote($id: Int!, $title: String!, $description: String!) {
+    updateOneTodo(
+      where: { id: $id }
+      data: { title: { set: $title }, description: { set: $description } }
+    ) {
+      id
+      title
+      description
+    }
+  }
+`;
