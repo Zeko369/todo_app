@@ -29,12 +29,12 @@ const client = new ApolloClient({
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>
-      <GlobalStyles />
       <ThemeProvider>
         <Head>
           <title>Todo app</title>
         </Head>
         <ColorModeProvider>
+          <GlobalStyles />
           <CSSReset />
           <Component {...pageProps} />
         </ColorModeProvider>
