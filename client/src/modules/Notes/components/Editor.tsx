@@ -1,12 +1,12 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styled from '@emotion/styled';
+import { useColorMode } from '@chakra-ui/core';
 import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
 
 import 'codemirror/theme/material-darker.css';
 import 'codemirror/theme/3024-day.css';
 import 'codemirror/lib/codemirror.css';
-import { useColorMode } from '@chakra-ui/core';
 
 const langs = ['javascript', 'clike', 'ruby', 'python', 'markdown', 'sql'] as const;
 type Language = typeof langs[number];
