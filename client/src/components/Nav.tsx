@@ -30,6 +30,11 @@ const Nav: React.FC<INavProps> = ({ children }) => {
 
   const { colorMode, toggleColorMode } = useColorMode();
 
+  const textColor = {
+    dark: (selected: boolean) => (selected ? '#fff' : '#888'),
+    light: (selected: boolean) => (selected ? '#000' : '#888'),
+  };
+
   const lists = router.asPath.startsWith('/list');
   const notes = router.asPath.startsWith('/notes');
   const tags = router.asPath.startsWith('/tags');
@@ -46,18 +51,18 @@ const Nav: React.FC<INavProps> = ({ children }) => {
       alignItems="center"
     >
       <Stack isInline align="center" spacing={3}>
-        <Heading mb={3} style={{ color: !(lists || notes || tags) ? '#000' : '#888' }}>
+        <Heading mb={3} style={{ color: textColor[colorMode](!(lists || notes || tags)) }}>
           <Link href="/">Todos</Link>
         </Heading>
-        <Heading mb={3} style={{ color: notes ? '#000' : '#888' }}>
+        <Heading mb={3} style={{ color: textColor[colorMode](notes) }}>
           <Link href="/notes">Notes</Link>
         </Heading>
-        <Heading mb={3} style={{ color: lists ? '#000' : '#888' }}>
+        <Heading mb={3} style={{ color: textColor[colorMode](lists) }}>
           <Link href="/lists">
             <a>Lists</a>
           </Link>
         </Heading>
-        <Heading mb={3} style={{ color: tags ? '#000' : '#888' }}>
+        <Heading mb={3} style={{ color: textColor[colorMode](tags) }}>
           <Link href="/tags">
             <a>Tags</a>
           </Link>
