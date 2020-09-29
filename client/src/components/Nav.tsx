@@ -26,6 +26,7 @@ const Nav: React.FC<INavProps> = ({ children }) => {
   const me = (!loading && !error && data?.me) || null;
 
   const lists = router.asPath.startsWith('/list');
+  const notes = router.asPath.startsWith('/notes');
   const tags = router.asPath.startsWith('/tags');
 
   const logout = () => {
@@ -36,8 +37,11 @@ const Nav: React.FC<INavProps> = ({ children }) => {
   return (
     <Flex justify="space-between" align="center">
       <Stack isInline align="center" spacing={3}>
-        <Heading mb={3} style={{ color: !(lists || tags) ? '#000' : '#888' }}>
+        <Heading mb={3} style={{ color: !(lists || notes || tags) ? '#000' : '#888' }}>
           <Link href="/">Todos</Link>
+        </Heading>
+        <Heading mb={3} style={{ color: notes ? '#000' : '#888' }}>
+          <Link href="/notes">Notes</Link>
         </Heading>
         <Heading mb={3} style={{ color: lists ? '#000' : '#888' }}>
           <Link href="/lists">
