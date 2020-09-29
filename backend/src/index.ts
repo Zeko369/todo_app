@@ -39,7 +39,7 @@ schema.queryType({
     t.crud.users({ ordering: true, filtering: true });
 
     t.crud.todo();
-    t.crud.todos({ ordering: true });
+    t.crud.todos({ ordering: true, filtering: true });
 
     t.crud.list();
     t.crud.lists({ ordering: true, filtering: true });
@@ -281,6 +281,7 @@ schema.objectType({
     t.model.tasks({ ordering: true, filtering: true });
     t.model.checked();
     t.model.checkedAt();
+    t.model.type();
     t.model.requires();
     t.model.requiredBy();
     t.model.createdAt();

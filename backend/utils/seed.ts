@@ -36,6 +36,19 @@ import { random, randomMany, repeat } from './helpers';
     }));
   };
 
+  await Promise.all(
+    repeat(10, () =>
+      db.todo.create({
+        data: {
+          title: lorem.words(3),
+          description: lorem.paragraph(),
+          user: { connect: { id: admin.id } },
+          type: 'NOTE',
+        },
+      })
+    )
+  );
+
   const todos = await Promise.all(
     repeat(10, () => {
       const checked = Math.random() > 0.5;

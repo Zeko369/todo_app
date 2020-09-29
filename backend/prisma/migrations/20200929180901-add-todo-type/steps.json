@@ -1,0 +1,46 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "Type",
+      "values": [
+        "NOTE",
+        "TODO",
+        "REMINDER"
+      ]
+    },
+    {
+      "tag": "CreateField",
+      "model": "Todo",
+      "field": "type",
+      "type": "Type",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Todo",
+          "field": "type"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Todo",
+          "field": "type"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "TODO"
+    }
+  ]
+}
