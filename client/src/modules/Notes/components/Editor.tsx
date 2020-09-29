@@ -4,7 +4,9 @@ import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
 
 import 'codemirror/theme/material-darker.css';
+import 'codemirror/theme/3024-day.css';
 import 'codemirror/lib/codemirror.css';
+import { useColorMode } from '@chakra-ui/core';
 
 const langs = ['javascript', 'clike', 'ruby', 'python', 'markdown', 'sql'] as const;
 type Language = typeof langs[number];
@@ -14,6 +16,7 @@ const CodeEditor = styled(Controlled)`
   height: 100%;
 
   .CodeMirror {
+    border-radius: 0.25rem;
     height: 100%;
   }
 `;
@@ -30,6 +33,8 @@ export interface EditorFunctions {
 const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language }, ref) => {
   const [code, setCode] = useState(initCode);
   const editorRef = useRef<IEditor>();
+
+  const { colorMode } = useColorMode();
 
   const [mode, setMode] = useState<Language | undefined>(undefined);
 
@@ -67,7 +72,7 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
         onChange={(...args) => console.log(args)}
         options={{
           mode,
-          theme: 'material-darker',
+          theme: colorMode === 'dark' ? 'material-darker' : '3024-day',
           lineNumbers: true,
           tabSize: 2,
           lineWrapping: true,

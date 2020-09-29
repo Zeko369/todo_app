@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { ThemeProvider, CSSReset } from '@chakra-ui/core';
+import { ThemeProvider, CSSReset, ColorModeProvider } from '@chakra-ui/core';
 import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { GlobalStyles } from '../styles/GlobalStyles';
@@ -34,8 +34,10 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         <Head>
           <title>Todo app</title>
         </Head>
-        <CSSReset />
-        <Component {...pageProps} />
+        <ColorModeProvider>
+          <CSSReset />
+          <Component {...pageProps} />
+        </ColorModeProvider>
       </ThemeProvider>
     </ApolloProvider>
   );

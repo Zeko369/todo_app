@@ -14,6 +14,8 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Grid,
+  useColorMode,
+  IconButton,
 } from '@chakra-ui/core';
 import Link from 'next/link';
 import { useMeQuery } from '../generated/graphql';
@@ -25,6 +27,8 @@ const Nav: React.FC<INavProps> = ({ children }) => {
   const router = useRouter();
 
   const me = (!loading && !error && data?.me) || null;
+
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const lists = router.asPath.startsWith('/list');
   const notes = router.asPath.startsWith('/notes');
@@ -87,6 +91,11 @@ const Nav: React.FC<INavProps> = ({ children }) => {
         )}
         <Stack isInline align="center">
           {children}
+          <IconButton
+            icon={colorMode === 'dark' ? 'moon' : 'sun'}
+            aria-label={colorMode === 'dark' ? 'light' : 'dark'}
+            onClick={toggleColorMode}
+          />
         </Stack>
       </Flex>
     </Grid>
