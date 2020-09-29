@@ -13,13 +13,18 @@
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.35",
     "@emotion/styled": "^10.0.27",
+    "@types/codemirror": "^0.0.98",
+    "@zeit/next-css": "^1.0.1",
     "chakra-next-link": "0.0.5",
+    "codemirror": "^5.58.1",
     "emotion-theming": "^10.0.27",
     "graphql": "^15.3.0",
     "next": "^9.5.3",
     "react": "^16.13.1",
+    "react-codemirror2": "^7.2.1",
     "react-dom": "^16.13.1",
-    "react-hook-form": "^6.7.2"
+    "react-hook-form": "^6.7.2",
+    "use-codemirror": "^0.2.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.17.8",
