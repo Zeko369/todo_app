@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Stack, Flex, Button, FormControl, FormLabel, Spinner } from '@chakra-ui/core';
+import { Stack, Flex, Button, FormControl, FormLabel, Spinner, Box } from '@chakra-ui/core';
 import Nav from '../../../components/Nav';
 import Editor, { EditorFunctions } from './Editor';
 import Input from '../../../components/Input';
@@ -33,7 +33,8 @@ export const NoteForm: React.FC<NoteForm> = (props) => {
       {props.initValues === null ? (
         <Spinner />
       ) : (
-        <form
+        <Box
+          as="form"
           onSubmit={(e) => {
             e.preventDefault();
             onClick();
@@ -50,7 +51,7 @@ export const NoteForm: React.FC<NoteForm> = (props) => {
               Save
             </Button>
           </Flex>
-        </form>
+        </Box>
       )}
 
       {props.initValues === null ? (
