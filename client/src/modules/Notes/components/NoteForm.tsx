@@ -45,6 +45,7 @@ export const NoteForm: React.FC<NoteForm> = (props) => {
               name="Name"
               outerProps={{ w: '100%', mr: 2 }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+              isRequired
               value={title}
             />
             <Button onClick={onClick} variantColor="green">

@@ -1,8 +1,10 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { useColorMode } from '@chakra-ui/core';
+import { Box, Button, Heading, IconButton, Spinner, Stack, useColorMode } from '@chakra-ui/core';
 import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
+
+import useSaveToggle from '../../../hooks/useSaveToggle';
 
 import 'codemirror/theme/material-darker.css';
 import 'codemirror/theme/3024-day.css';
@@ -36,13 +38,20 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
 
   const { colorMode } = useColorMode();
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<Language | undefined>(undefined);
+  const [vimMode, setVimMode] = useState<string>();
+  const [vim, toggleVim] = useSaveToggle('vim');
 
   useEffect(() => {
-    Promise.all(langs.map((lang) => import(`codemirror/mode/${lang}/${lang}` as any)))
+    (async () => {
+      await import('codemirror/keymap/vim' as any);
+      await Promise.all(langs.map((lang) => import(`codemirror/mode/${lang}/${lang}` as any)));
+    })()
       .then(() => {
         console.log('Done loading languages, reloading editor');
         setMode(language);
+        setLoading(false);
       })
       .catch((err) => {
         console.error(`Error loading languages`);
@@ -60,12 +69,38 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
     },
   }));
 
+  const undo = () => {
+    editorRef.current?.undo();
+  };
+
+  const redo = () => {
+    editorRef.current?.redo();
+  };
+
+  const setupListeners = (cm: IEditor) => {
+    cm.on('vim-mode-change', (vimEvent: any) => {
+      setVimMode((vimEvent as { mode: string }).mode);
+    });
+  };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
-    <>
+    <Box>
+      <Stack isInline pb="2">
+        <Button size="sm" onClick={toggleVim}>
+          {vim ? 'Vim' : 'Normal mode'}
+        </Button>
+        <IconButton size="sm" icon="arrow-left" aria-label="Undo" onClick={undo} />
+        <IconButton size="sm" icon="arrow-right" aria-label="Redo" onClick={redo} />
+      </Stack>
       <CodeEditor
         value={code}
         editorDidMount={(e: IEditor) => {
           e.refresh();
+          setupListeners(e);
           editorRef.current = e;
         }}
         onBeforeChange={(_e: IEditor, _d: CodeMirror.EditorChange, v: string) => setCode(v)}
@@ -75,9 +110,15 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
           lineNumbers: true,
           tabSize: 2,
           lineWrapping: true,
+          keyMap: (vim && 'vim') || 'default',
         }}
       />
-    </>
+      {vim && (
+        <Heading p={2} size="sm" fontWeight="bold">
+          {vimMode?.toUpperCase()}
+        </Heading>
+      )}
+    </Box>
   );
 });
 
