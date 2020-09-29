@@ -2222,6 +2222,19 @@ export type NotesQuery = (
   )> }
 );
 
+export type NoteQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type NoteQuery = (
+  { __typename?: 'Query' }
+  & { todo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'description'>
+  )> }
+);
+
 export type CreateTagMutationVariables = Exact<{
   text: Scalars['String'];
   color?: Maybe<Scalars['String']>;
@@ -2961,6 +2974,41 @@ export function useNotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Note
 export type NotesQueryHookResult = ReturnType<typeof useNotesQuery>;
 export type NotesLazyQueryHookResult = ReturnType<typeof useNotesLazyQuery>;
 export type NotesQueryResult = Apollo.QueryResult<NotesQuery, NotesQueryVariables>;
+export const NoteDocument = gql`
+    query Note($id: Int!) {
+  todo(where: {id: $id}) {
+    id
+    title
+    description
+  }
+}
+    `;
+
+/**
+ * __useNoteQuery__
+ *
+ * To run a query within a React component, call `useNoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNoteQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useNoteQuery(baseOptions?: Apollo.QueryHookOptions<NoteQuery, NoteQueryVariables>) {
+        return Apollo.useQuery<NoteQuery, NoteQueryVariables>(NoteDocument, baseOptions);
+      }
+export function useNoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NoteQuery, NoteQueryVariables>) {
+          return Apollo.useLazyQuery<NoteQuery, NoteQueryVariables>(NoteDocument, baseOptions);
+        }
+export type NoteQueryHookResult = ReturnType<typeof useNoteQuery>;
+export type NoteLazyQueryHookResult = ReturnType<typeof useNoteLazyQuery>;
+export type NoteQueryResult = Apollo.QueryResult<NoteQuery, NoteQueryVariables>;
 export const CreateTagDocument = gql`
     mutation createTag($text: String!, $color: String) {
   createOneTag(data: {text: $text, color: $color}) {

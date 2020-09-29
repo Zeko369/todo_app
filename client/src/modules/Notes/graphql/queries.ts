@@ -9,3 +9,13 @@ export const NOTES_QUERY = gql`
     }
   }
 `;
+
+export const NOTE_QUERY = gql`
+  query Note($id: Int!) {
+    todo(where: { id: $id }) {
+      id
+      title
+      description
+    }
+  }
+`;
