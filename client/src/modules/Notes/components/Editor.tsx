@@ -64,12 +64,11 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
     <>
       <CodeEditor
         value={code}
-        editorDidMount={(e) => {
+        editorDidMount={(e: IEditor) => {
           e.refresh();
           editorRef.current = e;
         }}
-        onBeforeChange={(e, d, v) => setCode(v)}
-        onChange={(...args) => console.log(args)}
+        onBeforeChange={(_e: IEditor, _d: CodeMirror.EditorChange, v: string) => setCode(v)}
         options={{
           mode,
           theme: colorMode === 'dark' ? 'material-darker' : '3024-day',
