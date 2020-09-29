@@ -1,24 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
-import { Box, Spinner, Heading, Button } from '@chakra-ui/core';
+import { Box, Spinner, Heading } from '@chakra-ui/core';
+import { Link, LinkButton } from 'chakra-next-link';
 
 import Nav from '../../../components/Nav';
 import { useNotesQuery } from '../../../generated/graphql';
-import useToggle from '../../../hooks/useToggle';
-import Input from '../../../components/Input';
 
 export const NotesPage: NextPage = () => {
   const { loading, error, data } = useNotesQuery();
 
-  const [showNew, toggleNew, setNew] = useToggle();
-  const [editingId, setEditingId] = useState(-1);
-
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
       <Nav>
-        <Button onClick={toggleNew} variantColor="blue">
-          {showNew ? 'Hide new' : 'Show new'}
-        </Button>
+        <LinkButton href="/notes/new">New</LinkButton>
       </Nav>
       {/* {showNew && (
         <Box mb="5">
@@ -58,7 +52,11 @@ export const NotesPage: NextPage = () => {
       ) : (
         <Box>
           {data.todos.map((note) => (
-            <Box>{note.title}</Box>
+            <Box>
+              <Link href="/notes/[id]" nextAs={`/notes/${note.id}`}>
+                {note.title}
+              </Link>
+            </Box>
           ))}
         </Box>
       )}
