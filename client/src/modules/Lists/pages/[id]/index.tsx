@@ -80,7 +80,7 @@ export const ListPage: NextPage = () => {
       <Nav />
       <Stack spacing={3} isInline>
         <Heading>List: {data?.list?.title}</Heading>
-        <LinkButton href="/lists/[id]/edit" as={`/lists/${id}/edit`} variantColor="green">
+        <LinkButton href="/lists/[id]/edit" nextAs={`/lists/${id}/edit`} variantColor="green">
           Edit
         </LinkButton>
         <Button onClick={toggleAll}>{!showAll ? 'Only todo' : 'All'}</Button>

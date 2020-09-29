@@ -24,11 +24,11 @@ export const ListsPage: NextPage = () => {
         <List styleType="disc">
           {data.lists.map((list) => (
             <ListItem key={list.id}>
-              <Link href="/lists/[id]" as={`/lists/${list.id}`}>
+              <Link href="/lists/[id]" nextAs={`/lists/${list.id}`}>
                 {list.title}
               </Link>
               {'  '}
-              <Link href="/lists/[id]/edit" as={`/lists/${list.id}/edit`}>
+              <Link href="/lists/[id]/edit" nextAs={`/lists/${list.id}/edit`}>
                 Edit
               </Link>
             </ListItem>
