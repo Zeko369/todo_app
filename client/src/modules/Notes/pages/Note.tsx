@@ -61,10 +61,10 @@ export const NotePage: NextPage = () => {
           <Spinner />
         ) : error || !data || !data.todo ? (
           <Heading size="xl">Error :(</Heading>
+        ) : content ? (
+          <PostContentWrapper>{mdxDone}</PostContentWrapper>
         ) : (
-          <>
-            <PostContentWrapper>{mdxDone}</PostContentWrapper>
-          </>
+          <Spinner />
         )}
       </Box>
     </AuthWrapper>
