@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const TODOS_QUERY = gql`
   query TODOS {
-    todos(orderBy: [{ pinned: desc }, { id: desc }]) {
+    todos(orderBy: [{ pinned: desc }, { id: desc }], where: { type: TODO }) {
       id
       title
       pinned

@@ -3249,7 +3249,7 @@ export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
 export const TodosDocument = gql`
     query TODOS {
-  todos(orderBy: [{pinned: desc}, {id: desc}]) {
+  todos(orderBy: [{pinned: desc}, {id: desc}], where: {type: TODO}) {
     id
     title
     pinned
