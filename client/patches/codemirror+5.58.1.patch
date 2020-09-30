@@ -1,8 +1,16 @@
 diff --git a/node_modules/codemirror/keymap/vim.js b/node_modules/codemirror/keymap/vim.js
-index 789e1e5..03e8b10 100644
+index 789e1e5..3ab377f 100644
 --- a/node_modules/codemirror/keymap/vim.js
 +++ b/node_modules/codemirror/keymap/vim.js
-@@ -62,6 +62,7 @@
+@@ -53,6 +53,7 @@
+     { keys: '<Down>', type: 'keyToKey', toKeys: 'j' },
+     { keys: '<Space>', type: 'keyToKey', toKeys: 'l' },
+     { keys: '<BS>', type: 'keyToKey', toKeys: 'h', context: 'normal'},
++    { keys: '<BS>', type: 'operatorMotion', operator: 'delete', motion: 'moveByCharacters', motionArgs: { forward: false }, operatorMotionArgs: { visualLine: false }, context: 'insert'},
+     { keys: '<Del>', type: 'keyToKey', toKeys: 'x', context: 'normal'},
+     { keys: '<C-Space>', type: 'keyToKey', toKeys: 'W' },
+     { keys: '<C-BS>', type: 'keyToKey', toKeys: 'B', context: 'normal' },
+@@ -62,6 +63,7 @@
      { keys: '<C-p>', type: 'keyToKey', toKeys: 'k' },
      { keys: '<C-[>', type: 'keyToKey', toKeys: '<Esc>' },
      { keys: '<C-c>', type: 'keyToKey', toKeys: '<Esc>' },
@@ -10,6 +18,18 @@ index 789e1e5..03e8b10 100644
      { keys: '<C-[>', type: 'keyToKey', toKeys: '<Esc>', context: 'insert' },
      { keys: '<C-c>', type: 'keyToKey', toKeys: '<Esc>', context: 'insert' },
      { keys: 's', type: 'keyToKey', toKeys: 'cl', context: 'normal' },
+@@ -87,9 +89,9 @@
+     { keys: 'w', type: 'motion', motion: 'moveByWords', motionArgs: { forward: true, wordEnd: false }},
+     { keys: 'W', type: 'motion', motion: 'moveByWords', motionArgs: { forward: true, wordEnd: false, bigWord: true }},
+     { keys: 'e', type: 'motion', motion: 'moveByWords', motionArgs: { forward: true, wordEnd: true, inclusive: true }},
+-    { keys: 'E', type: 'motion', motion: 'moveByWords', motionArgs: { forward: true, wordEnd: true, bigWord: true, inclusive: true }},
++    { keys: 'E', type: 'motion', motion: 'moveToEol', motionArgs: { motionArgs: { inclusive: true } }},
+     { keys: 'b', type: 'motion', motion: 'moveByWords', motionArgs: { forward: false, wordEnd: false }},
+-    { keys: 'B', type: 'motion', motion: 'moveByWords', motionArgs: { forward: false, wordEnd: false, bigWord: true }},
++    { keys: 'B', type: 'motion', motion: 'moveToFirstNonWhiteSpaceCharacter', motionArgs: { motionArgs: { inclusive: true } }},
+     { keys: 'ge', type: 'motion', motion: 'moveByWords', motionArgs: { forward: false, wordEnd: true, inclusive: true }},
+     { keys: 'gE', type: 'motion', motion: 'moveByWords', motionArgs: { forward: false, wordEnd: true, bigWord: true, inclusive: true }},
+     { keys: '{', type: 'motion', motion: 'moveByParagraph', motionArgs: { forward: false, toJumplist: true }},
 diff --git a/node_modules/codemirror/mode/rpm/changes/index.html b/node_modules/codemirror/mode/rpm/changes/index.html
 deleted file mode 100644
 index 9d244ec..0000000
