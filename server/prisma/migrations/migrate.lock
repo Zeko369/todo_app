@@ -1,0 +1,14 @@
+# Prisma Migrate lockfile v1
+
+20200716212735-init
+20200716212827-add-lists
+20200716212919-add-requirements
+20200825202503-add-tags
+20200901120616-add-color-to-tags
+20200904132730-add-archived-at-to-list
+20200904133420-add-tasks
+20200904203344-make-todo-required-on-task
+20200912110235-add-pinned-to-todos
+20200916162817-add-user
+20200916221207-add-comments
+20200929180901-add-todo-type

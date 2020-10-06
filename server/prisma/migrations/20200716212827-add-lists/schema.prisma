@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model Todo {
+  id          Int       @default(autoincrement()) @id
+  title       String?
+  description String?
+  checked     Boolean   @default(false)
+  checkedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  list        List?     @relation(fields: [listId], references: [id])
+  listId      Int?
+  updatedAt   DateTime  @updatedAt
+}
+
+model List {
+  id        Int      @default(autoincrement()) @id
+  title     String?
+  todos     Todo[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

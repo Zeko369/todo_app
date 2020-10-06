@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+model Todo {
+  id          Int       @default(autoincrement()) @id
+  title       String?
+  description String?
+  checked     Boolean   @default(false)
+  checkedAt   DateTime?
+  tasks       Task[]
+  list        List?     @relation(fields: [listId], references: [id])
+  listId      Int?
+  requires    Todo[]    @relation("Requirements", references: [id])
+  requiredBy  Todo[]    @relation("Requirements", references: [id])
+  tags        Tag[]     @relation("Tags", references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Task {
+  id        Int       @default(autoincrement()) @id
+  todo      Todo?     @relation(fields: [todoId], references: [id])
+  todoId    Int?
+  title     String
+  checkedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model List {
+  id         Int       @default(autoincrement()) @id
+  title      String?
+  todos      Todo[]
+  archivedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Tag {
+  id        Int      @default(autoincrement()) @id
+  text      String
+  color     String?
+  todos     Todo[]   @relation("Tags", references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
