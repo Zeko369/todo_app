@@ -8,3 +8,5 @@ backend/api.graphql
 logs/
 
 .env
+
+server/dist
