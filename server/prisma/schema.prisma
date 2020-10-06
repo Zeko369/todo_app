@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -13,7 +17,7 @@ enum Role {
 }
 
 model User {
-  id        Int       @default(autoincrement()) @id
+  id        Int       @id @default(autoincrement())
   username  String    @unique
   email     String    @unique
   password  String
@@ -28,7 +32,7 @@ model User {
 }
 
 model Comment {
-  id        Int      @default(autoincrement()) @id
+  id        Int      @id @default(autoincrement())
   title     String
   content   String?
   user      User     @relation(fields: [userId], references: [id])
@@ -46,7 +50,7 @@ enum Type {
 }
 
 model Todo {
-  id          Int       @default(autoincrement()) @id
+  id          Int       @id @default(autoincrement())
   pinned      Boolean   @default(false)
   title       String?
   description String?
@@ -67,7 +71,7 @@ model Todo {
 }
 
 model Task {
-  id        Int       @default(autoincrement()) @id
+  id        Int       @id @default(autoincrement())
   // tasks        Task[]    @relation("TaskToTask")
   // parentTask   Task?     @relation("TaskToTask", fields: [parentTaskId], references: [id])
   // parentTaskId Int?
@@ -82,7 +86,7 @@ model Task {
 }
 
 model List {
-  id         Int       @default(autoincrement()) @id
+  id         Int       @id @default(autoincrement())
   title      String?
   todos      Todo[]
   user       User?     @relation(fields: [userId], references: [id])
@@ -93,7 +97,7 @@ model List {
 }
 
 model Tag {
-  id        Int      @default(autoincrement()) @id
+  id        Int      @id @default(autoincrement())
   text      String
   color     String?
   todos     Todo[]   @relation("Tags", references: [id])

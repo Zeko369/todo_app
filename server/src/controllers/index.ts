@@ -1,4 +1,5 @@
 import { Query, Resolver } from 'type-graphql';
+import { AuthResolver } from './Auth/resolver';
 
 @Resolver()
 export class HelloResolver {
@@ -8,4 +9,4 @@ export class HelloResolver {
   }
 }
 
-export const resolvers = [HelloResolver] as const;
+export const resolvers = [HelloResolver, AuthResolver] as const;
