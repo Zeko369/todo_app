@@ -5,5 +5,5 @@ export interface GQLCtx {
   user?: User;
   res: Response;
   req: Request;
-  db: PrismaClient;
+  prisma: PrismaClient;
 }

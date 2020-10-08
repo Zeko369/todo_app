@@ -20,7 +20,7 @@ async function main() {
   const schema = await buildSchema({ resolvers, validate: false });
   const server = new ApolloServer({
     schema,
-    context: ({ req, res }: ExpCtx): GQLCtx => ({ req, res, user: req.user, db }),
+    context: ({ req, res }: ExpCtx): GQLCtx => ({ req, res, user: req.user, prisma: db }),
   });
 
   app.use(cookieParser());

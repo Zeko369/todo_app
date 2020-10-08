@@ -20,12 +20,12 @@ export class AuthResolver {
     const lowerEmail = email.toLowerCase();
     const hashedPassword = await hash(password);
 
-    let user = await ctx.db.user.findOne({ where: { email: lowerEmail } });
+    let user = await ctx.prisma.user.findOne({ where: { email: lowerEmail } });
     if (user) {
       throw new Error('EMAIL_IN_USE/Email already in use');
     }
 
-    await ctx.db.user.create({
+    await ctx.prisma.user.create({
       data: { email: lowerEmail, password: hashedPassword, username },
     });
 
@@ -35,7 +35,7 @@ export class AuthResolver {
   @Mutation(() => User)
   async signIn(@Ctx() ctx: GQLCtx, @Arg('data') data: SignInInput) {
     const { email, password } = data;
-    const user = await ctx.db.user.findOne({ where: { email } });
+    const user = await ctx.prisma.user.findOne({ where: { email } });
 
     if (!user) {
       throw new Error('EMAIL_NOT_FOUND/Cant find user with that email');
