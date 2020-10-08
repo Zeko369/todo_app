@@ -200,7 +200,7 @@ const Todo: React.FC<TodoProps> = (props) => {
             <RevIf
               cond={isMobile || false}
               one={
-                <Stack spacing={3} isInline={!isMobile} ml="4">
+                <Stack spacing={1} isInline={!isMobile} ml="4">
                   <IconButton
                     icon="settings"
                     size="sm"
