@@ -1,6 +1,15 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { Box, Button, Heading, IconButton, Spinner, Stack, useColorMode } from '@chakra-ui/core';
+import {
+  Box,
+  Button,
+  Heading,
+  IconButton,
+  Select,
+  Spinner,
+  Stack,
+  useColorMode,
+} from '@chakra-ui/core';
 import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
 
@@ -26,20 +35,19 @@ const CodeEditor = styled(Controlled)<{ fontSize: number }>`
 
 interface EditorProps {
   initCode: string;
-  language: Language;
 }
 
 export interface EditorFunctions {
   getCode: () => string | undefined;
 }
 
-const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language }, ref) => {
+const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode }, ref) => {
   const [code, setCode] = useState(initCode);
   const editorRef = useRef<IEditor>();
 
   const { colorMode } = useColorMode();
 
-  const [fontSize, setFontSize] = useState<string>('');
+  const [fontSize, setFontSize] = useState<string>('1.3');
   const [loading, setLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<Language | undefined>(undefined);
   const [vimMode, setVimMode] = useState<string>();
@@ -52,7 +60,7 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
     })()
       .then(() => {
         console.log('Done loading languages, reloading editor');
-        setMode(language);
+        setMode('markdown');
         setLoading(false);
       })
       .catch((err) => {
@@ -79,10 +87,18 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
     editorRef.current?.redo();
   };
 
-  const setupListeners = (cm: IEditor) => {
-    cm.on('vim-mode-change', (vimEvent: any) => {
+  const editorDidMount = (e: IEditor) => {
+    e.refresh();
+
+    e.on('vim-mode-change', (vimEvent: any) => {
       setVimMode((vimEvent as { mode: string }).mode);
     });
+
+    editorRef.current = e;
+  };
+
+  const languageOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setMode(e.target.value as Language);
   };
 
   if (loading) {
@@ -106,15 +122,20 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
           value={fontSize}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFontSize(e.target.value)}
         />
+        <Box d="inline-block">
+          <Select size="sm" onChange={languageOnChange} value={mode}>
+            {langs.map((language) => (
+              <option key={language} value={language}>
+                {language}
+              </option>
+            ))}
+          </Select>
+        </Box>
       </Stack>
       <CodeEditor
         fontSize={parseFloat(fontSize || '1.5')}
         value={code}
-        editorDidMount={(e: IEditor) => {
-          e.refresh();
-          setupListeners(e);
-          editorRef.current = e;
-        }}
+        editorDidMount={editorDidMount}
         onBeforeChange={(_e: IEditor, _d: CodeMirror.EditorChange, v: string) => setCode(v)}
         options={{
           mode,

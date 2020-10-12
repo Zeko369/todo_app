@@ -61,7 +61,7 @@ export const NoteForm: React.FC<NoteForm> = (props) => {
       ) : (
         <FormControl isRequired>
           <FormLabel>Content</FormLabel>
-          <Editor ref={ref} initCode={props.initValues?.code || initCode} language="markdown" />
+          <Editor ref={ref} initCode={props.initValues?.code || initCode} />
         </FormControl>
       )}
     </Stack>
