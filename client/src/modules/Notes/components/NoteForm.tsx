@@ -10,6 +10,7 @@ interface NoteForm {
     title: string;
     code?: string;
   } | null;
+  saving?: boolean;
 }
 
 const initCode = 'Hello';
@@ -48,7 +49,7 @@ export const NoteForm: React.FC<NoteForm> = (props) => {
               isRequired
               value={title}
             />
-            <Button onClick={onClick} variantColor="green">
+            <Button onClick={onClick} variantColor="green" isLoading={props.saving}>
               Save
             </Button>
           </Flex>

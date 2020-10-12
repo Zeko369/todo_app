@@ -6,6 +6,7 @@ import {
   FormLabel,
   FormErrorMessage,
   FormControlProps,
+  Stack,
 } from '@chakra-ui/core';
 import { ForwardRefRenderFunction } from 'react';
 import capitalize from '../helpers';
@@ -15,6 +16,7 @@ interface InputProps extends ChakraInputProps {
   error?: string;
   name: string;
   outerProps?: FormControlProps;
+  noLabel?: boolean;
 }
 
 const resoleType = (name: string): string | undefined => {
@@ -31,11 +33,21 @@ const resoleType = (name: string): string | undefined => {
 };
 
 const Input: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
-  const { name, isInvalid, isRequired, error, label, placeholder, outerProps, ...rest } = props;
+  const {
+    name,
+    isInvalid,
+    noLabel,
+    isRequired,
+    error,
+    label,
+    placeholder,
+    outerProps,
+    ...rest
+  } = props;
 
   return (
     <FormControl isInvalid={isInvalid || !!error} isRequired={isRequired} {...outerProps}>
-      <FormLabel htmlFor={name}>{label || capitalize(name)}</FormLabel>
+      {!noLabel && <FormLabel htmlFor={name}>{label || capitalize(name)}</FormLabel>}
       <ChakraInput
         type={resoleType(name)}
         id={name}

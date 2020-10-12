@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import { Heading } from '@chakra-ui/core';
@@ -11,6 +11,7 @@ export const EditNotePage: NextPage = () => {
   const router = useRouter();
   const id = getId(router.query) || -1;
 
+  const [saving, setSaving] = useState<boolean>(false);
   const { loading, error, data } = useNoteQuery({ variables: { id } });
   const [updateNote] = useUpdateNoteMutation({
     refetchQueries: [{ query: NOTES_QUERY }, { query: NOTE_QUERY, variables: { id } }],
@@ -21,11 +22,9 @@ export const EditNotePage: NextPage = () => {
   }
 
   const onClick = async (title: string, code: string) => {
+    setSaving(true);
     await updateNote({ variables: { id, title, description: code } });
-
-    if (id) {
-      router.push('/notes/[id]', `/notes/${id}`);
-    }
+    setSaving(false);
   };
 
   return (
@@ -36,6 +35,7 @@ export const EditNotePage: NextPage = () => {
           ? { title: data.todo.title || '', code: data.todo.description || undefined }
           : null
       }
+      saving={saving}
     >
       <Heading>Edit note</Heading>
     </NoteForm>

@@ -4,6 +4,7 @@ import { Box, Button, Heading, IconButton, Spinner, Stack, useColorMode } from '
 import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
 
+import Input from '../../../components/Input';
 import useSaveToggle from '../../../hooks/useSaveToggle';
 
 import 'codemirror/theme/material-darker.css';
@@ -13,8 +14,8 @@ import 'codemirror/lib/codemirror.css';
 const langs = ['javascript', 'clike', 'ruby', 'python', 'markdown', 'sql'] as const;
 type Language = typeof langs[number];
 
-const CodeEditor = styled(Controlled)`
-  font-size: 1.5em;
+const CodeEditor = styled(Controlled)<{ fontSize: number }>`
+  font-size: ${(props) => props.fontSize}em;
   height: 100%;
 
   .CodeMirror {
@@ -38,6 +39,7 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
 
   const { colorMode } = useColorMode();
 
+  const [fontSize, setFontSize] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [mode, setMode] = useState<Language | undefined>(undefined);
   const [vimMode, setVimMode] = useState<string>();
@@ -95,8 +97,18 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode, language },
         </Button>
         <IconButton size="sm" icon="arrow-left" aria-label="Undo" onClick={undo} />
         <IconButton size="sm" icon="arrow-right" aria-label="Redo" onClick={redo} />
+        <Input
+          name="Font size"
+          noLabel
+          size="sm"
+          w="50px"
+          placeholder="1.5"
+          value={fontSize}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFontSize(e.target.value)}
+        />
       </Stack>
       <CodeEditor
+        fontSize={parseFloat(fontSize || '1.5')}
         value={code}
         editorDidMount={(e: IEditor) => {
           e.refresh();
