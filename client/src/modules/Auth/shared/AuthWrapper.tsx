@@ -1,8 +1,9 @@
-import React from 'react';
-import { Heading, Spinner } from '@chakra-ui/core';
+import React, { useEffect } from 'react';
+import { Heading, Spinner, Stack } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
 import { useMeQuery } from '../../../generated/graphql';
+import { LinkButton } from 'chakra-next-link';
 
 export const AuthWrapper: React.FC = ({ children }) => {
   const { loading, error, data } = useMeQuery();
@@ -27,6 +28,11 @@ export const AuthWrapper: React.FC = ({ children }) => {
       invalidToken();
       return null;
     default:
-      return <Heading>We're sorry, but an error occurred while logging you in</Heading>;
+      return (
+        <Stack justifyContent="center" p="10">
+          <Heading>We're sorry, but an error occurred while logging you in</Heading>;
+          <LinkButton href="/auth/login">Login</LinkButton>
+        </Stack>
+      );
   }
 };
