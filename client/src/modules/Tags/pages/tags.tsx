@@ -99,9 +99,12 @@ export const TagsPage: NextPage = () => {
                 isRequired
                 name="color"
                 bg={`${color}.100`}
+                color="black"
               >
                 {colors.map((color) => (
-                  <option value={color}>{color}</option>
+                  <option value={color} key={color}>
+                    {color}
+                  </option>
                 ))}
               </Select>
               <Button type="submit">{editingId === -1 ? 'Create' : 'Update'}</Button>
