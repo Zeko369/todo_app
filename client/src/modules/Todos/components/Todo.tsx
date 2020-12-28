@@ -154,7 +154,7 @@ const Todo: React.FC<TodoProps> = (props) => {
         <Stack w="100%" spacing={3}>
           <Flex w="100%">
             <Stack w="100%">
-              <Heading fontSize="xl" wordBreak="break-all" alignItems="center" display="flex">
+              <Heading size="lg" wordBreak="break-all" alignItems="center" display="flex">
                 {pinned && <Icon aria-label="pinned" name="lock" color="orange.500" mr="2" />}
                 {tasks &&
                   tasks.length > 0 &&

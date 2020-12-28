@@ -174,18 +174,27 @@ export const createTodoWithList = gql`
 `;
 
 export const updateTodo = gql`
-  mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
+  mutation updateTodo($id: Int!, $title: String, $description: String) {
     updateOneTodo(
       where: { id: $id }
-      data: {
-        title: { set: $title }
-        description: { set: $description }
-        list: { connect: { id: $listId } }
-      }
+      data: { title: { set: $title }, description: { set: $description } }
     ) {
       id
       title
       description
+    }
+  }
+`;
+
+export const connectTodoToList = gql`
+  mutation connectTodoToList($id: Int!, $listId: Int!) {
+    updateOneTodo(where: { id: $id }, data: { list: { connect: { id: $listId } } }) {
+      id
+      title
+      description
+      list {
+        id
+      }
     }
   }
 `;

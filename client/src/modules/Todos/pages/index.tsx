@@ -32,6 +32,7 @@ import {
   useAddTodosToListMutation,
   useTagsQuery,
   useAddTagToTodosMutation,
+  useConnectTodoToListMutation,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
@@ -81,7 +82,7 @@ export const HomePage: NextPage = () => {
   const [addTagToTodos] = useAddTagToTodosMutation(apolloOptions);
   const [deleteTodo] = useDeleteTodoMutation(apolloOptions);
   const [deleteManyTodos] = useDeleteManyTodosMutation(apolloOptions);
-  const [updateTodo] = useUpdateTodoMutation(apolloOptions);
+  const [connectTodoToList] = useConnectTodoToListMutation(apolloOptions);
   const [removeTodoFromList] = useRemoveTodoFromListMutation(apolloOptions);
   const [addTodosToList] = useAddTodosToListMutation(apolloOptions);
 
@@ -103,7 +104,7 @@ export const HomePage: NextPage = () => {
       return removeTodoFromList({ variables: { id } });
     }
 
-    return updateTodo({ variables: { id, listId } });
+    return connectTodoToList({ variables: { id, listId } });
   };
 
   const remove = async (id: number) => {
@@ -195,8 +196,10 @@ export const HomePage: NextPage = () => {
     );
   }
 
+  console.log('render');
+
   return (
-    <Box w="90%" maxW="1000px" m="0 auto">
+    <Box w="90%" maxW="1000px" m="0 auto" pb="10">
       <Nav>
         <Text>
           <b>Done: </b>
@@ -415,7 +418,7 @@ export const HomePage: NextPage = () => {
             ))}
         </Stack>
       ) : (
-        <Heading fontSize={1.75}>No data :(</Heading>
+        <Heading fontSize="1.75em">No data :(</Heading>
       )}
     </Box>
   );

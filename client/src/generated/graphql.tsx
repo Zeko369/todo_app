@@ -2527,7 +2527,6 @@ export type UpdateTodoMutationVariables = Exact<{
   id: Scalars['Int'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  listId?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -2536,6 +2535,24 @@ export type UpdateTodoMutation = (
   & { updateOneTodo?: Maybe<(
     { __typename?: 'Todo' }
     & Pick<Todo, 'id' | 'title' | 'description'>
+  )> }
+);
+
+export type ConnectTodoToListMutationVariables = Exact<{
+  id: Scalars['Int'];
+  listId: Scalars['Int'];
+}>;
+
+
+export type ConnectTodoToListMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneTodo?: Maybe<(
+    { __typename?: 'Todo' }
+    & Pick<Todo, 'id' | 'title' | 'description'>
+    & { list?: Maybe<(
+      { __typename?: 'List' }
+      & Pick<List, 'id'>
+    )> }
   )> }
 );
 
@@ -3743,8 +3760,8 @@ export type CreateTodoWithListMutationHookResult = ReturnType<typeof useCreateTo
 export type CreateTodoWithListMutationResult = Apollo.MutationResult<CreateTodoWithListMutation>;
 export type CreateTodoWithListMutationOptions = Apollo.BaseMutationOptions<CreateTodoWithListMutation, CreateTodoWithListMutationVariables>;
 export const UpdateTodoDocument = gql`
-    mutation updateTodo($id: Int!, $title: String, $description: String, $listId: Int) {
-  updateOneTodo(where: {id: $id}, data: {title: {set: $title}, description: {set: $description}, list: {connect: {id: $listId}}}) {
+    mutation updateTodo($id: Int!, $title: String, $description: String) {
+  updateOneTodo(where: {id: $id}, data: {title: {set: $title}, description: {set: $description}}) {
     id
     title
     description
@@ -3769,7 +3786,6 @@ export type UpdateTodoMutationFn = Apollo.MutationFunction<UpdateTodoMutation, U
  *      id: // value for 'id'
  *      title: // value for 'title'
  *      description: // value for 'description'
- *      listId: // value for 'listId'
  *   },
  * });
  */
@@ -3779,6 +3795,44 @@ export function useUpdateTodoMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateTodoMutationHookResult = ReturnType<typeof useUpdateTodoMutation>;
 export type UpdateTodoMutationResult = Apollo.MutationResult<UpdateTodoMutation>;
 export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<UpdateTodoMutation, UpdateTodoMutationVariables>;
+export const ConnectTodoToListDocument = gql`
+    mutation connectTodoToList($id: Int!, $listId: Int!) {
+  updateOneTodo(where: {id: $id}, data: {list: {connect: {id: $listId}}}) {
+    id
+    title
+    description
+    list {
+      id
+    }
+  }
+}
+    `;
+export type ConnectTodoToListMutationFn = Apollo.MutationFunction<ConnectTodoToListMutation, ConnectTodoToListMutationVariables>;
+
+/**
+ * __useConnectTodoToListMutation__
+ *
+ * To run a mutation, you first call `useConnectTodoToListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConnectTodoToListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [connectTodoToListMutation, { data, loading, error }] = useConnectTodoToListMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useConnectTodoToListMutation(baseOptions?: Apollo.MutationHookOptions<ConnectTodoToListMutation, ConnectTodoToListMutationVariables>) {
+        return Apollo.useMutation<ConnectTodoToListMutation, ConnectTodoToListMutationVariables>(ConnectTodoToListDocument, baseOptions);
+      }
+export type ConnectTodoToListMutationHookResult = ReturnType<typeof useConnectTodoToListMutation>;
+export type ConnectTodoToListMutationResult = Apollo.MutationResult<ConnectTodoToListMutation>;
+export type ConnectTodoToListMutationOptions = Apollo.BaseMutationOptions<ConnectTodoToListMutation, ConnectTodoToListMutationVariables>;
 export const UpdateTaskDocument = gql`
     mutation updateTask($id: Int!, $title: String) {
   updateOneTask(where: {id: $id}, data: {title: {set: $title}}) {
