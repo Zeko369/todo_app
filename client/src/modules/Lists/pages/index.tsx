@@ -1,17 +1,20 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { Heading, List, Spinner, ListItem, Box } from '@chakra-ui/core';
+import { Heading, List, Spinner, ListItem, Box, Button } from '@chakra-ui/core';
 import { Link, LinkButton } from 'chakra-next-link';
 
-import { useListsQuery } from '../../../generated/graphql';
 import Nav from '../../../components/Nav';
+import { useListsQuery } from '../../Todos/hooks/useListsQuery';
+import useSaveToggle from '../../../hooks/useSaveToggle';
 
 export const ListsPage: NextPage = () => {
-  const { loading, error, data } = useListsQuery();
+  const [showShared, toggle] = useSaveToggle('showShared', true);
+  const { loading, error, data } = useListsQuery(showShared);
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
       <Nav>
+        <Button onClick={toggle}>{!showShared ? `Show` : 'Hide'} shared</Button>
         <LinkButton href="/lists/new" variantColor="blue">
           New
         </LinkButton>

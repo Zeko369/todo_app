@@ -33,6 +33,9 @@ export const TODOS_QUERY = gql`
       list {
         id
         title
+        sharedWith {
+          id
+        }
       }
     }
   }
@@ -265,7 +268,12 @@ export const addTagsToTodo = gql`
 export const addComment = gql`
   mutation addComment($todoId: Int!, $title: String!, $content: String) {
     createOneComment(
-      data: { title: $title, content: $content, todo: { connect: { id: $todoId } } }
+      data: {
+        title: $title
+        content: $content
+        todo: { connect: { id: $todoId } }
+        user: { connect: { id: 1 } }
+      }
     ) {
       id
       title

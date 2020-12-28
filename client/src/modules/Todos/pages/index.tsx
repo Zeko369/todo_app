@@ -23,10 +23,7 @@ import useToggle from '../../../hooks/useToggle';
 import TodoForm from '../components/TodoForm';
 import useKeyPress from '../../../hooks/useKeyPress';
 import {
-  useTodosQuery,
   useDeleteTodoMutation,
-  useListsQuery,
-  useUpdateTodoMutation,
   useRemoveTodoFromListMutation,
   useDeleteManyTodosMutation,
   useAddTodosToListMutation,
@@ -37,6 +34,8 @@ import {
 import { TODOS_QUERY } from '../graphql/queries';
 import Nav from '../../../components/Nav';
 import { useSelectTags } from '../../../hooks/useSelectTags';
+import { useListsQuery } from '../hooks/useListsQuery';
+import { useTodosQuery } from '../hooks/useTodosQuery';
 
 export const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
@@ -60,8 +59,9 @@ function sortFunc<T extends BaseTodo>(order: boolean): (t1: T, t2: T) => number 
 }
 
 export const HomePage: NextPage = () => {
-  const { loading, error, data } = useTodosQuery({ pollInterval: 2000 });
-  const listsQuery = useListsQuery();
+  const [showShared, toggle] = useSaveToggle('showShared', true);
+  const { loading, error, data } = useTodosQuery(showShared, { pollInterval: 2000 });
+  const listsQuery = useListsQuery(showShared);
   const tagsQuery = useTagsQuery();
 
   const { loading: lLoading, error: lError, data: lData } = listsQuery;
@@ -183,6 +183,8 @@ export const HomePage: NextPage = () => {
     }, 1);
   }, []);
 
+  console.log(data);
+
   const toggleNew = useCallback(() => (showNew ? setNew(false) : openNew()), [showNew]);
   const filteredData = useMemo(() => [...(data?.todos || [])].sort(sortFunc(order)), [data, order]);
 
@@ -205,7 +207,10 @@ export const HomePage: NextPage = () => {
           <b>Done: </b>
           {`${filteredData.filter((a) => a.checked).length} / ${filteredData.length}`}
         </Text>
-        <Button onClick={toggleNew} variantColor="blue" ml="2">
+        <Button onClick={toggle} ml="2">
+          {!showShared ? `!` : ''}shared
+        </Button>
+        <Button onClick={toggleNew} variantColor="blue">
           {showNew ? '-new' : '+new'}
         </Button>
       </Nav>

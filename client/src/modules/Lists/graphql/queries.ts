@@ -9,6 +9,9 @@ export const LISTS_QUERY = gql`
         id
         title
       }
+      sharedWith {
+        id
+      }
     }
   }
 `;
