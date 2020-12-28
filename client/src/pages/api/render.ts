@@ -13,10 +13,10 @@ const RenderMDX = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const mdxSource = await renderToString(source, {
     components,
-    mdxOptions: {
-      remarkPlugins: [remarkCodeTitles],
-      rehypePlugins: [mdxPrism],
-    },
+    // mdxOptions: {
+    //   remarkPlugins: [remarkCodeTitles],
+    //   rehypePlugins: [mdxPrism],
+    // },
   });
 
   res.json({ mdxSource });
