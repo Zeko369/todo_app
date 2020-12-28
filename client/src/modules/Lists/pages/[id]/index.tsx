@@ -98,7 +98,7 @@ export const ListPage: NextPage = () => {
       {loading ? (
         <Spinner />
       ) : error || !data || !data.list ? (
-        <Heading size="xl">Error :(</Heading>
+        <Heading size="xl">{error?.message}</Heading>
       ) : (
         <>
           {!me ? (

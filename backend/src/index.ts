@@ -78,7 +78,27 @@ schema.queryType({
     t.crud.user();
     t.crud.users({ ordering: true, filtering: true });
 
-    t.crud.todo();
+    t.crud.todo({
+      resolve: async (a, b, c, d, e) => {
+        const user = await getUser(c);
+
+        if (!user) {
+          return null;
+        }
+
+        const todo = await c.db.todo.findOne({
+          where: { id: b.where.id || -1 },
+          include: { list: { select: { sharedWith: { select: { id: true } }, userId: true } } },
+        });
+
+        if (todo?.userId === user.id || todo?.list?.sharedWith.some((a) => a.id === user.id)) {
+          const res = await e(a, b, c, d);
+          return res;
+        }
+
+        return null;
+      },
+    });
     t.crud.todos({
       ordering: true,
       filtering: true,
@@ -124,24 +144,23 @@ schema.queryType({
     });
 
     t.crud.list({
-      resolve: async (a, b, c, d, e) => {
-        const user = await getUser(c);
+      authorize: async (root, args, ctx, info) => {
+        const user = await getUser(ctx);
 
         if (!user) {
-          return null;
+          return false;
         }
 
-        const list = await c.db.list.findOne({
-          where: { id: b.where.id || -1 },
+        const list = await ctx.db.list.findOne({
+          where: { id: args.where.id || -1 },
           select: { sharedWith: { select: { id: true } }, userId: true },
         });
 
         if (list?.userId === user.id || list?.sharedWith.some((a) => a.id === user.id)) {
-          const res = await e(a, b, c, d);
-          return res;
+          return true;
         }
 
-        return null;
+        return false;
       },
     });
     t.crud.lists({
