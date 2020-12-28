@@ -110,7 +110,7 @@ export const Comments: React.FC<CommentsProps> = ({ comments, todoId }) => {
                 </Flex>
                 <Text>{comment.content}</Text>
               </Box>
-              <Stack>
+              <Stack isInline>
                 <IconButton
                   variant="ghost"
                   size="sm"
