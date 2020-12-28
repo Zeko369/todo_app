@@ -24,4 +24,4 @@ jobs:
       - run: 'ssh-keyscan ${{ secrets.SERVER_URL }} >> ~/.ssh/known_hosts'
       - run: yarn
       - run: git checkout yarn.lock
-      - run: yarn deploy
+      - run: SERVER_URL=${{ secrets.SERVER_URL }} USER=${{ secrets.USER }} yarn deploy
