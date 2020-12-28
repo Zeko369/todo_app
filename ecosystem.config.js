@@ -16,11 +16,6 @@ module.exports = {
       args: './backend/dist/index.js',
       log_file: './logs/server.log',
       time: true,
-      env: {
-        NODE_ENV: 'development',
-        PORT: 4000,
-        DATABASE_URL: 'postgresql://todo:foobar123@localhost:5432/todo_development?schema=public',
-      },
       env_production: {
         NODE_ENV: 'production',
         PORT: 2135,
@@ -30,11 +25,11 @@ module.exports = {
   ],
   deploy: {
     production: {
-      user: 'zeko',
-      host: 'c2.zekan.tk',
+      user: process.env.USER,
+      host: process.env.SERVER_URL,
       ref: 'origin/master',
       repo: 'git@github.com:Zeko369/todo_app.git',
-      path: '/home/zeko/todo',
+      path: `/home/${process.env.USER}/todo`,
       'post-deploy': './scripts/postdeploy.sh',
     },
   },

@@ -21,7 +21,7 @@ jobs:
       - uses: webfactory/ssh-agent@v0.2.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - run: 'ssh-keyscan c2.zekan.tk >> ~/.ssh/known_hosts'
+      - run: 'ssh-keyscan ${{ secrets.SERVER_URL }} >> ~/.ssh/known_hosts'
       - run: yarn
       - run: git checkout yarn.lock
       - run: yarn deploy
