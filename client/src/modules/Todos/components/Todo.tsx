@@ -6,7 +6,6 @@ import {
   Heading,
   Text,
   Stack,
-  Select,
   Button,
   Tag,
   TagCloseButton,
@@ -17,6 +16,7 @@ import {
   Icon,
 } from '@chakra-ui/core';
 
+import { Select } from '../../../components/Select';
 import useToggle from '../../../hooks/useToggle';
 import TodoForm from './TodoForm';
 import {

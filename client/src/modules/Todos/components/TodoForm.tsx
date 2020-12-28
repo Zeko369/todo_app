@@ -8,7 +8,6 @@ import {
   Flex,
   IconButton,
   Textarea,
-  Select,
   Spinner,
   Tag,
   TagIcon,
@@ -30,6 +29,7 @@ import {
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
 import { QueryResult } from '@apollo/client';
+import { Select } from '../../../components/Select';
 
 interface Props {
   todo?: Pick<TodoDB, 'id' | 'title' | 'description'> & { list?: Pick<ListDB, 'id'> | null };

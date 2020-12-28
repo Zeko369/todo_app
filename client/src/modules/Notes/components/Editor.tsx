@@ -1,18 +1,10 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import {
-  Box,
-  Button,
-  Heading,
-  IconButton,
-  Select,
-  Spinner,
-  Stack,
-  useColorMode,
-} from '@chakra-ui/core';
+import { Box, Button, Heading, IconButton, Spinner, Stack, useColorMode } from '@chakra-ui/core';
 import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
 
+import { Select } from '../../../components/Select';
 import Input from '../../../components/Input';
 import useSaveToggle from '../../../hooks/useSaveToggle';
 

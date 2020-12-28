@@ -12,10 +12,10 @@ import {
   CloseButton,
   Flex,
   theme,
-  Select,
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 
+import { Select } from '../../../components/Select';
 import Nav from '../../../components/Nav';
 import {
   useTagsQuery,

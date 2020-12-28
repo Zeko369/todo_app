@@ -7,7 +7,6 @@ import {
   Button,
   Text,
   Collapse,
-  Select,
   Spinner,
   SimpleGrid,
   IconButton,
@@ -36,6 +35,7 @@ import Nav from '../../../components/Nav';
 import { useSelectTags } from '../../../hooks/useSelectTags';
 import { useListsQuery } from '../hooks/useListsQuery';
 import { useTodosQuery } from '../hooks/useTodosQuery';
+import { Select } from '../../../components/Select';
 
 export const apolloOptions = {
   refetchQueries: [{ query: TODOS_QUERY }],
