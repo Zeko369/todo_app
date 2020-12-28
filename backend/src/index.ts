@@ -123,7 +123,27 @@ schema.queryType({
       },
     });
 
-    t.crud.list();
+    t.crud.list({
+      resolve: async (a, b, c, d, e) => {
+        const user = await getUser(c);
+
+        if (!user) {
+          return null;
+        }
+
+        const list = await c.db.list.findOne({
+          where: { id: b.where.id || -1 },
+          select: { sharedWith: { select: { id: true } }, userId: true },
+        });
+
+        if (list?.userId === user.id || list?.sharedWith.some((a) => a.id === user.id)) {
+          const res = await e(a, b, c, d);
+          return res;
+        }
+
+        return null;
+      },
+    });
     t.crud.lists({
       ordering: true,
       filtering: true,
