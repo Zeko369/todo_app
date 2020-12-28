@@ -42,9 +42,31 @@ const scopeToUser = async (root: any, args: any, ctx: any, info: any, originalRe
     return [];
   }
 
-  const newArgs = { ...args, where: { userId: { equals: user.id } } };
+  const newArgs = { ...args, where: { ...args.where, userId: { equals: user.id } } };
   const res = await originalResolve(root, newArgs, ctx, info);
 
+  return res;
+};
+
+const connectToUserMutation = async (
+  root: any,
+  args: any,
+  ctx: any,
+  info: any,
+  originalMutation: any
+) => {
+  const user = await getUser(ctx);
+
+  if (!user) {
+    throw new Error('Not logged in');
+  }
+
+  const res = originalMutation(
+    root,
+    { data: { ...args.data, user: { connect: { id: user.id } } } },
+    ctx,
+    info
+  );
   return res;
 };
 
@@ -133,15 +155,15 @@ schema.mutationType({
       },
     });
 
-    t.crud.createOneComment();
+    t.crud.createOneComment({ resolve: connectToUserMutation });
     t.crud.updateOneComment();
     t.crud.deleteOneComment();
 
-    t.crud.createOneTag();
+    t.crud.createOneTag({ resolve: connectToUserMutation });
     t.crud.updateOneTag();
     t.crud.deleteOneTag();
 
-    t.crud.createOneTask();
+    t.crud.createOneTask({ resolve: connectToUserMutation });
     t.crud.updateOneTask();
     t.crud.updateManyTask();
     t.crud.deleteOneTask();
@@ -180,8 +202,20 @@ schema.mutationType({
       },
     });
 
-    t.crud.createOneTodo();
-    t.crud.updateOneTodo();
+    t.crud.createOneTodo({ resolve: connectToUserMutation });
+    t.crud.updateOneTodo({
+      resolve: async (a, b, c, d, e) => {
+        console.log(b.data.list);
+
+        const res = await e(a, b, c, d);
+
+        if (!res) {
+          throw new Error('hello');
+        }
+
+        return res;
+      },
+    });
     t.crud.updateManyTodo();
     t.crud.deleteOneTodo();
     t.crud.deleteManyTodo();
@@ -216,7 +250,7 @@ schema.mutationType({
       },
     });
 
-    t.crud.createOneList();
+    t.crud.createOneList({ resolve: connectToUserMutation });
     t.crud.updateOneList();
     t.crud.deleteOneList();
   },
