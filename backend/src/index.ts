@@ -21,34 +21,52 @@ use(
   })
 );
 
-function getUserId(token: any | null | undefined): string {
-  const userId = token.userId;
-  if (!userId) {
-    throw new Error('INVALID_TOKEN');
+const getUser = async (ctx: NexusContext) => {
+  try {
+    // @ts-ignore
+    const userId = ctx.token.userId;
+    if (!userId) {
+      throw new Error('INVALID_TOKEN');
+    }
+
+    return ctx.db.user.findOne({ where: { id: parseInt(userId) } });
+  } catch (err) {
+    return null;
+  }
+};
+
+const scopeToUser = async (root: any, args: any, ctx: any, info: any, originalResolve: any) => {
+  const user = await getUser(ctx);
+
+  if (!user) {
+    return [];
   }
 
-  return userId;
-}
+  const newArgs = { ...args, where: { userId: { equals: user.id } } };
+  const res = await originalResolve(root, newArgs, ctx, info);
+
+  return res;
+};
 
 schema.queryType({
   definition(t) {
     t.crud.task();
-    t.crud.tasks();
+    // t.crud.tasks({ resolve: scopeToUser });
 
     t.crud.user();
     t.crud.users({ ordering: true, filtering: true });
 
     t.crud.todo();
-    t.crud.todos({ ordering: true, filtering: true });
+    t.crud.todos({ ordering: true, filtering: true, resolve: scopeToUser });
 
     t.crud.list();
-    t.crud.lists({ ordering: true, filtering: true });
+    t.crud.lists({ ordering: true, filtering: true, resolve: scopeToUser });
 
     t.crud.tag();
-    t.crud.tags({ ordering: true });
+    t.crud.tags({ ordering: true, resolve: scopeToUser });
 
     t.crud.comment();
-    t.crud.comments({ ordering: true });
+    // t.crud.comments({ ordering: true });
 
     t.field('me', {
       type: 'User',
@@ -58,13 +76,7 @@ schema.queryType({
           throw new Error('TOKEN_MISSING');
         }
 
-        const userId = getUserId(ctx.token);
-
-        return ctx.db.user.findOne({
-          where: {
-            id: parseInt(userId),
-          },
-        });
+        return getUser(ctx);
       },
     });
   },

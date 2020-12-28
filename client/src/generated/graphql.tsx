@@ -18,7 +18,6 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   task?: Maybe<Task>;
-  tasks: Array<Task>;
   user?: Maybe<User>;
   users: Array<User>;
   todo?: Maybe<Todo>;
@@ -28,21 +27,12 @@ export type Query = {
   tag?: Maybe<Tag>;
   tags: Array<Tag>;
   comment?: Maybe<Comment>;
-  comments: Array<Comment>;
   me?: Maybe<User>;
 };
 
 
 export type QueryTaskArgs = {
   where: TaskWhereUniqueInput;
-};
-
-
-export type QueryTasksArgs = {
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  before?: Maybe<TaskWhereUniqueInput>;
-  after?: Maybe<TaskWhereUniqueInput>;
 };
 
 
@@ -107,15 +97,6 @@ export type QueryTagsArgs = {
 
 export type QueryCommentArgs = {
   where: CommentWhereUniqueInput;
-};
-
-
-export type QueryCommentsArgs = {
-  orderBy?: Maybe<Array<CommentOrderByInput>>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  before?: Maybe<CommentWhereUniqueInput>;
-  after?: Maybe<CommentWhereUniqueInput>;
 };
 
 export type TaskWhereUniqueInput = {
