@@ -12,8 +12,8 @@ module.exports = {
     },
     {
       name: 'Todo: Server',
-      script: 'node',
-      args: './backend/dist/index.js',
+      script: './scripts/start.sh',
+      args: '',
       log_file: './logs/server.log',
       time: true,
       env_production: {
