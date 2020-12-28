@@ -23,6 +23,7 @@ export const LIST_QUERY = gql`
       title
       user {
         id
+        username
       }
       sharedWith {
         id

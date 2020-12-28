@@ -2384,7 +2384,7 @@ export type ListQuery = (
     & Pick<List, 'id' | 'title'>
     & { user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id'>
+      & Pick<User, 'id' | 'username'>
     )>, sharedWith: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -3224,6 +3224,7 @@ export const ListDocument = gql`
     title
     user {
       id
+      username
     }
     sharedWith {
       id

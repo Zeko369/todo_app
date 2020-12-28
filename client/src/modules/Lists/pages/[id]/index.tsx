@@ -14,6 +14,8 @@ import {
   Button,
   TagIcon,
   useDisclosure,
+  List,
+  ListItem,
 } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
@@ -29,6 +31,7 @@ import useSaveToggle from '../../../../hooks/useSaveToggle';
 import { LIST_QUERY } from '../../graphql/queries';
 import { useSelectTags } from '../../../../hooks/useSelectTags';
 import { ShareListModal } from '../../components/ShareListModal';
+import { useMe } from '../../../Todos/hooks/useListsQuery';
 
 type Tag = Pick<TagDB, 'id' | 'text' | 'color'>;
 
@@ -41,6 +44,7 @@ export const ListPage: NextPage = () => {
   const id = getId(router.query) || -1;
 
   const modal = useDisclosure();
+  const me = useMe();
   const { loading, error, data } = useListQuery({ variables: { id } });
 
   const [checkTask] = useCheckTaskMutation(refetch(id));
@@ -97,6 +101,25 @@ export const ListPage: NextPage = () => {
         <Heading size="xl">Error :(</Heading>
       ) : (
         <>
+          {!me ? (
+            <Spinner />
+          ) : (
+            <Stack>
+              <Heading size="lg">
+                Owner: {data?.list.user?.id === me.id ? 'Me' : data?.list.user?.username}
+              </Heading>
+              {data?.list.sharedWith.length > 0 && (
+                <Stack>
+                  <Heading size="md">Shared list</Heading>
+                  <List styleType="disc">
+                    {data?.list.sharedWith.map((user) => (
+                      <ListItem key={user.id}>{user.username}</ListItem>
+                    ))}
+                  </List>
+                </Stack>
+              )}
+            </Stack>
+          )}
           <Heading size="lg">
             Done: {data.list.todos.filter((todo) => todo.checked).length} / {data.list.todos.length}
           </Heading>
