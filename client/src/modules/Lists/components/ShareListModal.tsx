@@ -10,8 +10,6 @@ import {
   Heading,
   Text,
   Stack,
-  ListItem,
-  List,
   Spinner,
   Button,
 } from '@chakra-ui/core';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Heading, Spinner, Stack } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import renderToString from 'next-mdx-remote/render-to-string';
-import mdxPrism from 'mdx-prism';
-import remarkCodeTitles from 'remark-code-titles';
+// import mdxPrism from 'mdx-prism';
+// import remarkCodeTitles from 'remark-code-titles';
 import { components } from '../../components/md';
 
 const RenderMDX = async (req: NextApiRequest, res: NextApiResponse) => {

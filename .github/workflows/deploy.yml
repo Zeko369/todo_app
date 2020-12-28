@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: webfactory/ssh-agent@v0.2.0
+      - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - run: 'ssh-keyscan ${{ secrets.SERVER_URL }} >> ~/.ssh/known_hosts'

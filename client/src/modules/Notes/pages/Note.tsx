@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { Box, Heading, Spinner, Flex, Code } from '@chakra-ui/core';
 import { LinkButton } from 'chakra-next-link';
-import hydrate from 'next-mdx-remote/hydrate';
+// import hydrate from 'next-mdx-remote/hydrate';
 import styled from '@emotion/styled';
 import { getId } from '../../../helpers/getId';
 import { useNoteQuery } from '../../../generated/graphql';
 import Nav from '../../../components/Nav';
 import { AuthWrapper } from '../../Auth/shared/AuthWrapper';
-import { components } from '../../../components/md';
+// import { components } from '../../../components/md';
 
 const PostContentWrapper = styled(Box)`
   & > :not(.remark-code-title) {
@@ -17,11 +17,11 @@ const PostContentWrapper = styled(Box)`
   }
 `;
 
-const initContent = {
-  compiledSource: 'const MDXContent = () => null;',
-  renderedOutput: '',
-  scope: {},
-};
+// const initContent = {
+//   compiledSource: 'const MDXContent = () => null;',
+//   renderedOutput: '',
+//   scope: {},
+// };
 
 export const NotePage: NextPage = () => {
   const router = useRouter();
