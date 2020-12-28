@@ -79,10 +79,92 @@ schema.queryType({
     t.crud.users({ ordering: true, filtering: true });
 
     t.crud.todo();
-    t.crud.todos({ ordering: true, filtering: true, resolve: scopeToUser });
+    t.crud.todos({
+      ordering: true,
+      filtering: true,
+      resolve: async (root, args, ctx, info, originalResolve) => {
+        const user = await getUser(ctx);
+
+        if (!user) {
+          return [];
+        }
+
+        const res = await originalResolve(
+          root,
+          {
+            ...args,
+            where: {
+              AND: [
+                { ...args.where },
+                {
+                  OR: [
+                    { userId: { equals: user.id } },
+                    {
+                      list: {
+                        sharedWith: {
+                          some: {
+                            id: {
+                              equals: user.id,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          ctx,
+          info
+        );
+
+        return res;
+      },
+    });
 
     t.crud.list();
-    t.crud.lists({ ordering: true, filtering: true, resolve: scopeToUser });
+    t.crud.lists({
+      ordering: true,
+      filtering: true,
+      resolve: async (root, args, ctx, info, originalResolve) => {
+        const user = await getUser(ctx);
+
+        if (!user) {
+          return [];
+        }
+
+        const res = await originalResolve(
+          root,
+          {
+            ...args,
+            where: {
+              AND: [
+                { ...args.where },
+                {
+                  OR: [
+                    { userId: { equals: user.id } },
+                    {
+                      sharedWith: {
+                        some: {
+                          id: {
+                            equals: user.id,
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          ctx,
+          info
+        );
+
+        return res;
+      },
+    });
 
     t.crud.tag();
     t.crud.tags({ ordering: true, resolve: scopeToUser });
@@ -341,6 +423,7 @@ schema.objectType({
     t.model.id();
     t.model.title();
     t.model.todos({ ordering: true });
+    t.model.sharedWith({ ordering: true, filtering: true });
     t.model.archivedAt();
     t.model.createdAt();
     t.model.updatedAt();
