@@ -3,7 +3,10 @@
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-cp ~/envs/todo .env
+echo $(whoami)
+echo $(pwd)
+
+cp ~/envs/todo ./backend/prisma/.env
 cp ~/envs/todo_client ./client/.env
 
 yarn
@@ -21,4 +24,4 @@ cd ..
 
 git checkout .
 
-pm2 reload ecosystem.config.js --env production
+yarn pm2 reload ecosystem.config.js --env production
