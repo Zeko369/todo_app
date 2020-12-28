@@ -185,6 +185,7 @@ export type List = {
   title?: Maybe<Scalars['String']>;
   todos: Array<Todo>;
   sharedWith: Array<User>;
+  user?: Maybe<User>;
   archivedAt?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -2317,6 +2318,42 @@ export type UpdateListMutation = (
   )> }
 );
 
+export type ShareListWithUserMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  listId: Scalars['Int'];
+}>;
+
+
+export type ShareListWithUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneList?: Maybe<(
+    { __typename?: 'List' }
+    & Pick<List, 'id'>
+    & { sharedWith: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )> }
+  )> }
+);
+
+export type DisconnectListWithUserMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  listId: Scalars['Int'];
+}>;
+
+
+export type DisconnectListWithUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateOneList?: Maybe<(
+    { __typename?: 'List' }
+    & Pick<List, 'id'>
+    & { sharedWith: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )> }
+  )> }
+);
+
 export type ListsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2345,7 +2382,13 @@ export type ListQuery = (
   & { list?: Maybe<(
     { __typename?: 'List' }
     & Pick<List, 'id' | 'title'>
-    & { todos: Array<(
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>, sharedWith: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    )>, todos: Array<(
       { __typename?: 'Todo' }
       & Pick<Todo, 'id' | 'title' | 'description' | 'checked'>
       & { tasks: Array<(
@@ -2356,6 +2399,17 @@ export type ListQuery = (
         & Pick<Tag, 'id' | 'text' | 'color'>
       )> }
     )> }
+  )> }
+);
+
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = (
+  { __typename?: 'Query' }
+  & { users: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
   )> }
 );
 
@@ -3051,6 +3105,78 @@ export function useUpdateListMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateListMutationHookResult = ReturnType<typeof useUpdateListMutation>;
 export type UpdateListMutationResult = Apollo.MutationResult<UpdateListMutation>;
 export type UpdateListMutationOptions = Apollo.BaseMutationOptions<UpdateListMutation, UpdateListMutationVariables>;
+export const ShareListWithUserDocument = gql`
+    mutation shareListWithUser($userId: Int!, $listId: Int!) {
+  updateOneList(where: {id: $listId}, data: {sharedWith: {connect: {id: $userId}}}) {
+    id
+    sharedWith {
+      id
+    }
+  }
+}
+    `;
+export type ShareListWithUserMutationFn = Apollo.MutationFunction<ShareListWithUserMutation, ShareListWithUserMutationVariables>;
+
+/**
+ * __useShareListWithUserMutation__
+ *
+ * To run a mutation, you first call `useShareListWithUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useShareListWithUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [shareListWithUserMutation, { data, loading, error }] = useShareListWithUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useShareListWithUserMutation(baseOptions?: Apollo.MutationHookOptions<ShareListWithUserMutation, ShareListWithUserMutationVariables>) {
+        return Apollo.useMutation<ShareListWithUserMutation, ShareListWithUserMutationVariables>(ShareListWithUserDocument, baseOptions);
+      }
+export type ShareListWithUserMutationHookResult = ReturnType<typeof useShareListWithUserMutation>;
+export type ShareListWithUserMutationResult = Apollo.MutationResult<ShareListWithUserMutation>;
+export type ShareListWithUserMutationOptions = Apollo.BaseMutationOptions<ShareListWithUserMutation, ShareListWithUserMutationVariables>;
+export const DisconnectListWithUserDocument = gql`
+    mutation disconnectListWithUser($userId: Int!, $listId: Int!) {
+  updateOneList(where: {id: $listId}, data: {sharedWith: {disconnect: {id: $userId}}}) {
+    id
+    sharedWith {
+      id
+    }
+  }
+}
+    `;
+export type DisconnectListWithUserMutationFn = Apollo.MutationFunction<DisconnectListWithUserMutation, DisconnectListWithUserMutationVariables>;
+
+/**
+ * __useDisconnectListWithUserMutation__
+ *
+ * To run a mutation, you first call `useDisconnectListWithUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisconnectListWithUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disconnectListWithUserMutation, { data, loading, error }] = useDisconnectListWithUserMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function useDisconnectListWithUserMutation(baseOptions?: Apollo.MutationHookOptions<DisconnectListWithUserMutation, DisconnectListWithUserMutationVariables>) {
+        return Apollo.useMutation<DisconnectListWithUserMutation, DisconnectListWithUserMutationVariables>(DisconnectListWithUserDocument, baseOptions);
+      }
+export type DisconnectListWithUserMutationHookResult = ReturnType<typeof useDisconnectListWithUserMutation>;
+export type DisconnectListWithUserMutationResult = Apollo.MutationResult<DisconnectListWithUserMutation>;
+export type DisconnectListWithUserMutationOptions = Apollo.BaseMutationOptions<DisconnectListWithUserMutation, DisconnectListWithUserMutationVariables>;
 export const ListsDocument = gql`
     query LISTS {
   lists(orderBy: {id: desc}) {
@@ -3096,6 +3222,13 @@ export const ListDocument = gql`
   list(where: {id: $id}) {
     id
     title
+    user {
+      id
+    }
+    sharedWith {
+      id
+      username
+    }
     todos(orderBy: {id: desc}) {
       id
       title
@@ -3141,6 +3274,39 @@ export function useListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListQ
 export type ListQueryHookResult = ReturnType<typeof useListQuery>;
 export type ListLazyQueryHookResult = ReturnType<typeof useListLazyQuery>;
 export type ListQueryResult = Apollo.QueryResult<ListQuery, ListQueryVariables>;
+export const UsersDocument = gql`
+    query USERS {
+  users {
+    id
+    username
+  }
+}
+    `;
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+      }
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, baseOptions);
+        }
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const CreateNoteDocument = gql`
     mutation createNote($title: String!, $description: String!) {
   createOneTodo(data: {title: $title, description: $description, type: NOTE}) {

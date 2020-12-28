@@ -13,6 +13,7 @@ import {
   Text,
   Button,
   TagIcon,
+  useDisclosure,
 } from '@chakra-ui/core';
 import { useRouter } from 'next/router';
 
@@ -27,6 +28,7 @@ import Nav from '../../../../components/Nav';
 import useSaveToggle from '../../../../hooks/useSaveToggle';
 import { LIST_QUERY } from '../../graphql/queries';
 import { useSelectTags } from '../../../../hooks/useSelectTags';
+import { ShareListModal } from '../../components/ShareListModal';
 
 type Tag = Pick<TagDB, 'id' | 'text' | 'color'>;
 
@@ -38,6 +40,7 @@ export const ListPage: NextPage = () => {
   const router = useRouter();
   const id = getId(router.query) || -1;
 
+  const modal = useDisclosure();
   const { loading, error, data } = useListQuery({ variables: { id } });
 
   const [checkTask] = useCheckTaskMutation(refetch(id));
@@ -77,12 +80,14 @@ export const ListPage: NextPage = () => {
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
+      <ShareListModal modal={modal} listData={data} />
       <Nav />
       <Stack spacing={3} isInline>
         <Heading>List: {data?.list?.title}</Heading>
         <LinkButton href="/lists/[id]/edit" nextAs={`/lists/${id}/edit`} variantColor="green">
           Edit
         </LinkButton>
+        <Button onClick={modal.onOpen}>Share</Button>
         <Button onClick={toggleAll}>{!showAll ? 'Only todo' : 'All'}</Button>
         <Button onClick={toggleTasks}>{!showTasks ? '+' : '-'}tasks</Button>
       </Stack>

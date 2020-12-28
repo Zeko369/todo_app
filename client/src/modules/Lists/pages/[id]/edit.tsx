@@ -9,14 +9,16 @@ import ListForm, { IListData } from '../../components/ListForm';
 import Nav from '../../../../components/Nav';
 import { LISTS_QUERY, LIST_QUERY } from '../../graphql/queries';
 
+export const refetch = (id: number) => ({
+  refetchQueries: [{ query: LISTS_QUERY }, { query: LIST_QUERY, variables: { id } }],
+});
+
 export const EditListPage: NextPage = () => {
   const router = useRouter();
   const id = getId(router.query) || -1;
 
   const { loading, error, data } = useListQuery({ variables: { id } });
-  const [update] = useUpdateListMutation({
-    refetchQueries: [{ query: LISTS_QUERY }, { query: LIST_QUERY, variables: { id } }],
-  });
+  const [update] = useUpdateListMutation(refetch(id));
 
   const onSubmit = async (data: IListData) => {
     await update({ variables: { id, ...data } });

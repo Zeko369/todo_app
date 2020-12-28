@@ -424,6 +424,7 @@ schema.objectType({
     t.model.title();
     t.model.todos({ ordering: true });
     t.model.sharedWith({ ordering: true, filtering: true });
+    t.model.user();
     t.model.archivedAt();
     t.model.createdAt();
     t.model.updatedAt();

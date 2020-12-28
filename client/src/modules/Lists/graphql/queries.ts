@@ -21,6 +21,13 @@ export const LIST_QUERY = gql`
     list(where: { id: $id }) {
       id
       title
+      user {
+        id
+      }
+      sharedWith {
+        id
+        username
+      }
       todos(orderBy: { id: desc }) {
         id
         title
@@ -37,6 +44,15 @@ export const LIST_QUERY = gql`
           color
         }
       }
+    }
+  }
+`;
+
+export const USERS_QUERY = gql`
+  query USERS {
+    users {
+      id
+      username
     }
   }
 `;

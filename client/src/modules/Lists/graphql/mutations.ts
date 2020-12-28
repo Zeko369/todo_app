@@ -17,3 +17,25 @@ export const updateList = gql`
     }
   }
 `;
+
+export const shareListWithUser = gql`
+  mutation shareListWithUser($userId: Int!, $listId: Int!) {
+    updateOneList(where: { id: $listId }, data: { sharedWith: { connect: { id: $userId } } }) {
+      id
+      sharedWith {
+        id
+      }
+    }
+  }
+`;
+
+export const disconnectListWithUser = gql`
+  mutation disconnectListWithUser($userId: Int!, $listId: Int!) {
+    updateOneList(where: { id: $listId }, data: { sharedWith: { disconnect: { id: $userId } } }) {
+      id
+      sharedWith {
+        id
+      }
+    }
+  }
+`;
