@@ -6,7 +6,6 @@ import {
   Heading,
   Grid,
   useColorMode,
-  IconButton,
   Box,
   Avatar,
   Menu,
