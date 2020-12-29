@@ -11,8 +11,10 @@ import {
   Avatar,
   Menu,
   MenuButton,
+  Text,
   MenuItem,
   MenuList,
+  Icon,
 } from '@chakra-ui/core';
 import Link from 'next/link';
 import { useMeQuery } from '../generated/graphql';
@@ -26,6 +28,7 @@ const Nav: React.FC<INavProps> = ({ children }) => {
   const me = (!loading && !error && data?.me) || null;
 
   const { colorMode, toggleColorMode } = useColorMode();
+  const dark = colorMode === 'dark';
 
   const textColor = {
     dark: (selected: boolean) => (selected ? '#fff' : '#888'),
@@ -68,11 +71,6 @@ const Nav: React.FC<INavProps> = ({ children }) => {
       <Flex w="100%" justify="flex-end">
         <Stack isInline align="center">
           {children}
-          <IconButton
-            icon={colorMode === 'dark' ? 'moon' : 'sun'}
-            aria-label={colorMode === 'dark' ? 'light' : 'dark'}
-            onClick={toggleColorMode}
-          />
           {me && (
             <Box>
               <Menu>
@@ -80,6 +78,12 @@ const Nav: React.FC<INavProps> = ({ children }) => {
                   <Avatar name={me.username} />
                 </MenuButton>
                 <MenuList>
+                  <MenuItem onClick={toggleColorMode}>
+                    <Stack isInline align="center">
+                      <Icon name={dark ? 'moon' : 'sun'} />
+                      <Text>{dark ? 'Dark' : 'Light'} theme</Text>
+                    </Stack>
+                  </MenuItem>
                   <MenuItem>Profile (not working)</MenuItem>
                   <MenuItem onClick={logout}>Logout</MenuItem>
                 </MenuList>
