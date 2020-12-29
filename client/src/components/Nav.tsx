@@ -4,18 +4,15 @@ import {
   Flex,
   Stack,
   Heading,
-  Text,
-  Button,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
   Grid,
   useColorMode,
   IconButton,
+  Box,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from '@chakra-ui/core';
 import Link from 'next/link';
 import { useMeQuery } from '../generated/graphql';
@@ -68,32 +65,7 @@ const Nav: React.FC<INavProps> = ({ children }) => {
           </Link>
         </Heading>
       </Stack>
-      <Flex w="100%" justify="space-between">
-        {me && (
-          <Flex alignItems="center">
-            <Stack isInline>
-              <Text>Hello, </Text>
-              <Text fontWeight="bold">{me.username}</Text>
-              <Popover>
-                <PopoverTrigger>
-                  <Button size="xs" variantColor="red" variant="ghost">
-                    Logout
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent zIndex={4}>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader>Are you sure you want to logout?</PopoverHeader>
-                  <PopoverBody display="flex" justifyContent="center">
-                    <Button variantColor="red" onClick={logout}>
-                      Log out
-                    </Button>
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
-            </Stack>
-          </Flex>
-        )}
+      <Flex w="100%" justify="flex-end">
         <Stack isInline align="center">
           {children}
           <IconButton
@@ -101,6 +73,19 @@ const Nav: React.FC<INavProps> = ({ children }) => {
             aria-label={colorMode === 'dark' ? 'light' : 'dark'}
             onClick={toggleColorMode}
           />
+          {me && (
+            <Box>
+              <Menu>
+                <MenuButton>
+                  <Avatar name={me.username} />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>Profile (not working)</MenuItem>
+                  <MenuItem onClick={logout}>Logout</MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+          )}
         </Stack>
       </Flex>
     </Grid>
