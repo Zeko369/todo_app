@@ -51,7 +51,6 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode }, ref) => {
       await Promise.all(langs.map((lang) => import(`codemirror/mode/${lang}/${lang}` as any)));
     })()
       .then(() => {
-        console.log('Done loading languages, reloading editor');
         setMode('markdown');
         setLoading(false);
       })

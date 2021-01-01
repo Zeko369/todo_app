@@ -183,8 +183,6 @@ export const HomePage: NextPage = () => {
     }, 1);
   }, []);
 
-  console.log(data);
-
   const toggleNew = useCallback(() => (showNew ? setNew(false) : openNew()), [showNew]);
   const filteredData = useMemo(() => [...(data?.todos || [])].sort(sortFunc(order)), [data, order]);
 
@@ -197,8 +195,6 @@ export const HomePage: NextPage = () => {
       </Box>
     );
   }
-
-  console.log('render');
 
   return (
     <Box w="90%" maxW="1000px" m="0 auto" pb="10">

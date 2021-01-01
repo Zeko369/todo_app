@@ -326,8 +326,6 @@ schema.mutationType({
     t.crud.createOneTodo({ resolve: connectToUserMutation });
     t.crud.updateOneTodo({
       resolve: async (a, b, c, d, e) => {
-        console.log(b.data.list);
-
         const res = await e(a, b, c, d);
 
         if (!res) {

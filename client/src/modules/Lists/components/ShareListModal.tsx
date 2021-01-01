@@ -70,7 +70,6 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({ modal, listData 
   };
 
   const onDisconnect = (id: number) => async () => {
-    console.log(id);
     await disconnectFromUser({ variables: { userId: id, listId } });
   };
 

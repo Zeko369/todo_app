@@ -85,11 +85,9 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
     try {
       if (todo) {
-        console.log('first');
         await updateTodo({ variables: { id: todo.id, ...attrs } });
 
         if (todo.list?.id && data.list === '-1') {
-          console.log('here');
           await removeTodoFromList({ variables: { id: todo.id } });
         } else if (attrs.listId && (!todo.list?.id || attrs.listId !== todo.list.id)) {
           await connectTodoToList({ variables: { id: todo.id, listId: attrs.listId } });

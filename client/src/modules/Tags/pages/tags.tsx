@@ -57,8 +57,6 @@ export const TagsPage: NextPage = () => {
   };
 
   const edit = ({ id, color, text }: Pick<TagDB, 'id' | 'text' | 'color'>) => () => {
-    console.log(id, text, color);
-
     setEditingId(id);
     setValue('text', text);
     setValue('color', color);
