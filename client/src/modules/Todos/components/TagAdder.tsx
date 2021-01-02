@@ -6,12 +6,15 @@ import {
   Button,
   Spinner,
   Heading,
+  HStack,
   List,
   ListItem,
   Tag,
-  TagIcon,
   TagLabel,
-} from '@chakra-ui/core';
+  TagLeftIcon,
+} from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+
 import { useTagsQuery, useAddTagToTodoMutation } from '../../../generated/graphql';
 import Input from '../../../components/Input';
 
@@ -41,7 +44,7 @@ export const TagAdder: React.FC<{ tags: number[]; id: number }> = ({ tags, id })
     <Stack>
       <Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack isInline spacing={3} alignItems="flex-end">
+          <HStack spacing={3} alignItems="flex-end">
             <Box w="100%">
               <Input
                 name="text"
@@ -55,7 +58,7 @@ export const TagAdder: React.FC<{ tags: number[]; id: number }> = ({ tags, id })
             <Button type="submit" isDisabled={items.length !== 1}>
               Add tag
             </Button>
-          </Stack>
+          </HStack>
         </form>
       </Box>
       {loading ? (
@@ -66,8 +69,8 @@ export const TagAdder: React.FC<{ tags: number[]; id: number }> = ({ tags, id })
         <List styleType="dot">
           {items.map((tag) => (
             <ListItem key={tag.id} mb={1}>
-              <Tag variantColor={tag.color || undefined} onClick={addTag(tag.id)} cursor="pointer">
-                <TagIcon icon="add" size="12px" />
+              <Tag colorScheme={tag.color || undefined} onClick={addTag(tag.id)} cursor="pointer">
+                <TagLeftIcon icon={<AddIcon />} size="12px" />
                 <TagLabel>{tag.text}</TagLabel>
               </Tag>
             </ListItem>

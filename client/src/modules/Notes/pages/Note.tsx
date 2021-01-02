@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { Box, Heading, Spinner, Flex } from '@chakra-ui/core';
+import { Box, Heading, Spinner, Flex } from '@chakra-ui/react';
 import { LinkButton } from 'chakra-next-link';
 import hydrate from 'next-mdx-remote/hydrate';
 import styled from '@emotion/styled';
@@ -54,7 +54,7 @@ export const NotePage: NextPage = () => {
         <Nav />
         <Flex justify="space-between">
           <Heading>{data?.todo?.title}</Heading>
-          <LinkButton href="/notes/[id]/edit" nextAs={`/notes/${id}/edit`} variantColor="green">
+          <LinkButton href={`/notes/${id}/edit`} colorScheme="green">
             Edit
           </LinkButton>
         </Flex>

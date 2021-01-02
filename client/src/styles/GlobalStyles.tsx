@@ -1,7 +1,7 @@
 import React from 'react';
-import { Global, css } from '@emotion/core';
+import { Global, css } from '@emotion/react';
 import { githubDark, githubLight } from './prism';
-import { useColorMode, useTheme } from '@chakra-ui/core';
+import { useColorMode, useTheme } from '@chakra-ui/react';
 
 export const GlobalStyles = () => {
   const theme = useTheme();

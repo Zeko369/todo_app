@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Spinner, Stack } from '@chakra-ui/core';
+import { Heading, Spinner, Stack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { useMeQuery } from '../../../generated/graphql';

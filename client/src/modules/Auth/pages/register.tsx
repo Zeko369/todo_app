@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import { Button, Heading, Stack } from '@chakra-ui/core';
+import { Button, Heading, Stack } from '@chakra-ui/react';
 import { Link } from 'chakra-next-link';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -79,7 +79,7 @@ export const RegisterPage: NextPage = () => {
             isRequired
           />
           <Link href="/auth/login">Login</Link>
-          <Button type="submit" variantColor="blue" isLoading={formState.isSubmitting}>
+          <Button type="submit" colorScheme="blue" isLoading={formState.isSubmitting}>
             Register
           </Button>
         </Stack>

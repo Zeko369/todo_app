@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { Heading, Box } from '@chakra-ui/core';
+import { Heading, Box } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { Link } from 'chakra-next-link';
 

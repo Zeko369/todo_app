@@ -13,8 +13,10 @@ import {
   Tag,
   Flex,
   TagLabel,
-  TagIcon,
-} from '@chakra-ui/core';
+  HStack,
+  TagRightIcon,
+} from '@chakra-ui/react';
+import { CloseIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 import useSaveToggle, { useSaveCycle } from '../../../hooks/useSaveToggle';
 import Todo from '../components/Todo';
@@ -73,7 +75,7 @@ export const HomePage: NextPage = () => {
   const [onlyList, setOnlyList] = useState<number>(-1);
 
   const [order, toggleOrder] = useSaveToggle('order');
-  const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo');
+  const [onlyTodo, toggleOnlyTodo] = useSaveToggle('onlyTodo', true);
   const [showNew, , setNew] = useSaveToggle('show:new');
   const [mass, toggleMass] = useToggle(false);
   const [compact, toggleCompact] = useSaveToggle('compact');
@@ -206,40 +208,42 @@ export const HomePage: NextPage = () => {
         <Button onClick={toggle} ml="2">
           {!showShared ? `!` : ''}shared
         </Button>
-        <Button onClick={toggleNew} variantColor="blue">
+        <Button onClick={toggleNew} colorScheme="blue">
           {showNew ? '-new' : '+new'}
         </Button>
       </Nav>
       <SimpleGrid columns={[1, null, 2]} spacingX="20px" spacingY="10px" mb="3">
-        <Stack isInline>
-          <Button onClick={toggleOrder} variantColor="cyan">
+        <HStack>
+          <Button onClick={toggleOrder} colorScheme="cyan">
             {order ? 'ASC' : 'DESC'}
           </Button>
-          <Button onClick={toggleOnlyTodo} variantColor={onlyTodo ? 'green' : undefined}>
+          <Button onClick={toggleOnlyTodo} colorScheme={onlyTodo ? 'green' : undefined}>
             {onlyTodo ? 'Only Todo' : 'All'}
           </Button>
           <Button
             onClick={toggleMass}
-            leftIcon={mass ? 'view' : 'view-off'}
-            variantColor={mass ? 'yellow' : undefined}
+            leftIcon={mass ? <ViewIcon /> : <ViewOffIcon />}
+            colorScheme={mass ? 'yellow' : undefined}
           >
             mass
           </Button>
           <Button
             onClick={smartSwitch}
-            leftIcon={tagsCycle === 0 ? 'view-off' : tagsCycle === 1 ? 'view' : 'lock'}
-            variantColor={tagsCycle > 0 ? 'purple' : undefined}
+            leftIcon={
+              tagsCycle === 0 ? <ViewOffIcon /> : tagsCycle === 1 ? <ViewIcon /> : <LockIcon />
+            }
+            colorScheme={tagsCycle > 0 ? 'purple' : undefined}
           >
             tags
           </Button>
           <IconButton
             onClick={toggleCompact}
             aria-label={compact ? 'Compact' : 'Wide'}
-            variantColor={!compact ? 'pink' : undefined}
-            icon={!compact ? 'view' : 'view-off'}
+            colorScheme={!compact ? 'pink' : undefined}
+            icon={!compact ? <ViewIcon /> : <ViewOffIcon />}
           />
-        </Stack>
-        <Stack isInline isReversed>
+        </HStack>
+        <HStack isReversed>
           <Button onClick={() => setOnlyList(-1)}>All list</Button>
           <Button onClick={() => setOnlyList(-2)}>No list</Button>
 
@@ -260,22 +264,22 @@ export const HomePage: NextPage = () => {
               </Select>
             )}
           </Box>
-        </Stack>
+        </HStack>
       </SimpleGrid>
       {mass && (
         <Stack spacing={2} mb={3}>
           <Box>Selected: {numberOfSelected}</Box>
-          <Button onClick={selectAll} variantColor="yellow">
+          <Button onClick={selectAll} colorScheme="yellow">
             Select all
           </Button>
           <SimpleGrid columns={[2, null, 6]} spacingX="20px" spacingY="10px">
-            <Button onClick={bulkDelete} variantColor="red" isDisabled={numberOfSelected === 0}>
+            <Button onClick={bulkDelete} colorScheme="red" isDisabled={numberOfSelected === 0}>
               Bulk delete
             </Button>
-            <Button variantColor="blue" isDisabled={true}>
+            <Button colorScheme="blue" isDisabled={true}>
               Bulk check
             </Button>
-            <Button onClick={bulkTag} variantColor="pink" isDisabled={numberOfSelected === 0}>
+            <Button onClick={bulkTag} colorScheme="pink" isDisabled={numberOfSelected === 0}>
               Bulk tag
             </Button>
             {tLoading ? (
@@ -298,7 +302,7 @@ export const HomePage: NextPage = () => {
             )}
             <Button
               onClick={bulkChangeList}
-              variantColor="green"
+              colorScheme="green"
               isDisabled={numberOfSelected === 0}
             >
               Bulk change list
@@ -334,12 +338,12 @@ export const HomePage: NextPage = () => {
           ) : tError || !tData ? (
             <Heading size="xl">Something went wrong</Heading>
           ) : (
-            <Stack isInline spacing={2}>
+            <HStack spacing={2}>
               {tData.tags.map((tag) => (
                 <Tag
                   key={tag.id}
                   size="sm"
-                  variantColor={tag.color || 'blue'}
+                  colorScheme={tag.color || 'blue'}
                   variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
                   as="button"
                   onClick={selectTag(tag.id)}
@@ -352,7 +356,7 @@ export const HomePage: NextPage = () => {
 
               <Tag
                 size="sm"
-                variantColor="gray"
+                colorScheme="gray"
                 as="button"
                 variant={tagIds.includes(-2) ? 'solid' : 'subtle'}
                 onClick={selectTag(-2)}
@@ -363,7 +367,7 @@ export const HomePage: NextPage = () => {
               </Tag>
               <Tag
                 size="sm"
-                variantColor="blue"
+                colorScheme="blue"
                 as="button"
                 onClick={() => {
                   setCycle(0);
@@ -372,14 +376,14 @@ export const HomePage: NextPage = () => {
               >
                 <Flex alignItems="center">
                   <TagLabel>CLEAR</TagLabel>
-                  <TagIcon icon="close" size="12px" />
+                  <TagRightIcon icon={<CloseIcon />} size="12px" />
                 </Flex>
               </Tag>
-            </Stack>
+            </HStack>
           )}
         </Box>
       )}
-      <Collapse isOpen={showNew}>
+      <Collapse in={showNew}>
         <TodoForm close={toggleNew} ref={newRef} listsQuery={listsQuery} tagsQuery={tagsQuery} />
       </Collapse>
       {filteredData.length > 0 ? (
