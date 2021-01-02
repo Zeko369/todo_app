@@ -12,10 +12,10 @@ import {
   Text,
   MenuItem,
   MenuList,
-  Icon,
   HStack,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { useMeQuery } from '../generated/graphql';
 
 interface INavProps {}
@@ -79,7 +79,7 @@ const Nav: React.FC<INavProps> = ({ children }) => {
                 <MenuList>
                   <MenuItem onClick={toggleColorMode}>
                     <HStack align="center">
-                      <Icon name={dark ? 'moon' : 'sun'} />
+                      {dark ? <MoonIcon /> : <SunIcon />}
                       <Text>{dark ? 'Dark' : 'Light'} theme</Text>
                     </HStack>
                   </MenuItem>

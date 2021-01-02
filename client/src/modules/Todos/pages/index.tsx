@@ -243,10 +243,7 @@ export const HomePage: NextPage = () => {
             icon={!compact ? <ViewIcon /> : <ViewOffIcon />}
           />
         </HStack>
-        <HStack isReversed>
-          <Button onClick={() => setOnlyList(-1)}>All list</Button>
-          <Button onClick={() => setOnlyList(-2)}>No list</Button>
-
+        <HStack justify="flex-end">
           <Box>
             {lLoading ? (
               <Spinner />
@@ -264,6 +261,9 @@ export const HomePage: NextPage = () => {
               </Select>
             )}
           </Box>
+
+          <Button onClick={() => setOnlyList(-2)}>No list</Button>
+          <Button onClick={() => setOnlyList(-1)}>All list</Button>
         </HStack>
       </SimpleGrid>
       {mass && (
@@ -331,7 +331,7 @@ export const HomePage: NextPage = () => {
       {tagsCycle > 0 && (
         <Box mb={3}>
           <Heading size="md" mb={2}>
-            Tags:{' '}
+            Tags:
           </Heading>
           {tLoading ? (
             <Spinner />

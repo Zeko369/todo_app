@@ -13,7 +13,6 @@ import {
   Checkbox,
   Input,
   Spinner,
-  Icon,
   HStack,
 } from '@chakra-ui/react';
 import {
@@ -168,7 +167,7 @@ const Todo: React.FC<TodoProps> = (props) => {
           <Flex w="100%">
             <Stack w="100%">
               <Heading size="lg" wordBreak="break-all" alignItems="center" display="flex">
-                {pinned && <Icon aria-label="pinned" name="lock" color="orange.500" mr="2" />}
+                {pinned && <LockIcon color="orange.500" aria-label="pinned" mr="2" />}
                 {tasks &&
                   tasks.length > 0 &&
                   `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}

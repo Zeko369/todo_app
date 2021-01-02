@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
-    "dev:remote": "NEXT_PUBLIC_API=https://api.zekan.tk/graphql next",
+    "dev:remote": "NEXT_PUBLIC_API=https://todo-api.zekan.tk/graphql next",
     "build": "next build",
     "start": "next start",
     "analyze": "ANALYZE=true next build",
