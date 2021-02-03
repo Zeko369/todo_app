@@ -148,7 +148,7 @@ export const ListPage: NextPage = () => {
                 <Tag size="sm" colorScheme="blue" as="button" onClick={selectTag(-1)}>
                   <Flex alignItems="center">
                     <TagLabel>NONE</TagLabel>
-                    <TagRightIcon icon={<CloseIcon />} size="12px" />
+                    <TagRightIcon as={CloseIcon} size="12px" />
                   </Flex>
                 </Tag>
               </HStack>

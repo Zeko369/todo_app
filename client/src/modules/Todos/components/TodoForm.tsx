@@ -203,7 +203,7 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
                       )
                     }
                   >
-                    <TagRightIcon icon={<AddIcon />} size="12px" />
+                    <TagRightIcon as={AddIcon} size="12px" />
                     <TagLabel>{tag.text}</TagLabel>
                   </Tag>
                 </Box>

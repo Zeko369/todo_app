@@ -376,7 +376,7 @@ export const HomePage: NextPage = () => {
               >
                 <Flex alignItems="center">
                   <TagLabel>CLEAR</TagLabel>
-                  <TagRightIcon icon={<CloseIcon />} size="12px" />
+                  <TagRightIcon as={CloseIcon} size="12px" />
                 </Flex>
               </Tag>
             </HStack>
