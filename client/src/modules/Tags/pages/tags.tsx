@@ -125,10 +125,12 @@ export const TagsPage: NextPage = () => {
               d="inline-block"
               mr={4}
               mb={4}
+              py="1"
+              px="2"
               colorScheme={tag.color || undefined}
             >
-              <HStack alignItems="center" spacing={3} mt="4px">
-                <Text lineHeight="24px" h="24px" mr={10}>
+              <HStack alignItems="center" spacing={3}>
+                <Text>
                   [{tag.todos.length}] <b>{tag.text}</b>
                 </Text>
                 <HStack spacing={1}>
