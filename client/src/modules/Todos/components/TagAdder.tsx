@@ -22,7 +22,7 @@ export const TagAdder: React.FC<{ tags: number[]; id: number }> = ({ tags, id })
   const { loading, error, data } = useTagsQuery();
   const [addTagToTodo] = useAddTagToTodoMutation();
 
-  const { register, handleSubmit, watch, setValue } = useForm<{ text: string }>({
+  const { register, handleSubmit, watch, reset } = useForm<{ text: string }>({
     defaultValues: { text: '' },
   });
 
@@ -36,7 +36,7 @@ export const TagAdder: React.FC<{ tags: number[]; id: number }> = ({ tags, id })
   const onSubmit = async () => {
     if (items.length === 1) {
       await addTag(items[0].id)();
-      setValue('');
+      reset();
     }
   };
 
