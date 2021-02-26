@@ -12,7 +12,20 @@ const RenderMDX = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const mdxSource = await renderToString(source, {
-    components,
+    // @ts-ignore
+    components: Object.fromEntries(
+      Object.entries(components).map(([key, Component]) => [
+        key,
+        // @ts-ignore
+        (props) => {
+          if (key === 'inlineCode') {
+            return <code {...props} />;
+          }
+
+          return <Component {...props} />;
+        },
+      ])
+    ),
     mdxOptions: {
       remarkPlugins: [remarkCodeTitles],
       rehypePlugins: [mdxPrism],
