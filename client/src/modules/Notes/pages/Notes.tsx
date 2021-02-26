@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { Box, Spinner, Heading, List, ListItem } from '@chakra-ui/core';
+import { Box, Spinner, Heading, List, ListItem } from '@chakra-ui/react';
 import { Link, LinkButton } from 'chakra-next-link';
 
 import Nav from '../../../components/Nav';
@@ -22,9 +22,7 @@ export const NotesPage: NextPage = () => {
         <List styleType="disc">
           {data.todos.map((note) => (
             <ListItem>
-              <Link href="/notes/[id]" nextAs={`/notes/${note.id}`}>
-                {note.title}
-              </Link>
+              <Link href={`/notes/${note.id}`}>{note.title}</Link>
             </ListItem>
           ))}
         </List>

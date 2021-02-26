@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
-import { Heading } from '@chakra-ui/core';
+import { Heading } from '@chakra-ui/react';
 import { NOTES_QUERY, NOTE_QUERY } from '../graphql/queries';
 import { NoteForm } from '../components/NoteForm';
 import { getId } from '../../../helpers/getId';

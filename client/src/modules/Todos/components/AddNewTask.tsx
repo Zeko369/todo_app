@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Input, Button, Stack } from '@chakra-ui/core';
+import { Box, Input, Button, HStack } from '@chakra-ui/react';
 import { useAddTaskMutation } from '../../../generated/graphql';
 import { TODO_QUERY } from '../graphql/queries';
 
@@ -26,12 +26,12 @@ export const AddNewTask: React.FC<AddNewTaskProps> = ({ todoId }) => {
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2} isInline>
+        <HStack spacing={2}>
           <Input ref={register} name="title" placeholder="New task..." />
-          <Button type="submit" variantColor="green">
+          <Button type="submit" colorScheme="green">
             Add
           </Button>
-        </Stack>
+        </HStack>
       </form>
     </Box>
   );

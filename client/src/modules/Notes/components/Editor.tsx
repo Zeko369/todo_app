@@ -1,6 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { Box, Button, Heading, IconButton, Spinner, Stack, useColorMode } from '@chakra-ui/core';
+import { Box, Button, Heading, IconButton, Spinner, HStack, useColorMode } from '@chakra-ui/react';
+import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import { Controlled } from 'react-codemirror2';
 import { Editor as IEditor } from 'codemirror';
 
@@ -55,8 +56,8 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode }, ref) => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error(`Error loading languages`);
-        console.error(err);
+        alert(`Error loading languages`);
+        alert(err);
       });
   }, []);
 
@@ -98,12 +99,12 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode }, ref) => {
 
   return (
     <Box>
-      <Stack isInline pb="2">
+      <HStack pb="2">
         <Button size="sm" onClick={toggleVim}>
           {vim ? 'Vim' : 'Normal mode'}
         </Button>
-        <IconButton size="sm" icon="arrow-left" aria-label="Undo" onClick={undo} />
-        <IconButton size="sm" icon="arrow-right" aria-label="Redo" onClick={redo} />
+        <IconButton size="sm" icon={<ArrowLeftIcon />} aria-label="Undo" onClick={undo} />
+        <IconButton size="sm" icon={<ArrowRightIcon />} aria-label="Redo" onClick={redo} />
         <Input
           name="Font size"
           noLabel
@@ -122,7 +123,7 @@ const Editor = forwardRef<EditorFunctions, EditorProps>(({ initCode }, ref) => {
             ))}
           </Select>
         </Box>
-      </Stack>
+      </HStack>
       <CodeEditor
         fontSize={parseFloat(fontSize || '1.5')}
         value={code}

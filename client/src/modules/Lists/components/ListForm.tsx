@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '@chakra-ui/core';
+import { Button } from '@chakra-ui/react';
 
 import Input from '../../../components/Input';
 import { List } from '../../../generated/graphql';

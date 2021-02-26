@@ -1,4 +1,5 @@
-import { Box, Heading, IconButton, useColorMode } from '@chakra-ui/core';
+import { Box, Heading, IconButton, useColorMode } from '@chakra-ui/react';
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import React from 'react';
 
 export const AuthLayout: React.FC = ({ children }) => {
@@ -11,7 +12,7 @@ export const AuthLayout: React.FC = ({ children }) => {
         mr="2"
         mt="2"
         float="right"
-        icon={colorMode === 'dark' ? 'moon' : 'sun'}
+        icon={colorMode === 'dark' ? <MoonIcon /> : <SunIcon />}
         aria-label={colorMode === 'dark' ? 'light' : 'dark'}
         onClick={toggleColorMode}
       />

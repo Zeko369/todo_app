@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Stack, Flex, Button, FormControl, FormLabel, Spinner, Box } from '@chakra-ui/core';
+import { Stack, Flex, Button, FormControl, FormLabel, Spinner, Box } from '@chakra-ui/react';
 import Nav from '../../../components/Nav';
 import Editor, { EditorFunctions } from './Editor';
 import Input from '../../../components/Input';
@@ -49,7 +49,7 @@ export const NoteForm: React.FC<NoteForm> = (props) => {
               isRequired
               value={title}
             />
-            <Button onClick={onClick} variantColor="green" isLoading={props.saving}>
+            <Button onClick={onClick} colorScheme="green" isLoading={props.saving}>
               Save
             </Button>
           </Flex>

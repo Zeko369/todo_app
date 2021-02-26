@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code, Divider, Heading, Image, ListItem, List, Text, Kbd } from '@chakra-ui/core';
+import { Code, Divider, Heading, Image, ListItem, List, Text, Kbd } from '@chakra-ui/react';
 import { Link } from 'chakra-next-link';
 import { BaseComponents } from './types';
 

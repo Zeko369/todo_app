@@ -2,6 +2,7 @@ import React, { useState, forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Heading,
+  HStack,
   Stack,
   Box,
   Button,
@@ -10,9 +11,11 @@ import {
   Textarea,
   Spinner,
   Tag,
-  TagIcon,
   TagLabel,
-} from '@chakra-ui/core';
+  TagRightIcon,
+} from '@chakra-ui/react';
+import { AddIcon, CloseIcon } from '@chakra-ui/icons';
+import { QueryResult } from '@apollo/client';
 
 import Input from '../../../components/Input';
 import {
@@ -28,7 +31,6 @@ import {
   useConnectTodoToListMutation,
 } from '../../../generated/graphql';
 import { TODOS_QUERY } from '../graphql/queries';
-import { QueryResult } from '@apollo/client';
 import { Select } from '../../../components/Select';
 
 interface Props {
@@ -131,7 +133,13 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
           {!isUpdate ? 'New TODO' : 'Edit TODO'}
         </Heading>
         {close && (
-          <IconButton size="xs" type="button" onClick={close} icon="close" aria-label="close" />
+          <IconButton
+            size="xs"
+            type="button"
+            onClick={close}
+            icon={<CloseIcon />}
+            aria-label="close"
+          />
         )}
       </Flex>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -159,7 +167,7 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
           ) : lError || !lData ? (
             <Heading size="xl">Error :(</Heading>
           ) : (
-            <Stack isInline>
+            <HStack>
               <Select name="list" ref={register}>
                 {lData.lists.map((list) => (
                   <option key={list.id} value={list.id}>
@@ -168,13 +176,13 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
                 ))}
                 <option value="-1">Select list...</option>
               </Select>
-              <Button onClick={() => setValue('list', '-1')} variantColor="blue">
+              <Button onClick={() => setValue('list', '-1')} colorScheme="blue">
                 None
               </Button>
-              <Button onClick={() => setValue('list', String(first))} variantColor="orange">
+              <Button onClick={() => setValue('list', String(first))} colorScheme="orange">
                 First
               </Button>
-            </Stack>
+            </HStack>
           )}
 
           {tLoading ? (
@@ -187,7 +195,7 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
                 <Box key={tag.id} d="inline-block" mr={2} mb={2}>
                   <Tag
                     variant={selected.includes(tag.id) ? 'solid' : 'subtle'}
-                    variantColor={tag.color || undefined}
+                    colorScheme={tag.color || undefined}
                     cursor="pointer"
                     onClick={() =>
                       setSelected((curr) =>
@@ -195,7 +203,7 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
                       )
                     }
                   >
-                    <TagIcon icon="add" size="12px" />
+                    <TagRightIcon as={AddIcon} size="12px" />
                     <TagLabel>{tag.text}</TagLabel>
                   </Tag>
                 </Box>
@@ -203,14 +211,14 @@ const TodoForm = forwardRef<HTMLInputElement, Props>((props, ref) => {
             </Box>
           )}
 
-          <Stack isInline justify="flex-end">
-            <Button type="submit" variantColor="green" variant="outline" isLoading={loading}>
+          <HStack justify="flex-end">
+            <Button type="submit" colorScheme="green" variant="outline" isLoading={loading}>
               {!isUpdate ? 'Add' : 'Update'}
             </Button>
-            <Button variantColor="green" isLoading={loading} onClick={onClose}>
+            <Button colorScheme="green" isLoading={loading} onClick={onClose}>
               {!isUpdate ? 'Add' : 'Update'} and close
             </Button>
-          </Stack>
+          </HStack>
         </Stack>
       </form>
     </Box>

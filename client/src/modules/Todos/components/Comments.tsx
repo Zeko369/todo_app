@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
   Stack,
+  HStack,
   Heading,
   Box,
   Flex,
@@ -9,7 +10,8 @@ import {
   Button,
   Text,
   IconButton,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 
 import capitalize from '../../../helpers';
@@ -110,24 +112,24 @@ export const Comments: React.FC<CommentsProps> = ({ comments, todoId }) => {
                 </Flex>
                 <Text>{comment.content}</Text>
               </Box>
-              <Stack isInline>
+              <HStack>
                 <IconButton
                   variant="ghost"
                   size="sm"
-                  icon="delete"
-                  variantColor="red"
+                  icon={<DeleteIcon />}
+                  colorScheme="red"
                   aria-label="Delete"
                   onClick={onDelete(comment.id)}
                 />
                 <IconButton
                   variant="ghost"
                   size="sm"
-                  icon="edit"
-                  variantColor="green"
+                  icon={<EditIcon />}
+                  colorScheme="green"
                   aria-label="Update"
                   onClick={onUpdate(comment)}
                 />
-              </Stack>
+              </HStack>
             </Flex>
           ))}
         </Stack>
@@ -149,7 +151,7 @@ export const Comments: React.FC<CommentsProps> = ({ comments, todoId }) => {
             <Stack>
               <Textarea name="content" ref={register()} />
               <Flex justifyContent="flex-end">
-                <Button variantColor="green" type="submit">
+                <Button colorScheme="green" type="submit">
                   {updateId === -1 ? 'Comment' : 'Update'}
                 </Button>
               </Flex>

@@ -9,11 +9,12 @@ import {
   ModalCloseButton,
   Heading,
   Text,
-  Stack,
+  HStack,
   Spinner,
   Button,
-} from '@chakra-ui/core';
-import { UseDisclosureReturn } from '@chakra-ui/core/dist/useDisclosure';
+  UseDisclosureReturn,
+  VStack,
+} from '@chakra-ui/react';
 import {
   useDisconnectListWithUserMutation,
   useListQuery,
@@ -38,23 +39,23 @@ interface UserListProps {
 
 const UserList: React.FC<UserListProps> = ({ users, title, onClick, buttonText }) => {
   return (
-    <Stack mb="2" spacing="2">
+    <VStack mb="2" spacing="2">
       <Heading size="sm">{title}</Heading>
-      <Stack spacing="1">
+      <VStack spacing="1">
         {users && users.length > 0 ? (
           users.map((user) => (
-            <Stack isInline key={user.id}>
+            <HStack key={user.id}>
               <Text>{user.username}</Text>
               <Button size="xs" onClick={onClick(user.id)}>
                 {buttonText}
               </Button>
-            </Stack>
+            </HStack>
           ))
         ) : (
           <Text color="red.500">No one</Text>
         )}
-      </Stack>
-    </Stack>
+      </VStack>
+    </VStack>
   );
 };
 
@@ -83,7 +84,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({ modal, listData 
         <ModalCloseButton />
         <ModalBody>
           {listData?.list ? (
-            <Stack spacing="3">
+            <VStack spacing="3">
               <UserList
                 title="List is already shared with"
                 onClick={onDisconnect}
@@ -106,7 +107,7 @@ export const ShareListModal: React.FC<ShareListModalProps> = ({ modal, listData 
                   buttonText="Add"
                 />
               )}
-            </Stack>
+            </VStack>
           ) : (
             <Heading color="red.500">Error loading list</Heading>
           )}

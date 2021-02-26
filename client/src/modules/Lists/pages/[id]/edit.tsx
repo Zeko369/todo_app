@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { Heading, Spinner, Box } from '@chakra-ui/core';
+import { Heading, Spinner, Box } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 import { useListQuery, useUpdateListMutation } from '../../../../generated/graphql';

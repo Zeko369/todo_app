@@ -13,8 +13,20 @@ import {
   Checkbox,
   Input,
   Spinner,
-  Icon,
-} from '@chakra-ui/core';
+  HStack,
+} from '@chakra-ui/react';
+import {
+  ChatIcon,
+  CheckIcon,
+  DeleteIcon,
+  EditIcon,
+  LockIcon,
+  MinusIcon,
+  SettingsIcon,
+  UnlockIcon,
+  ViewIcon,
+  ViewOffIcon,
+} from '@chakra-ui/icons';
 
 import { Select } from '../../../components/Select';
 import useToggle from '../../../hooks/useToggle';
@@ -138,15 +150,15 @@ const Todo: React.FC<TodoProps> = (props) => {
       <Flex justify="space-between" pos="relative">
         <Stack mr="4">
           <IconButton
-            icon={(mass ? massSelect : checked) ? 'check' : 'minus'}
-            variantColor={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
+            icon={(mass ? massSelect : checked) ? <CheckIcon /> : <MinusIcon />}
+            colorScheme={(mass ? massSelect : checked) ? (mass ? 'blue' : 'green') : 'gray'}
             aria-label="check"
             isLoading={loading}
             onClick={mass ? onMass : onCheck}
           />
           <IconButton
-            icon={!compact ? 'view' : 'view-off'}
-            variantColor={compact ? 'gray' : 'pink'}
+            icon={!compact ? <ViewIcon /> : <ViewOffIcon />}
+            colorScheme={compact ? 'gray' : 'pink'}
             aria-label={compact ? 'show' : 'hide'}
             onClick={toggleCompact}
           />
@@ -155,7 +167,7 @@ const Todo: React.FC<TodoProps> = (props) => {
           <Flex w="100%">
             <Stack w="100%">
               <Heading size="lg" wordBreak="break-all" alignItems="center" display="flex">
-                {pinned && <Icon aria-label="pinned" name="lock" color="orange.500" mr="2" />}
+                {pinned && <LockIcon color="orange.500" aria-label="pinned" mr="2" />}
                 {tasks &&
                   tasks.length > 0 &&
                   `[${tasks.filter((task) => task.checkedAt).length} / ${tasks.length}] `}
@@ -177,7 +189,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                       key={tag.id}
                       mr={2}
                       mb={2}
-                      variantColor={tag.color || undefined}
+                      colorScheme={tag.color || undefined}
                       variant={selectedTags.includes(tag.id) ? 'solid' : 'subtle'}
                     >
                       <Flex alignItems="center">
@@ -202,23 +214,23 @@ const Todo: React.FC<TodoProps> = (props) => {
               one={
                 <Stack spacing={1} isInline={!isMobile} ml="4">
                   <IconButton
-                    icon="settings"
+                    icon={<SettingsIcon />}
                     size="sm"
                     aria-label="show controls"
                     onClick={toggleButtons}
-                    variantColor={!showButtons ? 'gray' : 'blue'}
+                    colorScheme={!showButtons ? 'gray' : 'blue'}
                   />
                   <IconButton
-                    icon="edit"
+                    icon={<EditIcon />}
                     size="sm"
                     aria-label="Update"
                     isLoading={loading}
                     onClick={toggleUpdate}
                   />
                   <IconButton
-                    icon="chat"
+                    icon={<ChatIcon />}
                     size="sm"
-                    variantColor={!localComments ? 'gray' : 'orange'}
+                    colorScheme={!localComments ? 'gray' : 'orange'}
                     aria-label={localComments ? 'show' : 'hide'}
                     onClick={toggleComments}
                   />
@@ -228,18 +240,18 @@ const Todo: React.FC<TodoProps> = (props) => {
               {!hideButtons && (
                 <Stack spacing={3} isInline={!isMobile} ml="4">
                   <IconButton
-                    icon="delete"
+                    icon={<DeleteIcon />}
                     size="sm"
-                    variantColor="red"
+                    colorScheme="red"
                     aria-label="Delete"
                     isLoading={loading}
                     onClick={onDelete}
                   />
 
                   <IconButton
-                    icon={pinned ? 'unlock' : 'lock'}
+                    icon={pinned ? <UnlockIcon /> : <LockIcon />}
                     size="sm"
-                    variantColor="orange"
+                    colorScheme="orange"
                     aria-label={pinned ? 'Unlock' : 'Lock'}
                     isLoading={loading}
                     onClick={onLock}
@@ -262,7 +274,7 @@ const Todo: React.FC<TodoProps> = (props) => {
                     />
 
                     <form onSubmit={onSubmitUpdateTask}>
-                      <Stack isInline ml="2">
+                      <HStack ml="2">
                         <Input
                           isRequired
                           name="title"
@@ -271,14 +283,14 @@ const Todo: React.FC<TodoProps> = (props) => {
                           }
                           value={taskTitle}
                         />
-                        <Button type="submit" variantColor="blue">
+                        <Button type="submit" colorScheme="blue">
                           Save
                         </Button>
-                      </Stack>
+                      </HStack>
                     </form>
                   </Flex>
                 ) : (
-                  <Stack isInline spacing={2}>
+                  <HStack spacing={2}>
                     <Checkbox
                       key={task.id}
                       isChecked={Boolean(task.checkedAt)}
@@ -287,21 +299,21 @@ const Todo: React.FC<TodoProps> = (props) => {
                     />
                     <IconButton
                       aria-label="edit"
-                      icon="edit"
+                      icon={<EditIcon />}
                       size="xs"
-                      variantColor="green"
+                      colorScheme="green"
                       variant="ghost"
                       onClick={editTask(task)}
                     />
                     <IconButton
                       aria-label="delete"
-                      icon="delete"
+                      icon={<DeleteIcon />}
                       size="xs"
-                      variantColor="red"
+                      colorScheme="red"
                       variant="ghost"
                       onClick={runDelete(task.id)}
                     />
-                  </Stack>
+                  </HStack>
                 )
               )}
               <AddNewTask todoId={todo.id} />
@@ -311,13 +323,13 @@ const Todo: React.FC<TodoProps> = (props) => {
       </Flex>
       {!hideButtons && (
         <Stack spacing={3} mt={5}>
-          <Stack isInline spacing={3}>
+          <HStack spacing={3}>
             {listsQuery.loading ? (
               <Spinner />
             ) : listsQuery.error || !listsQuery.data ? (
               <Heading size="xl">Error :(</Heading>
             ) : (
-              <Stack isInline>
+              <HStack>
                 <Select value={selected} onChange={changeList}>
                   {listsQuery.data.lists.map((list) => (
                     <option key={list.id} value={list.id}>
@@ -326,22 +338,22 @@ const Todo: React.FC<TodoProps> = (props) => {
                   ))}
                   <option value="-1">Select list...</option>
                 </Select>
-                <Button onClick={() => setSelected(-1)} variantColor="blue">
+                <Button onClick={() => setSelected(-1)} colorScheme="blue">
                   None
                 </Button>
                 <Button
                   onClick={() => setSelected(listsQuery?.data?.lists[0]?.id || -1)}
-                  variantColor="orange"
+                  colorScheme="orange"
                 >
                   First
                 </Button>
 
-                <Button variantColor="blue" onClick={onSaveList}>
+                <Button colorScheme="blue" onClick={onSaveList}>
                   Save
                 </Button>
-              </Stack>
+              </HStack>
             )}
-          </Stack>
+          </HStack>
           <Box>
             <TagAdder tags={tags?.map((t) => t.id) || []} id={id} />
           </Box>

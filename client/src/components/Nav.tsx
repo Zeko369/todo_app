@@ -2,7 +2,6 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import {
   Flex,
-  Stack,
   Heading,
   Grid,
   useColorMode,
@@ -13,9 +12,10 @@ import {
   Text,
   MenuItem,
   MenuList,
-  Icon,
-} from '@chakra-ui/core';
+  HStack,
+} from '@chakra-ui/react';
 import Link from 'next/link';
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { useMeQuery } from '../generated/graphql';
 
 interface INavProps {}
@@ -49,7 +49,7 @@ const Nav: React.FC<INavProps> = ({ children }) => {
       gap="1"
       alignItems="center"
     >
-      <Stack isInline align="center" spacing={3}>
+      <HStack align="center" spacing={3}>
         <Heading mb={3} style={{ color: textColor[colorMode](!(lists || notes || tags)) }}>
           <Link href="/">Todos</Link>
         </Heading>
@@ -66,9 +66,9 @@ const Nav: React.FC<INavProps> = ({ children }) => {
             <a>Tags</a>
           </Link>
         </Heading>
-      </Stack>
+      </HStack>
       <Flex w="100%" justify="flex-end">
-        <Stack isInline align="center">
+        <HStack align="center">
           {children}
           {me && (
             <Box>
@@ -78,10 +78,10 @@ const Nav: React.FC<INavProps> = ({ children }) => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem onClick={toggleColorMode}>
-                    <Stack isInline align="center">
-                      <Icon name={dark ? 'moon' : 'sun'} />
+                    <HStack align="center">
+                      {dark ? <MoonIcon /> : <SunIcon />}
                       <Text>{dark ? 'Dark' : 'Light'} theme</Text>
-                    </Stack>
+                    </HStack>
                   </MenuItem>
                   <MenuItem>Profile (not working)</MenuItem>
                   <MenuItem onClick={logout}>Logout</MenuItem>
@@ -89,7 +89,7 @@ const Nav: React.FC<INavProps> = ({ children }) => {
               </Menu>
             </Box>
           )}
-        </Stack>
+        </HStack>
       </Flex>
     </Grid>
   );

@@ -12,7 +12,9 @@ import {
   CloseButton,
   Flex,
   theme,
-} from '@chakra-ui/core';
+  HStack,
+} from '@chakra-ui/react';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 
 import { Select } from '../../../components/Select';
@@ -72,7 +74,7 @@ export const TagsPage: NextPage = () => {
   return (
     <Box w="90%" maxW="1000px" m="0 auto">
       <Nav>
-        <Button onClick={toggleNew} variantColor="blue">
+        <Button onClick={toggleNew} colorScheme="blue">
           {showNew ? 'Hide new' : 'Show new'}
         </Button>
       </Nav>
@@ -123,31 +125,33 @@ export const TagsPage: NextPage = () => {
               d="inline-block"
               mr={4}
               mb={4}
-              variantColor={tag.color || undefined}
+              py="1"
+              px="2"
+              colorScheme={tag.color || undefined}
             >
-              <Stack isInline alignItems="center" spacing={3} mt="4px">
-                <Text lineHeight="24px" h="24px" mr={10}>
+              <HStack alignItems="center" spacing={3}>
+                <Text>
                   [{tag.todos.length}] <b>{tag.text}</b>
                 </Text>
-                <Stack isInline spacing={1}>
+                <HStack spacing={1}>
                   <IconButton
                     aria-label="edit"
                     onClick={edit(tag)}
                     variant="ghost"
-                    variantColor="green"
-                    icon="edit"
+                    colorScheme="green"
+                    icon={<EditIcon />}
                     size="xs"
                   />
                   <IconButton
                     aria-label="edit"
                     onClick={remove(tag.id)}
                     variant="ghost"
-                    variantColor="red"
-                    icon="delete"
+                    colorScheme="red"
+                    icon={<DeleteIcon />}
                     size="xs"
                   />
-                </Stack>
-              </Stack>
+                </HStack>
+              </HStack>
             </Tag>
           ))}
         </Box>

@@ -12,12 +12,14 @@ import {
   Stack,
   Text,
   Button,
-  TagIcon,
   useDisclosure,
   List,
   ListItem,
-} from '@chakra-ui/core';
+  TagRightIcon,
+  HStack,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { CloseIcon } from '@chakra-ui/icons';
 
 import {
   useListQuery,
@@ -86,15 +88,15 @@ export const ListPage: NextPage = () => {
     <Box w="90%" maxW="1000px" m="0 auto">
       <ShareListModal modal={modal} listData={data} />
       <Nav />
-      <Stack spacing={3} isInline>
+      <HStack spacing={3}>
         <Heading>List: {data?.list?.title}</Heading>
-        <LinkButton href="/lists/[id]/edit" nextAs={`/lists/${id}/edit`} variantColor="green">
+        <LinkButton href={`/lists/${id}/edit`} colorScheme="green">
           Edit
         </LinkButton>
         <Button onClick={modal.onOpen}>Share</Button>
         <Button onClick={toggleAll}>{!showAll ? 'Only todo' : 'All'}</Button>
         <Button onClick={toggleTasks}>{!showTasks ? '+' : '-'}tasks</Button>
-      </Stack>
+      </HStack>
       {loading ? (
         <Spinner />
       ) : error || !data || !data.list ? (
@@ -128,12 +130,12 @@ export const ListPage: NextPage = () => {
               <Heading size="md" mb={2}>
                 Filter by tag:
               </Heading>
-              <Stack isInline spacing={2}>
+              <HStack spacing={2}>
                 {tags.map((tag) => (
                   <Tag
                     key={tag.id}
                     size="sm"
-                    variantColor={tag.color || 'blue'}
+                    colorScheme={tag.color || 'blue'}
                     variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
                     as="button"
                     onClick={selectTag(tag.id)}
@@ -143,13 +145,13 @@ export const ListPage: NextPage = () => {
                     </Flex>
                   </Tag>
                 ))}
-                <Tag size="sm" variantColor="blue" as="button" onClick={selectTag(-1)}>
+                <Tag size="sm" colorScheme="blue" as="button" onClick={selectTag(-1)}>
                   <Flex alignItems="center">
                     <TagLabel>NONE</TagLabel>
-                    <TagIcon icon="close" size="12px" />
+                    <TagRightIcon as={CloseIcon} size="12px" />
                   </Flex>
                 </Tag>
-              </Stack>
+              </HStack>
             </Box>
           )}
           <Stack mt={3}>
@@ -157,7 +159,7 @@ export const ListPage: NextPage = () => {
               .filter((todo) => showAll || !todo.checked)
               .map((todo) => (
                 <Box key={todo.id}>
-                  <Stack isInline spacing={2} alignItems="center">
+                  <HStack spacing={2} alignItems="center">
                     <Checkbox isChecked={todo.checked} onChange={check(todo.id)}>
                       <Heading size="sm">{todo.title}</Heading>
                     </Checkbox>
@@ -170,7 +172,7 @@ export const ListPage: NextPage = () => {
                       <Tag
                         key={tag.id}
                         size="sm"
-                        variantColor={tag.color || 'blue'}
+                        colorScheme={tag.color || 'blue'}
                         variant={tagIds.includes(tag.id) ? 'solid' : 'subtle'}
                       >
                         <Flex alignItems="center">
@@ -178,7 +180,7 @@ export const ListPage: NextPage = () => {
                         </Flex>
                       </Tag>
                     ))}
-                  </Stack>
+                  </HStack>
                   {showTasks && todo.tasks.length > 0 && (
                     <Stack pl={6}>
                       {todo.tasks.map((task) => (

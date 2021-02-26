@@ -6,7 +6,7 @@ import {
   FormLabel,
   FormErrorMessage,
   FormControlProps,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { ForwardRefRenderFunction } from 'react';
 import capitalize from '../helpers';
 
